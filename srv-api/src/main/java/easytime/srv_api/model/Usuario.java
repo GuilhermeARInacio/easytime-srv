@@ -16,9 +16,18 @@ public enum Usuario {
     private final String login;
     private final String senha;
 
-    public static Usuario buscarPorLoginESenha(String username, String senha) {
+    public static Usuario buscarPorLoginESenha(String login, String senha) {
         for (Usuario usuario : Usuario.values()) {
-            if (usuario.getLogin().equalsIgnoreCase(username) && usuario.getSenha().equals(senha)) {
+            if (usuario.getLogin().equalsIgnoreCase(login) && usuario.getSenha().equals(senha)) {
+                return usuario;
+            }
+        }
+        return null;
+    }
+
+    public static Usuario findByLogin(String login){
+        for (Usuario usuario : Usuario.values()) {
+            if (usuario.getLogin().equalsIgnoreCase(login)) {
                 return usuario;
             }
         }
