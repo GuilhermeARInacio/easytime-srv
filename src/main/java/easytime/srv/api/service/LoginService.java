@@ -28,7 +28,7 @@ public class LoginService {
 
         validacoes.forEach(v -> v.validar(usuario));
 
-        var authenticationToken = new UsernamePasswordAuthenticationToken(usuario.login(), usuario.senha());
+        var authenticationToken = new UsernamePasswordAuthenticationToken(usuario.usuario(), usuario.senha());
         var authentication = manager.authenticate(authenticationToken);
 
         Usuario usuarioAutenticacao = (Usuario) authentication.getPrincipal();

@@ -13,6 +13,8 @@ public enum Usuario {
     USUARIO2(2L, "abcd@gmail.com", "12345");
 
     private final Long id;
+
+
     private final String login;
     private final String senha;
 
