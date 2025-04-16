@@ -10,7 +10,7 @@ public class ValidacaoUsuarioESenhaExists implements ValidacaoLogin{
 
     @Override
     public void validar(DTOUsuario usuario) {
-        var usuarioBusca = Usuario.buscarPorLoginESenha(usuario.login(), usuario.senha());
+        var usuarioBusca = Usuario.buscarPorLoginESenha(usuario.usuario(), usuario.senha());
         if(usuarioBusca == null){
             throw new UsuarioESenhaNotFoundException("O usuário e senha informados são inválidos!");
         }

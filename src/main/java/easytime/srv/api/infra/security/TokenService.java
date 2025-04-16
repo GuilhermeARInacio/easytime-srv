@@ -23,7 +23,7 @@ public class TokenService {
             var algoritmo = Algorithm.HMAC256(secret);
             return JWT.create()
                     .withIssuer("easytime-srv")
-                    .withSubject(usuario.login())
+                    .withSubject(usuario.usuario())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritmo);
         } catch (JWTCreationException exception){
