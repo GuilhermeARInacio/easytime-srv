@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>easytime</groupId>
-	<artifactId>srv-api</artifactId>
+	<artifactId>api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>srv-api</name>
+	<name>api</name>
 	<description>Projeto SRV do Easytime</description>
 	<url/>
 	<licenses>
