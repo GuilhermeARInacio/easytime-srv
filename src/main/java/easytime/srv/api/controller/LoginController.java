@@ -66,10 +66,10 @@ public class LoginController {
             var token = loginService.login(usuario);
 
             return ResponseEntity.status(200).body(token);
+        }catch (CampoInvalidoException | CampoVazioException e){
+            return ResponseEntity.status(400).body(e.getMessage());
         }catch(UsuarioESenhaNotFoundException e){
             return ResponseEntity.status(401).body(e.getMessage());
-        } catch (CampoInvalidoException | CampoVazioException e){
-            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 }
