@@ -2,7 +2,7 @@
 # Easytime - Sistema de Marcação de Ponto (SRV)
 
 ## Descrição do Projeto
-Easytime é um sistema de marcação de ponto desenvolvido com uma arquitetura **BFF (Back For Front)**. Este projeto é responsável por gerenciar a autenticação de usuários e fornecer um **token JWT** para acesso seguro às funcionalidades do sistema. O seguinte repositório descreve a camada de serviço do sistema Easytime;.
+Easytime é um sistema de marcação de ponto desenvolvido com uma arquitetura **BFF (Back For Front)**. Este projeto é responsável por gerenciar a autenticação de usuários e fornecer um **token JWT** para acesso seguro às funcionalidades do sistema. O seguinte repositório descreve a camada de serviço do sistema Easytime.
 
 O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e implementa autenticação e segurança com **Spring Security**.
 
