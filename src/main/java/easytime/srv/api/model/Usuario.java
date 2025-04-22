@@ -14,8 +14,6 @@ public enum Usuario {
     USUARIO3(3L, "aaa", "Abc@12345");
 
     private final Long id;
-
-
     private final String login;
     private final String senha;
 
