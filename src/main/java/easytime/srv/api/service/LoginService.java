@@ -44,7 +44,7 @@ public class LoginService {
         var authenticationToken = new UsernamePasswordAuthenticationToken(usuario.login(), usuario.senha());
         var authentication = manager.authenticate(authenticationToken);
 
-        Usuario usuarioAutenticacao = (Usuario) authentication.getPrincipal();
-        return tokenService.gerarToken(new DTOUsuario(usuarioAutenticacao.getLogin(), usuarioAutenticacao.getSenha()));
+        String usuarioAutenticacao = (String) authentication.getPrincipal();
+        return tokenService.gerarToken(new DTOUsuario(usuarioAutenticacao, usuarioAutenticacao));
     }
 }
