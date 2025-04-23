@@ -35,7 +35,7 @@ public class LoginController {
                                     name = "Retorna um token JWT sempre que o usuário é validado com sucesso",
                                     value = """
                             {
-                                "usuario":"abc@gmail.com",
+                                "usuario":"mkenzo",
                                 "senha":"1234"
                             }
                             """

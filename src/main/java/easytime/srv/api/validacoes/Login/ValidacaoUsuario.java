@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ValidacaoUsuario implements ValidacaoLogin {
     public void validar(DTOUsuario dto) {
-        if(dto.usuario().isEmpty() || dto.usuario().isBlank()) {
+        if(dto.login().isEmpty() || dto.login().isBlank()) {
             throw new CampoVazioException("O usuario não pode ser vazio");
         }
-        if(!dto.usuario().matches(".*[a-zA-Z].*")) {
+        if(!dto.login().matches(".*[a-zA-Z].*")) {
             throw new CampoInvalidoException("Formato do usuario inválido");
         }
     }

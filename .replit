@@ -1,0 +1,16 @@
+modules = ["java-graalvm22.3"]
+run = "mvn spring-boot:run"
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+run = ["sh", "-c", "mvn spring-boot:run"]
+
+[[ports]]
+localPort = 8080
+externalPort = 8080
+
+[[ports]]
+localPort = 35729
+externalPort = 80

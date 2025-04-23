@@ -2,13 +2,11 @@ package easytime.srv.api.service;
 
 import easytime.srv.api.infra.security.TokenService;
 import easytime.srv.api.model.DTOUsuario;
-import easytime.srv.api.model.Usuario;
 import easytime.srv.api.validacoes.Login.ValidacaoLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -24,14 +22,14 @@ public class LoginService {
     @Autowired
     private TokenService tokenService;
 
-    public String login(@RequestBody DTOUsuario usuario) {
+    public String login( DTOUsuario usuario) {
 
         validacoes.forEach(v -> v.validar(usuario));
 
-        var authenticationToken = new UsernamePasswordAuthenticationToken(usuario.usuario(), usuario.senha());
+        var authenticationToken = new UsernamePasswordAuthenticationToken(usuario.login(), usuario.senha());
         var authentication = manager.authenticate(authenticationToken);
 
-        Usuario usuarioAutenticacao = (Usuario) authentication.getPrincipal();
-        return tokenService.gerarToken(new DTOUsuario(usuarioAutenticacao.getLogin(), usuarioAutenticacao.getSenha()));
+        String usuarioAutenticacao = (String) authentication.getPrincipal();
+        return tokenService.gerarToken(new DTOUsuario(usuarioAutenticacao, usuarioAutenticacao));
     }
 }
