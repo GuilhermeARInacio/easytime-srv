@@ -4,6 +4,7 @@ import easytime.srv.api.model.UserDTO;
 import easytime.srv.api.util.PasswordUtil;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
@@ -13,6 +14,7 @@ import java.util.List;
 @Table(name = "Users")
 @Getter
 @Setter
+@NoArgsConstructor
 public class User {
 
     @Id

@@ -1,5 +1,7 @@
 package easytime.srv.api.controller;
 
+import easytime.srv.api.infra.exceptions.CampoInvalidoException;
+import easytime.srv.api.infra.exceptions.CampoVazioException;
 import easytime.srv.api.infra.exceptions.UsuarioESenhaNotFoundException;
 import easytime.srv.api.model.DTOUsuario;
 import easytime.srv.api.service.LoginService;
@@ -33,7 +35,7 @@ public class LoginController {
                                     name = "Retorna um token JWT sempre que o usuário é validado com sucesso",
                                     value = """
                             {
-                                "usuario":"abc@gmail.com",
+                                "usuario":"mkenzo",
                                 "senha":"1234"
                             }
                             """
@@ -64,6 +66,8 @@ public class LoginController {
             var token = loginService.login(usuario);
 
             return ResponseEntity.status(200).body(token);
+        }catch (CampoInvalidoException | CampoVazioException e){
+            return ResponseEntity.status(400).body(e.getMessage());
         }catch(UsuarioESenhaNotFoundException e){
             return ResponseEntity.status(401).body(e.getMessage());
         }

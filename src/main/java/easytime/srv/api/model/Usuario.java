@@ -9,8 +9,8 @@ import lombok.ToString;
 @Getter
 public enum Usuario {
 
-    USUARIO1(1L, "abc@gmail.com", "teste123@@"),
-    USUARIO2(2L, "abcd@gmail.com", "teste123@@");
+    USUARIO1(1L, "abc@gmail.com", "1234"),
+    USUARIO2(2L, "abcd@gmail.com", "12345");
 
     private final Long id;
 
