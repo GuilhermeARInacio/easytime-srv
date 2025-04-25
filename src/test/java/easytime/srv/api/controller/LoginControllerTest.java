@@ -31,13 +31,9 @@ class LoginControllerTest {
     @Mock
     private LoginService loginService;
 
-    private DTOUsuario usuario;
-
     @BeforeEach
     void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-
-        //usuario = Mockito.mock(DTOUsuario.class);
     }
 
     @Test

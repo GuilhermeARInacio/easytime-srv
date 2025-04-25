@@ -1,6 +1,5 @@
 package easytime.srv.api.infra.security;
 
-import easytime.srv.api.model.Usuario;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,8 +19,6 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
     private TokenService tokenService;
-
-    private Usuario usuarios;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

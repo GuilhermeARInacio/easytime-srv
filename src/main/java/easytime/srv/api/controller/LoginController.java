@@ -4,7 +4,10 @@ import easytime.srv.api.infra.exceptions.CampoInvalidoException;
 import easytime.srv.api.infra.exceptions.CampoVazioException;
 import easytime.srv.api.infra.exceptions.UsuarioESenhaNotFoundException;
 import easytime.srv.api.model.DTOUsuario;
+import easytime.srv.api.model.UserDTO;
 import easytime.srv.api.service.LoginService;
+import easytime.srv.api.tables.User;
+import easytime.srv.api.tables.repositorys.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -19,6 +22,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/login")
 public class LoginController {
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private  LoginService loginService;
@@ -36,7 +42,7 @@ public class LoginController {
                                     value = """
                             {
                                 "usuario":"mkenzo",
-                                "senha":"1234"
+                                "senha":"Mat@@1234"
                             }
                             """
                             )
