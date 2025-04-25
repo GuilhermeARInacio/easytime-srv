@@ -2,7 +2,6 @@ package easytime.srv.api.validacoes.Login;
 
 import easytime.srv.api.infra.exceptions.UsuarioESenhaNotFoundException;
 import easytime.srv.api.model.DTOUsuario;
-import easytime.srv.api.model.Usuario;
 import easytime.srv.api.tables.repositorys.UserRepository;
 import easytime.srv.api.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;

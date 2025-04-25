@@ -3,7 +3,10 @@ package easytime.srv.api.controller;
 import easytime.srv.api.model.UserDTO;
 import easytime.srv.api.service.UserService;
 import easytime.srv.api.tables.User;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +21,8 @@ public class UserController {
     private UserService userService;
 
     @PutMapping("/create")
+    @Operation(summary = "Criar usuário", description = "Envia um UserDTO para api e cria um usuário no banco de dados")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<Object> createUser(@RequestBody UserDTO user) {
         if (!user.isValid()) {
             return ResponseEntity.badRequest().body("Usuário inválido");
@@ -27,6 +32,8 @@ public class UserController {
     }
 
     @GetMapping("/list")
+    @Operation(summary = "Listar todos usuários", description = "Sistema retorna todos os usuários cadastrados")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<Object> listUsers() {
         List<User> users = userService.listUsers();
         if(users.isEmpty()){
@@ -36,12 +43,16 @@ public class UserController {
     }
 
     @GetMapping("/getById/{id}")
+    @Operation(summary = "Listar usuário por id", description = "Sistema retorna um usuário pelo id")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<Object> getUserById(@PathVariable Integer id) {
         Optional<User> user = userService.getUserById(id);
         return user.<ResponseEntity<Object>>map(value -> ResponseEntity.status(200).body(value)).orElseGet(() -> ResponseEntity.status(404).body("Usuário não encontrado"));
     }
 
     @DeleteMapping("/delete/{id}")
+    @Operation(summary = "Deletar usuário", description = "Usuário deleta um usuário pelo id")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<Object> delete(@PathVariable Integer id) {
         Optional<User> user = userService.getUserById(id);
         if(user.isEmpty()){
