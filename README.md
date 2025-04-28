@@ -55,6 +55,110 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
     - Um número.
     - Um caractere especial (ex.: `!@#$%^&*()`).
 
+### CRUD de Usuários `/users`
+**PUT** `/create`
+
+- **Descrição**: Cria um usuário no sistema
+- **Request Body**:
+  ```json
+  {
+  "nome": "string",
+  "email": "string",
+  "login": "string",
+  "password": "string",
+  "sector": "string",
+  "jobTitle": "string",
+  "role": "string",
+  "isActive": true,
+  "valid": true
+  }
+  ```
+- **Response**:
+    - **201 Created**: Cria o usuário.
+      ```json
+      {
+      "nome": "string",
+      "email": "string",
+      "login": "string",
+      "password": "string",
+      "sector": "string",
+      "jobTitle": "string",
+      "role": "string",
+      "isActive": true,
+      "valid": true
+      }
+      ```
+    - **400 Bad Request**: Retorna uma mensagem de erro caso alguma informação seja inválida e não aceita pelo sistema.
+
+**GET** `/list`
+
+- **Descrição**: Retorna uma lista com todos os usuários cadastrados no sistema.
+
+- **Response**:
+    - **200 OK**: Retorna lista dos usuários.
+      ```json
+      [{
+      "nome": "string",
+      "email": "string",
+      "login": "string",
+      "password": "string",
+      "sector": "string",
+      "jobTitle": "string",
+       "role": "string",
+      "isActive": true,
+      "valid": true
+      },
+      {
+      "nome": "string",
+      "email": "string",
+      "login": "string",
+      "password": "string",
+      "sector": "string",
+      "jobTitle": "string",
+      "role": "string",
+      "isActive": true,
+      "valid": true
+      }]
+      ```
+    - **404 Not Found**: Retorna uma mensagem de erro dizendo que o sistema não achou nenhum usuário.
+
+**GET** `/getById/{id}`
+
+- **Descrição**: Envia um id específico e retorno o usuário correspondente.
+- **Path Variable**:
+   ```
+    id: Integer
+   ```
+
+- **Response**:
+    - **200 OK**: Retorna usuário.
+      ```json
+      {
+      "nome": "string",
+      "email": "string",
+      "login": "string",
+      "password": "string",
+      "sector": "string",
+      "jobTitle": "string",
+      "role": "string",
+      "isActive": true,
+      "valid": true
+      }
+      ```
+    - **404 Not Found**: Retorna uma mensagem de erro dizendo que o sistema não achou nenhum usuário.
+
+**DELETE** `/delete/{id}`
+
+- **Descrição**: Remove um usuário baseado em um id passado.
+- **Path Variable**:
+     ```
+      id: Integer
+     ```
+  
+- **Response**:
+    - **200 OK**: Remove o usuário do sistema.
+    - **404 Not Found**: Retorna uma mensagem de erro dizendo que o sistema não achou nenhum usuário.
+
 ## Como Executar o Projeto
 1. Certifique-se de ter o **Java 17** e o **Maven** instalados.
 2. Clone o repositório:
