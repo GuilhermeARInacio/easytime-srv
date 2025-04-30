@@ -1,12 +1,11 @@
 package easytime.srv.api.controller;
 
-import easytime.srv.api.model.UserDTO;
+import easytime.srv.api.model.user.UserDTO;
 import easytime.srv.api.service.UserService;
 import easytime.srv.api.tables.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

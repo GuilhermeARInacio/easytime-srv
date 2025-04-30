@@ -1,7 +1,7 @@
 package easytime.srv.api.service;
 
 import easytime.srv.api.infra.security.TokenService;
-import easytime.srv.api.model.DTOUsuario;
+import easytime.srv.api.model.user.DTOUsuario;
 import easytime.srv.api.validacoes.Login.ValidacaoLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

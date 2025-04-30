@@ -2,7 +2,7 @@ package easytime.srv.api.validacoes.Login;
 
 import easytime.srv.api.infra.exceptions.CampoInvalidoException;
 import easytime.srv.api.infra.exceptions.CampoVazioException;
-import easytime.srv.api.model.DTOUsuario;
+import easytime.srv.api.model.user.DTOUsuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

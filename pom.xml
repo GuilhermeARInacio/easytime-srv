@@ -78,6 +78,12 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Email Sender -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
 		<!-- JPA API -->
 		<dependency>
 			<groupId>jakarta.persistence</groupId>

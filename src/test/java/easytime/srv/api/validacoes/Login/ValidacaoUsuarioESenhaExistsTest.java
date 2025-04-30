@@ -1,7 +1,7 @@
 package easytime.srv.api.validacoes.Login;
 
 import easytime.srv.api.infra.exceptions.UsuarioESenhaNotFoundException;
-import easytime.srv.api.model.DTOUsuario;
+import easytime.srv.api.model.user.DTOUsuario;
 import easytime.srv.api.tables.User;
 import easytime.srv.api.tables.repositorys.UserRepository;
 import org.junit.jupiter.api.BeforeEach;

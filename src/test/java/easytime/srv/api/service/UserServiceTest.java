@@ -1,9 +1,8 @@
 package easytime.srv.api.service;
 
-import easytime.srv.api.model.UserDTO;
+import easytime.srv.api.model.user.UserDTO;
 import easytime.srv.api.tables.User;
 import easytime.srv.api.tables.repositorys.UserRepository;
-import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

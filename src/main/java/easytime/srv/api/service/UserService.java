@@ -1,7 +1,7 @@
 package easytime.srv.api.service;
 
 
-import easytime.srv.api.model.UserDTO;
+import easytime.srv.api.model.user.UserDTO;
 import easytime.srv.api.tables.repositorys.UserRepository;
 import easytime.srv.api.tables.User;
 import org.springframework.beans.factory.annotation.Autowired;

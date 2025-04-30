@@ -3,10 +3,8 @@ package easytime.srv.api.controller;
 import easytime.srv.api.infra.exceptions.CampoInvalidoException;
 import easytime.srv.api.infra.exceptions.CampoVazioException;
 import easytime.srv.api.infra.exceptions.UsuarioESenhaNotFoundException;
-import easytime.srv.api.model.DTOUsuario;
-import easytime.srv.api.model.UserDTO;
+import easytime.srv.api.model.user.DTOUsuario;
 import easytime.srv.api.service.LoginService;
-import easytime.srv.api.tables.User;
 import easytime.srv.api.tables.repositorys.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,7 +63,7 @@ public class LoginController {
             )
     })
     @Operation(summary = "Fazer login", description = "Usuário envia usuário e senha válidos para obter um token JWT")
-    @SecurityRequirement(name = "bearer-key")
+//    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<String> login(@RequestBody DTOUsuario usuario) {
         try{
             var token = loginService.login(usuario);
