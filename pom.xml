@@ -112,6 +112,13 @@
 			<version>5.0.1</version>
 		</dependency>
 
+		<!-- Dependência para .env -->
+		<dependency>
+			<groupId>io.github.cdimascio</groupId>
+			<artifactId>java-dotenv</artifactId>
+			<version>5.2.2</version>
+		</dependency>
+
 		<!-- Spring Data JPA (opcional, se estiver usando Spring Framework) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

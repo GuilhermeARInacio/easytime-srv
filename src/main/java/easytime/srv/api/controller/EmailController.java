@@ -1,62 +1,55 @@
 package easytime.srv.api.controller;
 
+import easytime.srv.api.infra.exceptions.CampoInvalidoException;
 import easytime.srv.api.model.email.EmailRequest;
+import easytime.srv.api.model.email.ValidationCode;
 import easytime.srv.api.service.EmailService;
-import easytime.srv.api.tables.PasswordValidationCode;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.webjars.NotFoundException;
 
 @RestController
 public class EmailController {
 
     @Autowired
-    private JavaMailSender javaMailSender;
-
-    @Autowired
     private EmailService emailService;
 
-    @Value("${spring.mail.username}")
-    private String from;
-
     @PostMapping("/send-email")
+    @Operation(summary = "Enviar email com código de validação", description = "Usuário envia email que deseja receber o código de validação e sistema envia para esse endereço um email com o código de validação.")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<String> sendEmail(@RequestBody @Valid EmailRequest emailRequest) {
         try{
-            emailService.validateEmail(emailRequest.email());
-
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-
-            mailMessage.setFrom(from);
-            mailMessage.setTo(emailRequest.email());
-            mailMessage.setSubject("Código de validação do reset de senha.");
-            PasswordValidationCode code = emailService.createCode();
-            mailMessage.setText("Envie o seguinte código: "+code.getCode());
-            System.out.println(code.toString());
-            javaMailSender.send(mailMessage);
-
+            emailService.sendEmail(emailRequest);
             return ResponseEntity.ok("Email enviado, verifique sua caixa de entrada ou spam.");
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.toString());
         }
     }
 
-    @PostMapping("/validate-code")
-    public ResponseEntity<String> validateCode(@RequestBody @Valid String code) {
+    @PostMapping("/redefine-senha")
+    @Operation(summary = "Redefinir senha", description = "Usuário envia o código de validação recebido por email e a nova senha desejada, sistema então atualiza essa senha.")
+    @SecurityRequirement(name = "bearer-key")
+    public ResponseEntity<Object> validateCode(@RequestBody @Valid ValidationCode validationCode) {
         try {
-            if (emailService.validateCode(code)) {
-                return ResponseEntity.ok("Código válido.");
-            } else {
-                return ResponseEntity.badRequest().body("Código inválido ou expirado.");
-            }
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.toString());
+            emailService.validateCode(validationCode.code());
+            emailService.redefinirSenha(validationCode.email(), validationCode.senha());
+            return ResponseEntity.ok("Senha redefinida com sucesso.");
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(404).body("Tente enviar um novo código, ocorreu um erro pois "+e.getMessage());
+        }catch (IllegalArgumentException e) {
+            return ResponseEntity.status(401).body("Tente enviar um novo código, ocorreu um erro pois " + e.getMessage());
+        }catch (CampoInvalidoException e ) {
+            return ResponseEntity.status(400).body("Tente enviar um novo código, ocorreu um erro pois "+e.getMessage());
+        }catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Senha não redefinida, erro: "+e);
         }
     }
 }
