@@ -1,5 +1,7 @@
 package easytime.srv.api.controller;
 
+import easytime.srv.api.infra.exceptions.InvalidUserException;
+import easytime.srv.api.infra.exceptions.ObjectAlreadyExistsException;
 import easytime.srv.api.model.user.UserDTO;
 import easytime.srv.api.service.UserService;
 import easytime.srv.api.tables.User;
@@ -23,11 +25,16 @@ public class UserController {
     @Operation(summary = "Criar usuário", description = "Envia um UserDTO para api e cria um usuário no banco de dados")
     @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<Object> createUser(@RequestBody UserDTO user) {
-        if (!user.isValid()) {
-            return ResponseEntity.badRequest().body("Usuário inválido");
+        try{
+            User userCreated = userService.createUser(user);
+            return ResponseEntity.status(201).body(userCreated);
+        }catch (InvalidUserException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }catch (ObjectAlreadyExistsException e){
+            return ResponseEntity.status(409).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erro ao criar usuário: " + e.getMessage());
         }
-        User userCreated = userService.createUser(user);
-        return ResponseEntity.status(201).body(userCreated);
     }
 
     @GetMapping("/list")
