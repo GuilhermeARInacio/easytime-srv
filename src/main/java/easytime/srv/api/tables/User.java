@@ -1,6 +1,6 @@
 package easytime.srv.api.tables;
 
-import easytime.srv.api.model.UserDTO;
+import easytime.srv.api.model.user.UserDTO;
 import easytime.srv.api.util.PasswordUtil;
 import jakarta.persistence.*;
 import lombok.Getter;

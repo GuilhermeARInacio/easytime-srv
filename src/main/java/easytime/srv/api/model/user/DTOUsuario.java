@@ -1,4 +1,4 @@
-package easytime.srv.api.model;
+package easytime.srv.api.model.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

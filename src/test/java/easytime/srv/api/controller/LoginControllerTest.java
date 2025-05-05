@@ -2,20 +2,15 @@ package easytime.srv.api.controller;
 
 import easytime.srv.api.infra.exceptions.CampoInvalidoException;
 import easytime.srv.api.infra.exceptions.UsuarioESenhaNotFoundException;
-import easytime.srv.api.model.DTOUsuario;
+import easytime.srv.api.model.user.DTOUsuario;
 import easytime.srv.api.service.LoginService;
-import easytime.srv.api.validacoes.Login.ValidacaoLogin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;

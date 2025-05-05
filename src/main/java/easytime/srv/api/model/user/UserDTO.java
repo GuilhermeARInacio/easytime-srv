@@ -1,10 +1,7 @@
-package easytime.srv.api.model;
+package easytime.srv.api.model.user;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.sql.Timestamp;
 
 @Setter
 @Getter

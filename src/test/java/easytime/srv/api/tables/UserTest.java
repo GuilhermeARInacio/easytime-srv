@@ -1,6 +1,6 @@
 package easytime.srv.api.tables;
 
-import easytime.srv.api.model.UserDTO;
+import easytime.srv.api.model.user.UserDTO;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
