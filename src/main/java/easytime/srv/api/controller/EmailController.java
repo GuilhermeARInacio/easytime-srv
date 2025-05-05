@@ -34,6 +34,8 @@ public class EmailController {
         }
     }
 
+    Integer codigo = 0;
+
     @PostMapping("/redefine-senha")
     @Operation(summary = "Redefinir senha", description = "Usuário envia o código de validação recebido por email e a nova senha desejada, sistema então atualiza essa senha.")
     @SecurityRequirement(name = "bearer-key")
