@@ -3,7 +3,6 @@ package easytime.srv.api.service;
 import easytime.srv.api.infra.exceptions.CampoInvalidoException;
 import easytime.srv.api.model.email.EmailRequest;
 import easytime.srv.api.tables.PasswordValidationCode;
-import easytime.srv.api.tables.User;
 import easytime.srv.api.tables.repositorys.PasswordValidationCodeRepository;
 import easytime.srv.api.tables.repositorys.UserRepository;
 import easytime.srv.api.util.PasswordUtil;

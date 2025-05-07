@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserIsValidTest {
 
     @InjectMocks
-    private ValidacaoUser validacaoUser;
+    private UserIsValid validacaoUser;
 
     private UserDTO userDTO;
 
@@ -24,9 +24,16 @@ class UserIsValidTest {
     }
 
     @Test
-    @DisplayName("Verifica se a senha é vazia no login")
-    void whenCampoVazio() {
-        assertThrows(InvalidUserException.class, () -> validacaoUser.validar(userDto));
+    @DisplayName("Usuário é inválido quando um campo está faltando")
+    void whenUserNotValid() {
+        userDTO.setPassword("");
+        assertThrows(InvalidUserException.class, () -> validacaoUser.validar(userDTO));
+    }
+
+    @Test
+    @DisplayName("Usuário é válido quando todos os campos estão presentes")
+    void whenUserIsValid() {
+        assertDoesNotThrow(() -> validacaoUser.validar(userDTO));
     }
 
     void createUserDto(){

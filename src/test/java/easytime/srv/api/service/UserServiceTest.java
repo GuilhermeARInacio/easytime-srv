@@ -27,6 +27,9 @@ class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private List<ValidacaoUser> validacoes;
+
     private UserDTO userDTO;
 
     @BeforeEach

@@ -26,7 +26,7 @@ public class TimeLog {
 
     private String device;
 
-    public enum LogType {
+    private enum LogType {
         IN, OUT, BREAK_START, BREAK_END
     }
 
