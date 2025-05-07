@@ -17,7 +17,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
 class LoginControllerTest {
 
     @InjectMocks
@@ -27,7 +26,7 @@ class LoginControllerTest {
     private LoginService loginService;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 

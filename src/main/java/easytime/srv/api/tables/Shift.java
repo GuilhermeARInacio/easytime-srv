@@ -24,7 +24,7 @@ public class Shift {
     @Column(nullable = false)
     private String endTime;
 
-    public enum DayOfWeek {
+    private enum DayOfWeek {
         Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
     }
 

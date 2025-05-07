@@ -17,11 +17,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String login = authentication.getName();
         String senha = authentication.getCredentials().toString();
 
-        //Usuario usuario = Usuario.buscarPorLoginESenha(login, senha);
-
-//        if (usuario == null) {
-//            throw new BadCredentialsException("Login ou senha inválidos!");
-//        }
 
         return new UsernamePasswordAuthenticationToken(
             login,

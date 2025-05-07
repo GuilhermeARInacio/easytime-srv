@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/hello")
+@RequestMapping()
 public class TesteController {
 
-    @GetMapping()
+    @GetMapping("/health-check")
     @Operation(summary = "Rota teste", description = "Rota para verificar se api está no ar")
     @SecurityRequirement(name = "bearer-key")
     public String hello(){
