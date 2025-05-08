@@ -159,6 +159,43 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
     - **200 OK**: Remove o usuário do sistema.
     - **404 Not Found**: Retorna uma mensagem de erro dizendo que o sistema não achou nenhum usuário.
 
+### Redefinição de senha
+**POST** `/sendEmail`
+
+- **Descrição**: Envia uma requisição com um email, o sistema envia um email com código de validação para começar o processo de redefinição de senha.
+- **Request Body**:
+  ```json
+  {
+  "email": "string"
+  }
+  ```
+- **Response**:
+    - **200 Ok**: Email enviado.
+      ```body
+      "Email enviado, verifique sua caixa de entrada ou spam."
+      ```
+    - **404 Not Found**: Retorna uma mensagem de erro quando sistema não acha o endereço de email enviado pelo usuário.
+
+**POST** `/redefine-senha`
+
+- **Descrição**: Envia uma requisição com um email, o sistema envia um email com código de validação para começar o processo de redefinição de senha.
+- **Request Body**:
+  ```json
+  {
+  "code": "string",
+  "email": "string",
+  "senha": "string"
+  }
+  ```
+- **Response**:
+    - **200 Ok**: Senha redefinida.
+      ```body
+      "Senha redefinida com sucesso."
+      ```
+    - **404 Not Found**: Retorna uma mensagem de erro quando sistema não acha o código de validação de senha enviado pelo usuário.
+    - **401 Unauthorized**: Retorna uma mensagem de erro quando o código enviado não é válido ou não existe.
+    - **400 Bad Request**: Retorna uma mensagem de erro quando a senha enviada pelo usuário não é válida.
+
 ## Como Executar o Projeto
 1. Certifique-se de ter o **Java 17** e o **Maven** instalados.
 2. Clone o repositório:

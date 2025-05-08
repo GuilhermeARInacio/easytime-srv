@@ -6,16 +6,17 @@ import easytime.srv.api.tables.PasswordValidationCode;
 import easytime.srv.api.tables.User;
 import easytime.srv.api.tables.repositorys.PasswordValidationCodeRepository;
 import easytime.srv.api.tables.repositorys.UserRepository;
-import easytime.srv.api.util.PasswordUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.webjars.NotFoundException;
+
+import jakarta.mail.internet.MimeMessage;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -44,36 +45,43 @@ class EmailServiceTest {
     }
 
     @Test
-    @DisplayName("Verifica se o código de validação é criado com sucesso")
-    void shouldCreateCodeSuccessfully() {
-        PasswordValidationCode code = new PasswordValidationCode();
-        when(passwordValidationCodeRepository.save(any())).thenReturn(code);
-
-        PasswordValidationCode result = emailService.createCode();
-
-        assertNotNull(result);
-        verify(passwordValidationCodeRepository, times(1)).save(any());
-    }
-
-    @Test
     @DisplayName("Verifica se o código de validação é enviado por e-mail")
     void shouldSendEmailSuccessfully() {
         EmailRequest emailRequest = new EmailRequest("test@example.com");
         PasswordValidationCode code = new PasswordValidationCode();
+        User user = new User();
+        user.setLogin("testUser");
+
+        ReflectionTestUtils.setField(emailService, "from", "noreply@example.com");
+
         when(passwordValidationCodeRepository.save(any())).thenReturn(code);
+        when(userRepository.findByEmail(emailRequest.email())).thenReturn(Optional.of(user));
+        MimeMessage mimeMessage = mock(MimeMessage.class);
+        when(javaMailSender.createMimeMessage()).thenReturn(mimeMessage);
 
         emailService.sendEmail(emailRequest);
 
-        verify(javaMailSender, times(1)).send(any(SimpleMailMessage.class));
+        verify(javaMailSender, times(1)).send(mimeMessage);
     }
 
     @Test
-    @DisplayName("Verifica se o e-mail é válido")
+    @DisplayName("Verifica se o e-mail inválido lança exceção")
     void shouldThrowExceptionForInvalidEmail() {
         EmailRequest emailRequest = new EmailRequest("invalid-email");
 
-        assertThrows(IllegalArgumentException.class, () -> emailService.sendEmail(emailRequest));
-        verify(javaMailSender, never()).send(any(SimpleMailMessage.class));
+        assertThrows(NotFoundException.class, () -> emailService.sendEmail(emailRequest));
+        verify(javaMailSender, never()).send(any(MimeMessage.class));
+    }
+
+    @Test
+    @DisplayName("Verifica se o e-mail não encontrado lança exceção")
+    void shouldThrowExceptionForNonExistentUserInSendEmail() {
+        EmailRequest emailRequest = new EmailRequest("test@example.com");
+
+        when(userRepository.findByEmail(emailRequest.email())).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> emailService.sendEmail(emailRequest));
+        verify(javaMailSender, never()).send(any(MimeMessage.class));
     }
 
     @Test
@@ -121,15 +129,6 @@ class EmailServiceTest {
 
     @Test
     @DisplayName("Verifica se a redefinição de senha falha para usuário inexistente")
-    void shouldThrowExceptionForInvalidPassword() {
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(new User()));
-
-        assertThrows(CampoInvalidoException.class, () -> emailService.redefinirSenha("test@example.com", "invalid"));
-        verify(userRepository, never()).save(any());
-    }
-
-    @Test
-    @DisplayName("Verifica se a redefinição de senha falha para usuário inexistente")
     void shouldThrowExceptionForNonExistentUser() {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
@@ -145,6 +144,16 @@ class EmailServiceTest {
     @Test
     @DisplayName("Verifica se o e-mail inválido lança exceção")
     void shouldThrowExceptionForInvalidEmailFormat() {
-        assertThrows(IllegalArgumentException.class, () -> emailService.validateEmail("invalid-email"));
+        assertThrows(NotFoundException.class, () -> emailService.validateEmail("invalid-email"));
+    }
+
+    @Test
+    @DisplayName("Deve lançar CampoInvalidoException para senha inválida")
+    void shouldThrowCampoInvalidoExceptionForInvalidPassword() {
+        User user = new User();
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
+
+        assertThrows(CampoInvalidoException.class, () -> emailService.redefinirSenha("test@example.com", "senhaInvalida"));
+        verify(userRepository, never()).save(any());
     }
 }

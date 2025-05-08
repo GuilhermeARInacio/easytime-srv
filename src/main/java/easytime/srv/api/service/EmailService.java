@@ -6,13 +6,19 @@ import easytime.srv.api.tables.PasswordValidationCode;
 import easytime.srv.api.tables.repositorys.PasswordValidationCodeRepository;
 import easytime.srv.api.tables.repositorys.UserRepository;
 import easytime.srv.api.util.PasswordUtil;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -36,15 +42,32 @@ public class EmailService {
     }
 
     public void sendEmail(EmailRequest emailRequest) {
-        validateEmail(emailRequest.email()); //pode throw IllegalArgumentException
+        validateEmail(emailRequest.email()); // Pode lançar IllegalArgumentException
 
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setFrom(from);
-        mailMessage.setTo(emailRequest.email());
-        mailMessage.setSubject("Código de validação do reset de senha.");
-        PasswordValidationCode code = createCode();
-        mailMessage.setText("Envie o seguinte código: "+code.getCode());
-        javaMailSender.send(mailMessage);
+        try {
+            var user = userRepository.findByEmail(emailRequest.email())
+                    .orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            PasswordValidationCode code = createCode();
+
+            String htmlTemplate = carregaTemplate();
+
+            String htmlContent = htmlTemplate
+                    .replace("{{login}}", user.getLogin())
+                    .replace("{{code}}", code.getCode());
+
+            helper.setFrom(from);
+            helper.setTo(emailRequest.email());
+            helper.setSubject("Código de validação do reset de senha.");
+            helper.setText(htmlContent, true); // Define que o conteúdo é HTML
+
+            javaMailSender.send(message);
+        }catch (MessagingException e) {
+            throw new RuntimeException("Erro ao enviar o e-mail.", e);
+        }
     }
 
     public void validateCode(String code) {
@@ -75,7 +98,15 @@ public class EmailService {
         try {
             new jakarta.mail.internet.InternetAddress(email).validate();
         } catch (jakarta.mail.internet.AddressException e) {
-            throw new IllegalArgumentException("Formato de e-mail inválido ou e-mail não encontrado.");
+            throw new NotFoundException("Formato de e-mail inválido ou e-mail não encontrado.");
+        }
+    }
+
+    private String carregaTemplate() {
+        try (InputStream inputStream = new ClassPathResource("templates/email-template.html").getInputStream()) {
+            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao carregar o template de e-mail.", e);
         }
     }
 
