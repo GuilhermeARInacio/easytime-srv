@@ -27,7 +27,7 @@ public class EmailController {
         try{
             emailService.sendEmail(emailRequest);
             return ResponseEntity.ok("Email enviado, verifique sua caixa de entrada ou spam.");
-        } catch (IllegalArgumentException e) {
+        } catch (NotFoundException e) {
             return ResponseEntity.status(404).body(e.getMessage());
         }catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.toString());

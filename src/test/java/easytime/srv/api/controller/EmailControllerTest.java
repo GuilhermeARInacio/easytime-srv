@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.webjars.NotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,65 +31,84 @@ class EmailControllerTest {
     }
 
     @Test
-    void sendEmailReturns404() {
-        doThrow(new IllegalArgumentException("")).when(emailService).sendEmail(any());
-        var response = emailController.sendEmail(new EmailRequest("user"));
-        assertEquals(HttpStatusCode.valueOf(404), response.getStatusCode());
+    void sendEmailShouldReturn404WhenEmailNotFound() {
+        doThrow(new NotFoundException("Email não encontrado")).when(emailService).sendEmail(any());
+        var response = emailController.sendEmail(new EmailRequest("user@example.com"));
+
+        assertEquals(404, response.getStatusCodeValue());
+        assertEquals("Email não encontrado", response.getBody());
     }
 
     @Test
-    void sendEmailReturns500() {
-        doThrow(new RuntimeException("")).when(emailService).sendEmail(any());
-        var response = emailController.sendEmail(new EmailRequest("user"));
-        assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
+    void sendEmailShouldReturn500OnUnexpectedError() {
+        doThrow(new RuntimeException("Erro interno")).when(emailService).sendEmail(any());
+        var response = emailController.sendEmail(new EmailRequest("user@example.com"));
+
+        assertEquals(500, response.getStatusCodeValue());
+        assertTrue(response.getBody().contains("Erro interno"));
     }
 
     @Test
-    void sendEmailReturns200() {
+    void sendEmailShouldReturn200OnSuccess() {
         doNothing().when(emailService).sendEmail(any());
-        var response = emailController.sendEmail(new EmailRequest("user"));
-        assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
+        var response = emailController.sendEmail(new EmailRequest("user@example.com"));
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("Email enviado, verifique sua caixa de entrada ou spam.", response.getBody());
     }
 
     @Test
-    void whenValidateCodeReturns404ForCode() {
-        doThrow(new NotFoundException("")).when(emailService).validateCode(any());
-        var response = emailController.validateCode(new ValidationCode("code", "email", "senha"));
-        assertEquals(HttpStatusCode.valueOf(404), response.getStatusCode());
+    void validateCodeShouldReturn404WhenCodeNotFound() {
+        doThrow(new NotFoundException("Código não encontrado")).when(emailService).validateCode(any());
+        var response = emailController.validateCode(new ValidationCode("invalid-code", "user@example.com", "password"));
+
+        assertEquals(404, response.getStatusCodeValue());
+        assertTrue(response.getBody().toString().contains("Código não encontrado"));
     }
 
     @Test
-    void whenValidateCodeReturns401() {
-        doThrow(new IllegalArgumentException("")).when(emailService).validateCode(any());
-        var response = emailController.validateCode(new ValidationCode("code", "email", "senha"));
-        assertEquals(HttpStatusCode.valueOf(401), response.getStatusCode());
+    void validateCodeShouldReturn401WhenCodeIsInvalid() {
+        doThrow(new IllegalArgumentException("Código inválido")).when(emailService).validateCode(any());
+        var response = emailController.validateCode(new ValidationCode("invalid-code", "user@example.com", "password"));
+
+        assertEquals(401, response.getStatusCodeValue());
+        assertTrue(response.getBody().toString().contains("Código inválido"));
     }
 
     @Test
-    void whenValidateCodeReturns404ForEmail() {
-        doThrow(new NotFoundException("")).when(emailService).redefinirSenha(any(), any());
-        var response = emailController.validateCode(new ValidationCode("code", "email", "senha"));
-        assertEquals(HttpStatusCode.valueOf(404), response.getStatusCode());
+    void validateCodeShouldReturn404WhenEmailNotFound() {
+        doThrow(new NotFoundException("Email não encontrado")).when(emailService).redefinirSenha(any(), any());
+        var response = emailController.validateCode(new ValidationCode("valid-code", "user@example.com", "password"));
+
+        assertEquals(404, response.getStatusCodeValue());
+        assertTrue(response.getBody().toString().contains("Email não encontrado"));
     }
 
     @Test
-    void whenValidateCodeReturns400ForPassword() {
-        doThrow(new CampoInvalidoException("")).when(emailService).redefinirSenha(any(), any());
-        var response = emailController.validateCode(new ValidationCode("code", "email", "senha"));
-        assertEquals(HttpStatusCode.valueOf(400), response.getStatusCode());
+    void validateCodeShouldReturn400WhenPasswordIsInvalid() {
+        doThrow(new CampoInvalidoException("Senha inválida")).when(emailService).redefinirSenha(any(), any());
+        var response = emailController.validateCode(new ValidationCode("valid-code", "user@example.com", "invalid-password"));
+
+        assertEquals(400, response.getStatusCodeValue());
+        assertTrue(response.getBody().toString().contains("Senha inválida"));
     }
 
     @Test
-    void whenValidateCodeReturns500() {
-        doThrow(new RuntimeException("")).when(emailService).validateCode(any());
-        var response = emailController.validateCode(new ValidationCode("code", "email", "senha"));
-        assertEquals(HttpStatusCode.valueOf(500), response.getStatusCode());
+    void validateCodeShouldReturn500OnUnexpectedError() {
+        doThrow(new RuntimeException("Erro interno")).when(emailService).validateCode(any());
+        var response = emailController.validateCode(new ValidationCode("valid-code", "user@example.com", "password"));
+
+        assertEquals(500, response.getStatusCodeValue());
+        assertTrue(response.getBody().toString().contains("Erro interno"));
     }
 
     @Test
-    void whenValidateCodeReturns200() {
+    void validateCodeShouldReturn200OnSuccess() {
         doNothing().when(emailService).validateCode(any());
-        var response = emailController.validateCode(new ValidationCode("code", "email", "senha"));
-        assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
+        doNothing().when(emailService).redefinirSenha(any(), any());
+        var response = emailController.validateCode(new ValidationCode("valid-code", "user@example.com", "password"));
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("Senha redefinida com sucesso.", response.getBody());
     }
 }
