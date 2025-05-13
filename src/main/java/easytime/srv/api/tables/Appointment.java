@@ -1,9 +1,12 @@
 package easytime.srv.api.tables;
 
 import jakarta.persistence.*;
+import lombok.Setter;
+
 import java.sql.Timestamp;
 
 @Entity
+@Setter
 @Table(name = "Appointments")
 public class Appointment {
 
