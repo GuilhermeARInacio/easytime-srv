@@ -81,14 +81,9 @@ public class TimeLog {
         return timeLog;
     }
 
-    public void setPonto(boolean isEntrada, int indice, Time hora) {
+    public void setPonto(Time hora) {
         try {
-            Field field;
-            if (isEntrada) {
-                field = TimeLog.class.getDeclaredField("E"+indice);
-            } else {
-                field = TimeLog.class.getDeclaredField("S"+indice);
-            }
+            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName());;
 
             field.setAccessible(true);
             field.set(this, hora);
@@ -103,5 +98,22 @@ public class TimeLog {
         PENDENTE,
         APROVADO,
         REPROVADO
+    }
+
+    public String getUltimoBatimentoName(){
+        boolean isEntrada = this.cont % 2 == 0;
+        int indice = (this.cont / 2) + 1;
+
+        return isEntrada ? "E" + indice : "S" + indice;
+    }
+
+    public Object getUltimoBatimentoValue(){
+        try {
+            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName());
+            field.setAccessible(true); // Allow access to private fields
+            return field.get(this); // Get the value of the field for the current instance
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException("Error accessing attribute: " + e.getMessage(), e);
+        }
     }
 }

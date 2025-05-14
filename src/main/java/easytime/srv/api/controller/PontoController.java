@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -26,7 +27,7 @@ public class PontoController {
     public ResponseEntity<?> registrarPonto(@RequestBody LoginDto login) {
         try{
             LocalDate dataHoje = LocalDate.now();
-            LocalTime horaAgora = LocalTime.now();
+            Time horaAgora = Time.valueOf(LocalTime.now());
 
             var ponto = service.registrarPonto(login, dataHoje, horaAgora);
             return ResponseEntity.ok(ponto);
