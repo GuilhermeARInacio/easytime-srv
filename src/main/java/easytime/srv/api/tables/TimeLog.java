@@ -90,9 +90,12 @@ public class TimeLog {
         return isEntrada ? "E" + indice : "S" + indice;
     }
 
-    public Object getUltimoBatimentoValue(){
+    public Object getUltimoBatimentoValue() {
+        if (this.cont <= 0) {
+            throw new RuntimeException("No batimento exists to retrieve.");
+        }
         try {
-            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(this.cont-1));
+            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(this.cont - 1));
             field.setAccessible(true); // Allow access to private fields
             return field.get(this); // Get the value of the field for the current instance
         } catch (NoSuchFieldException | IllegalAccessException e) {
