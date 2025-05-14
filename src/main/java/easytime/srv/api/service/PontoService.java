@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 
 @Service
 public class PontoService {
@@ -21,21 +23,15 @@ public class PontoService {
     @Autowired
     private TimeLogsRepository timeLogsRepository;
 
-    public TimeLog registrarPonto(LoginDto login) {
+    public TimeLog registrarPonto(LoginDto login, LocalDate dataHoje, LocalTime horaAgora) {
         User user = userRepository.findByLogin(login.login()).orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
 
-        LocalDate dataHoje = LocalDate.now();
+        System.out.println("Data e hora atuais: " + dataHoje + " " + horaAgora);
 
         var timeLog = timeLogsRepository.findByUserAndData(user, dataHoje)
                 .orElse(new TimeLog(user, dataHoje)); // cria um novo TimeLog se não existir
 
-        LocalTime horaAgora = LocalTime.now();
-
         // validacoes
-//       pipipi
-//        popopo
-//               pipip
-//
 
         int cont = timeLog.getCont();
         if (cont >= 6) {
@@ -45,10 +41,11 @@ public class PontoService {
         boolean isEntrada = cont % 2 == 0;
         int indice = (cont / 2) + 1;
 
-        timeLog.setPonto(isEntrada, indice, horaAgora);
+        timeLog.setPonto(isEntrada, indice, Time.valueOf(horaAgora));
+
+        System.out.println(timeLog);
 
         timeLogsRepository.save(timeLog);
-        System.out.println(timeLog);
         return timeLog;
     }
 

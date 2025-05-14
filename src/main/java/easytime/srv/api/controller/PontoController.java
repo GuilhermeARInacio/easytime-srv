@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+
 @Controller
 @RestController
 @RequestMapping("/ponto")
@@ -21,7 +25,10 @@ public class PontoController {
     @PostMapping
     public ResponseEntity<?> registrarPonto(@RequestBody LoginDto login) {
         try{
-            var ponto = service.registrarPonto(login);
+            LocalDate dataHoje = LocalDate.now();
+            LocalTime horaAgora = LocalTime.now();
+
+            var ponto = service.registrarPonto(login, dataHoje, horaAgora);
             return ResponseEntity.ok(ponto);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao registrar ponto: " + e.getMessage());

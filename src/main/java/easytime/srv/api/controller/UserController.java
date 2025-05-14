@@ -28,9 +28,9 @@ public class UserController {
         try{
             User userCreated = userService.createUser(user);
             return ResponseEntity.status(201).body(userCreated);
-        }catch (InvalidUserException e){
+        } catch (InvalidUserException e){
             return ResponseEntity.badRequest().body(e.getMessage());
-        }catch (ObjectAlreadyExistsException e){
+        } catch (ObjectAlreadyExistsException e){
             return ResponseEntity.status(409).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Erro ao criar usuário: " + e.getMessage());

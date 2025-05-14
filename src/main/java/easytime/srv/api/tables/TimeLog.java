@@ -2,13 +2,16 @@ package easytime.srv.api.tables;
 
 import easytime.srv.api.model.pontos.TimeLogDto;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.lang.reflect.Field;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 
 @Entity
 @Setter
@@ -20,8 +23,6 @@ public class TimeLog {
     public TimeLog(User user, LocalDate date) {
         this.user = user;
         this.data = date;
-        this.E1 = LocalTime.now();
-        this.cont++;
     }
 
     @Id
@@ -33,25 +34,38 @@ public class TimeLog {
     private User user;
 
     @Column(nullable = false)
+    @Getter
     private LocalDate data;
 
-    @Column(nullable = false)
-    private LocalTime E1;
+    @Column(nullable = true, columnDefinition = "time")
+    @Getter
+    private Time E1;
 
-    private LocalTime S1;
+    @Column(nullable = true, columnDefinition = "time")
+    @Getter
+    private Time S1;
 
-    private LocalTime E2;
+    @Column(nullable = true, columnDefinition = "time")
+    @Getter
+    private Time E2;
 
-    private LocalTime S2;
+    @Column(nullable = true, columnDefinition = "time")
+    @Getter
+    private Time S2;
 
-    private LocalTime E3;
+    @Column(nullable = true, columnDefinition = "time")
+    @Getter
+    private Time E3;
 
-    private LocalTime S3 = LocalTime.now();
+    @Column(nullable = true, columnDefinition = "time")
+    @Getter
+    private Time S3;
 
     private String location;
 
     private String device;
 
+    @Getter
     private int cont = 0;
 
     private float horas_trabalhadas = 0;
@@ -64,43 +78,10 @@ public class TimeLog {
         TimeLog timeLog = new TimeLog();
         timeLog.setUser(dto.user());
 
-        if (dto.data() != null) {
-            timeLog.setData(dto.data());
-        }
-        if (dto.E1() != null) {
-            timeLog.setE1(dto.E1());
-        }
-        if (dto.S1() != null) {
-            timeLog.setS1(dto.S1());
-        }
-        if (dto.E2() != null) {
-            timeLog.setE2(dto.E2());
-        }
-        if (dto.S2() != null) {
-            timeLog.setS2(dto.S2());
-        }
-        if (dto.E3() != null) {
-            timeLog.setE3(dto.E3());
-        }
-        if (dto.S3() != null) {
-            timeLog.setS3(dto.S3());
-        }
-
         return timeLog;
     }
 
-    // Getters and Setters
-    public Integer getCont(){
-        return cont;
-    }
-
-    public enum Status {
-        PENDENTE,
-        APROVADO,
-        REPROVADO
-    }
-
-    public void setPonto(boolean isEntrada, int indice, LocalTime hora) {
+    public void setPonto(boolean isEntrada, int indice, Time hora) {
         try {
             Field field;
             if (isEntrada) {
@@ -118,11 +99,9 @@ public class TimeLog {
 
     }
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private LogType logType = LogType.IN;
-
-    public enum LogType {
-        IN, OUT, BREAK_START, BREAK_END
+    public enum Status {
+        PENDENTE,
+        APROVADO,
+        REPROVADO
     }
 }
