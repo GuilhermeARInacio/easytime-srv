@@ -1,5 +1,6 @@
 package easytime.srv.api.service;
 
+import easytime.srv.api.model.pontos.TimeLogDto;
 import easytime.srv.api.model.user.LoginDto;
 import easytime.srv.api.tables.TimeLog;
 import easytime.srv.api.tables.User;
@@ -23,7 +24,7 @@ public class PontoService {
     @Autowired
     private TimeLogsRepository timeLogsRepository;
 
-    public TimeLog registrarPonto(LoginDto login, LocalDate dataHoje, LocalTime horaAgora) {
+    public TimeLogDto registrarPonto(LoginDto login, LocalDate dataHoje, LocalTime horaAgora) {
         User user = userRepository.findByLogin(login.login()).orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
 
         System.out.println("Data e hora atuais: " + dataHoje + " " + horaAgora);
@@ -46,7 +47,7 @@ public class PontoService {
         System.out.println(timeLog);
 
         timeLogsRepository.save(timeLog);
-        return timeLog;
+        return new TimeLogDto(timeLog);
     }
 
 }

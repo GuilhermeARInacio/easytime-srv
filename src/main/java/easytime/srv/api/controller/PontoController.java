@@ -1,7 +1,9 @@
 package easytime.srv.api.controller;
 
+import easytime.srv.api.model.pontos.TimeLogDto;
 import easytime.srv.api.model.user.LoginDto;
 import easytime.srv.api.service.PontoService;
+import easytime.srv.api.tables.TimeLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

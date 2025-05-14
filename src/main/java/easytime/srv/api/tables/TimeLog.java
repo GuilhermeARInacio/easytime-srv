@@ -15,6 +15,7 @@ import java.time.ZoneId;
 
 @Entity
 @Setter
+@Getter
 @NoArgsConstructor
 @ToString
 @Table(name = "TimeLogs")
@@ -34,38 +35,30 @@ public class TimeLog {
     private User user;
 
     @Column(nullable = false)
-    @Getter
     private LocalDate data;
 
     @Column(nullable = true, columnDefinition = "time")
-    @Getter
     private Time E1;
 
     @Column(nullable = true, columnDefinition = "time")
-    @Getter
     private Time S1;
 
     @Column(nullable = true, columnDefinition = "time")
-    @Getter
     private Time E2;
 
     @Column(nullable = true, columnDefinition = "time")
-    @Getter
     private Time S2;
 
     @Column(nullable = true, columnDefinition = "time")
-    @Getter
     private Time E3;
 
     @Column(nullable = true, columnDefinition = "time")
-    @Getter
     private Time S3;
 
     private String location;
 
     private String device;
 
-    @Getter
     private int cont = 0;
 
     private float horas_trabalhadas = 0;
@@ -73,13 +66,6 @@ public class TimeLog {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status = Status.PENDENTE;
-
-    public static TimeLog toEntity(TimeLogDto dto) {
-        TimeLog timeLog = new TimeLog();
-        timeLog.setUser(dto.user());
-
-        return timeLog;
-    }
 
     public void setPonto(boolean isEntrada, int indice, Time hora) {
         try {
