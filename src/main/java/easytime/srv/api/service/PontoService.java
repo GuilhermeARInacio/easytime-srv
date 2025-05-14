@@ -1,5 +1,6 @@
 package easytime.srv.api.service;
 
+import easytime.srv.api.model.pontos.TimeLogDto;
 import easytime.srv.api.model.user.LoginDto;
 import easytime.srv.api.tables.TimeLog;
 import easytime.srv.api.tables.User;
@@ -12,8 +13,6 @@ import org.webjars.NotFoundException;
 
 import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -28,7 +27,7 @@ public class PontoService {
     @Autowired
     private List<ValidacaoPonto> validacoes;
 
-    public TimeLog registrarPonto(LoginDto login, LocalDate dataHoje, Time horaAgora) {
+    public TimeLogDto registrarPonto(LoginDto login, LocalDate dataHoje, Time horaAgora) {
         User user = userRepository.findByLogin(login.login()).orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
 
         System.out.println("Data e hora atuais: " + dataHoje + " " + horaAgora);
@@ -43,7 +42,7 @@ public class PontoService {
         System.out.println(timeLog);
 
         timeLogsRepository.save(timeLog);
-        return timeLog;
+        return new TimeLogDto(timeLog);
     }
 
 }
