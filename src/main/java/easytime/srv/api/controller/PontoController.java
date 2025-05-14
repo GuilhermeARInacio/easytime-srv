@@ -1,10 +1,8 @@
 package easytime.srv.api.controller;
 
-import easytime.srv.api.model.pontos.TimeLogDto;
 import easytime.srv.api.model.user.DTOUsuario;
 import easytime.srv.api.model.user.LoginDto;
 import easytime.srv.api.service.PontoService;
-import easytime.srv.api.tables.TimeLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -16,11 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.webjars.NotFoundException;
 
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
 
 @Controller
 @RestController
@@ -72,8 +70,12 @@ public class PontoController {
 
             var ponto = pontoService.registrarPonto(login, dataHoje, horaAgora);
             return ResponseEntity.ok(ponto);
-        } catch (Exception e) {
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(404).body("Erro ao registrar ponto: " + e.getMessage());
+        }catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Erro ao registrar ponto: " + e.getMessage());
+        }catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erro ao registrar ponto: " + e.getMessage());
         }
     }
 
@@ -91,7 +93,13 @@ public class PontoController {
     @Operation(summary = "Remover registro de batimento de ponto", description = "Usuário envia o ID do registro.")
     @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<?> removerPonto(@PathVariable Integer id) {
-        pontoService.removerPonto(id);
-        return ResponseEntity.ok().build();
+        try{
+            pontoService.removerPonto(id);
+            return ResponseEntity.ok().build();
+        }catch (NotFoundException e) {
+            return ResponseEntity.status(404).body("Erro ao remover ponto: " + e.getMessage());
+        }catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erro ao remover ponto: " + e.getMessage());
+        }
     }
 }
