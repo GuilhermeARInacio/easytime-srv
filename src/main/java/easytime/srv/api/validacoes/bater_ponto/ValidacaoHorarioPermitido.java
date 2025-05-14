@@ -1,10 +1,12 @@
 package easytime.srv.api.validacoes.bater_ponto;
 
 import easytime.srv.api.tables.TimeLog;
+import org.springframework.stereotype.Component;
 
 import java.sql.Time;
 import java.time.LocalTime;
 
+@Component
 public class ValidacaoHorarioPermitido implements ValidacaoPonto {
 
     @Override

@@ -99,7 +99,7 @@ class EmailServiceTest {
     void shouldThrowExceptionForInvalidCode() {
         when(passwordValidationCodeRepository.findByCode(anyString())).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> emailService.validateCode("invalid-code"));
+        assertThrows(IllegalArgumentException.class, () -> emailService.validateCode("invalid-code"));
     }
 
     @Test

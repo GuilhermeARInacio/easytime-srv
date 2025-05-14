@@ -30,8 +30,6 @@ public class PontoService {
     public TimeLogDto registrarPonto(LoginDto login, LocalDate dataHoje, Time horaAgora) {
         User user = userRepository.findByLogin(login.login()).orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
 
-        System.out.println("Data e hora atuais: " + dataHoje + " " + horaAgora);
-
         var timeLog = timeLogsRepository.findByUserAndData(user, dataHoje)
                 .orElse(new TimeLog(user, dataHoje)); // cria um novo TimeLog se não existir
 
@@ -39,10 +37,13 @@ public class PontoService {
 
         timeLog.setPonto(horaAgora);
 
-        System.out.println(timeLog);
-
         timeLogsRepository.save(timeLog);
         return new TimeLogDto(timeLog);
     }
 
+    public void removerPonto(Integer id) {
+        var timeLog = timeLogsRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Ponto não encontrado."));
+        timeLogsRepository.delete(timeLog);
+    }
 }

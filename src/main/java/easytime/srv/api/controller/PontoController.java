@@ -7,10 +7,7 @@ import easytime.srv.api.tables.TimeLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Time;
 import java.time.LocalDate;
@@ -23,7 +20,7 @@ import java.time.ZoneId;
 public class PontoController {
 
     @Autowired
-    private PontoService service;
+    private PontoService pontoService;
 
     @PostMapping
     public ResponseEntity<?> registrarPonto(@RequestBody LoginDto login) {
@@ -31,10 +28,16 @@ public class PontoController {
             LocalDate dataHoje = LocalDate.now();
             Time horaAgora = Time.valueOf(LocalTime.now());
 
-            var ponto = service.registrarPonto(login, dataHoje, horaAgora);
+            var ponto = pontoService.registrarPonto(login, dataHoje, horaAgora);
             return ResponseEntity.ok(ponto);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao registrar ponto: " + e.getMessage());
         }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> removerPonto(@PathVariable Integer id) {
+        pontoService.removerPonto(id);
+        return ResponseEntity.ok().build();
     }
 }

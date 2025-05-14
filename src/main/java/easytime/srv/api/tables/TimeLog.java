@@ -66,7 +66,7 @@ public class TimeLog {
 
     public void setPonto(Time hora) {
         try {
-            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName());;
+            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(this.cont));;
 
             field.setAccessible(true);
             field.set(this, hora);
@@ -83,16 +83,16 @@ public class TimeLog {
         REPROVADO
     }
 
-    public String getUltimoBatimentoName(){
-        boolean isEntrada = this.cont % 2 == 0;
-        int indice = (this.cont / 2) + 1;
+    public String getUltimoBatimentoName(int cont){
+        boolean isEntrada = cont % 2 == 0;
+        int indice = (cont / 2) + 1;
 
         return isEntrada ? "E" + indice : "S" + indice;
     }
 
     public Object getUltimoBatimentoValue(){
         try {
-            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName());
+            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(this.cont-1));
             field.setAccessible(true); // Allow access to private fields
             return field.get(this); // Get the value of the field for the current instance
         } catch (NoSuchFieldException | IllegalAccessException e) {
