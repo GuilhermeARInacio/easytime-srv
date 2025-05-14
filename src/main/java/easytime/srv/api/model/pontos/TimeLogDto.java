@@ -1,18 +1,29 @@
 package easytime.srv.api.model.pontos;
 
-import easytime.srv.api.tables.User;
+import easytime.srv.api.tables.TimeLog;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 
 public record TimeLogDto(
-        User user,
+        @Schema(description = "Login do usuário", example = "mkenzo")
+        String login,
+        @Schema(description = "Data do ponto", example = "2023-10-01")
         LocalDate data,
-        LocalDateTime E1,
-        LocalDateTime S1,
-        LocalDateTime E2,
-        LocalDateTime S2,
-        LocalDateTime E3,
-        LocalDateTime S3
+        @Schema(description = "Horário do ponto", example = "08:00:00")
+        Time horarioBatida,
+        @Schema(description = "Status do ponto", example = "PENDENTE")
+        TimeLog.Status status
 ) {
+
+    public TimeLogDto(TimeLog timeLog){
+        this(
+                timeLog.getUser().getLogin(),
+                timeLog.getData(),
+                (Time) timeLog.getUltimoBatimentoValue(),
+                timeLog.getStatus()
+        );
+    }
 }
