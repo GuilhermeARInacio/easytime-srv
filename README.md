@@ -219,16 +219,18 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
         "usuario": "string"
       }
       ```
-    - **Response**:
-        - **200 OK**: Retorna o ponto batido.
-          ```json
-          {
-            "usuario": "string",
-            "dataHora": "2023-10-01T12:00:00Z"
-          }
-          ```
-        - **400 Bad Request**: Retorna uma mensagem de erro quando o usuário não é válido ou não existe.
-        - **401 Unauthorized**: Retorna uma mensagem de erro quando o usuário não está autenticado.
+      - **Response**:
+          - **200 OK**: Retorna o ponto batido.
+            ```json
+            {
+                "login": "string",
+                "data": "2025-05-14",
+                "horarioBatida": "12:00:00",
+                "status": "PENDENTE"
+            }
+            ```
+          - **400 Bad Request**: Retorna uma mensagem de erro quando o usuário não é válido ou não existe.
+          - **401 Unauthorized**: Retorna uma mensagem de erro quando o usuário não está autenticado.
 
 ## Como Executar o Projeto
 1. Certifique-se de ter o **Java 17** e o **Maven** instalados.
