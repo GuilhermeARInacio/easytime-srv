@@ -72,7 +72,7 @@ public class EmailService {
 
     public void validateCode(String code) {
         var validationCode = passwordValidationCodeRepository.findByCode(code.trim())
-                .orElseThrow(() -> new NotFoundException("Código não encontrado"));
+                .orElseThrow(() -> new IllegalArgumentException("Código não encontrado"));
 
         if(validateTimestamp(validationCode.getTimestamp())){
             passwordValidationCodeRepository.delete(validationCode);

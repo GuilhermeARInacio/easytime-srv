@@ -1,14 +1,18 @@
 package easytime.srv.api.controller;
 
+import easytime.srv.api.model.pontos.TimeLogDto;
 import easytime.srv.api.model.user.LoginDto;
 import easytime.srv.api.service.PontoService;
+import easytime.srv.api.tables.TimeLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
 
 @Controller
 @RestController
@@ -16,15 +20,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class PontoController {
 
     @Autowired
-    private PontoService service;
+    private PontoService pontoService;
 
     @PostMapping
     public ResponseEntity<?> registrarPonto(@RequestBody LoginDto login) {
         try{
-            service.registrarPonto(login);
-            return ResponseEntity.ok("Ponto registrado com sucesso.");
+            LocalDate dataHoje = LocalDate.now();
+            Time horaAgora = Time.valueOf(LocalTime.now());
+
+            var ponto = pontoService.registrarPonto(login, dataHoje, horaAgora);
+            return ResponseEntity.ok(ponto);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao registrar ponto: " + e.getMessage());
         }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> removerPonto(@PathVariable Integer id) {
+        pontoService.removerPonto(id);
+        return ResponseEntity.ok().build();
     }
 }

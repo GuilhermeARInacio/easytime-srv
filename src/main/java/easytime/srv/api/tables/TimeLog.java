@@ -1,16 +1,27 @@
 package easytime.srv.api.tables;
 
-import easytime.srv.api.model.pontos.TimeLogDto;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.lang.reflect.Field;
+import java.sql.Time;
+import java.time.LocalDate;
 
 @Entity
 @Setter
+@Getter
+@NoArgsConstructor
+@ToString
 @Table(name = "TimeLogs")
 public class TimeLog {
+
+    public TimeLog(User user, LocalDate date) {
+        this.user = user;
+        this.data = date;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,58 +32,71 @@ public class TimeLog {
     private User user;
 
     @Column(nullable = false)
-    private Date data;
+    private LocalDate data;
 
-    @Column(nullable = false, columnDefinition = "timestamp default current_timestamp")
-    private Timestamp E1;
+    @Column(nullable = true, columnDefinition = "time")
+    private Time E1;
 
-    @Column(nullable = true, columnDefinition = "timestamp default current_timestamp")
-    private Timestamp S1;
+    @Column(nullable = true, columnDefinition = "time")
+    private Time S1;
 
-    @Column(nullable = true, columnDefinition = "timestamp default current_timestamp")
-    private Timestamp E2;
+    @Column(nullable = true, columnDefinition = "time")
+    private Time E2;
 
-    @Column(nullable = true, columnDefinition = "timestamp default current_timestamp")
-    private Timestamp S2;
+    @Column(nullable = true, columnDefinition = "time")
+    private Time S2;
 
-    @Column(nullable = true, columnDefinition = "timestamp default current_timestamp")
-    private Timestamp E3;
+    @Column(nullable = true, columnDefinition = "time")
+    private Time E3;
 
-    @Column(nullable = false, columnDefinition = "timestamp default current_timestamp")
-    private Timestamp S3;
+    @Column(nullable = true, columnDefinition = "time")
+    private Time S3;
 
     private String location;
 
     private String device;
 
-    public static TimeLog toEntity(TimeLogDto dto) {
-        TimeLog timeLog = new TimeLog();
-        timeLog.setUser(dto.user());
+    private int cont = 0;
 
-        if(dto.data() != null) {
-            timeLog.setData(Date.valueOf(dto.data()));
-        }
-        if (dto.E1() != null) {
-            timeLog.setE1(Timestamp.valueOf(dto.E1()));
-        }
-        if (dto.S1() != null) {
-            timeLog.setS1(Timestamp.valueOf(dto.S1()));
-        }
-        if (dto.E2() != null) {
-            timeLog.setE2(Timestamp.valueOf(dto.E2()));
-        }
-        if (dto.S2() != null) {
-            timeLog.setS2(Timestamp.valueOf(dto.S2()));
-        }
-        if (dto.E3() != null) {
-            timeLog.setE3(Timestamp.valueOf(dto.E3()));
-        }
-        if (dto.S3() != null) {
-            timeLog.setS3(Timestamp.valueOf(dto.S3()));
+    private float horas_trabalhadas = 0;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status = Status.PENDENTE;
+
+    public void setPonto(Time hora) {
+        try {
+            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(this.cont));;
+
+            field.setAccessible(true);
+            field.set(this, hora);
+            this.cont++;
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException("Erro ao definir o campo: " + e);
         }
 
-        return timeLog;
     }
 
-    // Getters and Setters
+    public enum Status {
+        PENDENTE,
+        APROVADO,
+        REPROVADO
+    }
+
+    public String getUltimoBatimentoName(int cont){
+        boolean isEntrada = cont % 2 == 0;
+        int indice = (cont / 2) + 1;
+
+        return isEntrada ? "E" + indice : "S" + indice;
+    }
+
+    public Object getUltimoBatimentoValue(){
+        try {
+            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(this.cont-1));
+            field.setAccessible(true); // Allow access to private fields
+            return field.get(this); // Get the value of the field for the current instance
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException("Error accessing attribute: " + e.getMessage(), e);
+        }
+    }
 }
