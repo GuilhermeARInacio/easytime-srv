@@ -1,4 +1,3 @@
-[//]: # (BackEnd For Frontend &#40;BFF&#41; do projeto de gerenciamento de ponto eletrônico EasyTime.)
 # Easytime - Sistema de Marcação de Ponto (SRV)
 
 ## Descrição do Projeto
@@ -10,6 +9,17 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
 - **Autenticação de Usuário**:
     - Rota de login que recebe as credenciais (usuário e senha).
     - Validação de senha com regras específicas.
+- **CRUD de Usuário**:
+    - Rota de cadastro de um novo usuário, deve ser feito por um usuario já cadastrado.
+    - Rota de listagem de todos os usuários cadastrados.
+    - Rota que retorna um usuário de acordo com o ID informado.
+    - Rota para excluir um usuário de acordo com o ID informado.
+    - Validação de campos com regras específicas.
+- **Troca de senha**:
+    - Rota para enviar um código de validação para um email válido.
+    - Rota para validar o código enviado e permitir a troca de senha.
+- **Batimento de ponto**:
+    - Rota de batimento de ponto, onde o usuário pode registrar seu ponto de entrada ou saída.
 
 ## Tecnologias Utilizadas
 - **Java 17**
@@ -23,6 +33,9 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
 - `src/main/java/easytime/srv/api/model`: Contém os DTOs (Data Transfer Objects) utilizados para transferência de dados.
 - `src/main/java/easytime/srv/api/service`: Contém as regras de negócio e serviços.
 - `src/main/java/easytime/srv/api/validacoes`: Contém as validações específicas, como validação de senha.
+- `src/main/java/easytime/srv/api/infra`: Contém a configuração de segurança, exceptions personalizadas e configurações do SpringDoc.
+- `src/main/java/easytime/srv/api/tables`: Contém as entidades do banco de dados.
+- `src/main/java/easytime/srv/api/utils`: Contém classes utilitárias, como o gerador de senhas.
 
 ## Endpoints
 
@@ -59,33 +72,33 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
 **PUT** `/create`
 
 - **Descrição**: Cria um usuário no sistema
-- **Request Body**:
-  ```json
-  {
-  "nome": "string",
-  "email": "string",
-  "login": "string",
-  "password": "string",
-  "sector": "string",
-  "jobTitle": "string",
-  "role": "string",
-  "isActive": true,
-  "valid": true
-  }
-  ```
+    - **Request Body**:
+      ```json
+      {
+          "nome": "string",
+          "email": "string",
+          "login": "string",
+          "password": "string",
+          "sector": "string",
+          "jobTitle": "string",
+          "role": "string",
+          "isActive": true,
+          "valid": true
+      }
+      ```
 - **Response**:
     - **201 Created**: Cria o usuário.
       ```json
       {
-      "nome": "string",
-      "email": "string",
-      "login": "string",
-      "password": "string",
-      "sector": "string",
-      "jobTitle": "string",
-      "role": "string",
-      "isActive": true,
-      "valid": true
+          "nome": "string",
+          "email": "string",
+          "login": "string",
+          "password": "string",
+          "sector": "string",
+          "jobTitle": "string",
+          "role": "string",
+          "isActive": true,
+          "valid": true
       }
       ```
     - **400 Bad Request**: Retorna uma mensagem de erro caso alguma informação seja inválida e não aceita pelo sistema.
@@ -98,26 +111,26 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
     - **200 OK**: Retorna lista dos usuários.
       ```json
       [{
-      "nome": "string",
-      "email": "string",
-      "login": "string",
-      "password": "string",
-      "sector": "string",
-      "jobTitle": "string",
-       "role": "string",
-      "isActive": true,
-      "valid": true
+          "nome": "string",
+          "email": "string",
+          "login": "string",
+          "password": "string",
+          "sector": "string",
+          "jobTitle": "string",
+           "role": "string",
+          "isActive": true,
+          "valid": true
       },
       {
-      "nome": "string",
-      "email": "string",
-      "login": "string",
-      "password": "string",
-      "sector": "string",
-      "jobTitle": "string",
-      "role": "string",
-      "isActive": true,
-      "valid": true
+          "nome": "string",
+          "email": "string",
+          "login": "string",
+          "password": "string",
+          "sector": "string",
+          "jobTitle": "string",
+          "role": "string",
+          "isActive": true,
+          "valid": true
       }]
       ```
     - **404 Not Found**: Retorna uma mensagem de erro dizendo que o sistema não achou nenhum usuário.
@@ -134,15 +147,15 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
     - **200 OK**: Retorna usuário.
       ```json
       {
-      "nome": "string",
-      "email": "string",
-      "login": "string",
-      "password": "string",
-      "sector": "string",
-      "jobTitle": "string",
-      "role": "string",
-      "isActive": true,
-      "valid": true
+          "nome": "string",
+          "email": "string",
+          "login": "string",
+          "password": "string",
+          "sector": "string",
+          "jobTitle": "string",
+          "role": "string",
+          "isActive": true,
+          "valid": true
       }
       ```
     - **404 Not Found**: Retorna uma mensagem de erro dizendo que o sistema não achou nenhum usuário.
@@ -154,7 +167,7 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
      ```
       id: Integer
      ```
-  
+
 - **Response**:
     - **200 OK**: Remove o usuário do sistema.
     - **404 Not Found**: Retorna uma mensagem de erro dizendo que o sistema não achou nenhum usuário.
@@ -166,7 +179,7 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
 - **Request Body**:
   ```json
   {
-  "email": "string"
+    "email": "string"
   }
   ```
 - **Response**:
@@ -179,14 +192,14 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
 **POST** `/redefine-senha`
 
 - **Descrição**: Envia uma requisição com um email, o sistema envia um email com código de validação para começar o processo de redefinição de senha.
-- **Request Body**:
-  ```json
-  {
-  "code": "string",
-  "email": "string",
-  "senha": "string"
-  }
-  ```
+    - **Request Body**:
+      ```json
+      {
+          "code": "string",
+          "email": "string",
+          "senha": "string"
+      }
+      ```
 - **Response**:
     - **200 Ok**: Senha redefinida.
       ```body
@@ -195,6 +208,27 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
     - **404 Not Found**: Retorna uma mensagem de erro quando sistema não acha o código de validação de senha enviado pelo usuário.
     - **401 Unauthorized**: Retorna uma mensagem de erro quando o código enviado não é válido ou não existe.
     - **400 Bad Request**: Retorna uma mensagem de erro quando a senha enviada pelo usuário não é válida.
+
+### Batimento de ponto
+
+**POST** `/ponto`
+- **Descrição**: Realiza o batimento de ponto do usuário.
+    - **Request Body**:
+      ```json
+      {
+        "usuario": "string"
+      }
+      ```
+    - **Response**:
+        - **200 OK**: Retorna o ponto batido.
+          ```json
+          {
+            "usuario": "string",
+            "dataHora": "2023-10-01T12:00:00Z"
+          }
+          ```
+        - **400 Bad Request**: Retorna uma mensagem de erro quando o usuário não é válido ou não existe.
+        - **401 Unauthorized**: Retorna uma mensagem de erro quando o usuário não está autenticado.
 
 ## Como Executar o Projeto
 1. Certifique-se de ter o **Java 17** e o **Maven** instalados.
