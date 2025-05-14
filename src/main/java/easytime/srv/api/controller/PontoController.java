@@ -21,8 +21,8 @@ public class PontoController {
     @PostMapping
     public ResponseEntity<?> registrarPonto(@RequestBody LoginDto login) {
         try{
-            service.registrarPonto(login);
-            return ResponseEntity.ok("Ponto registrado com sucesso.");
+            var ponto = service.registrarPonto(login);
+            return ResponseEntity.ok(ponto);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erro ao registrar ponto: " + e.getMessage());
         }
