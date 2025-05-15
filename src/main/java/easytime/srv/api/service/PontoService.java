@@ -13,6 +13,7 @@ import org.webjars.NotFoundException;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -27,8 +28,11 @@ public class PontoService {
     @Autowired
     private List<ValidacaoPonto> validacoes;
 
-    public TimeLogDto registrarPonto(LoginDto login, LocalDate dataHoje, Time horaAgora) {
+    public TimeLogDto registrarPonto(LoginDto login) {
         User user = userRepository.findByLogin(login.login()).orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
+
+        LocalDate dataHoje = LocalDate.now();
+        Time horaAgora = Time.valueOf(LocalTime.now());
 
         var timeLog = timeLogsRepository.findByUserAndData(user, dataHoje)
                 .orElse(new TimeLog(user, dataHoje)); // cria um novo TimeLog se não existir

@@ -65,10 +65,7 @@ public class PontoController {
     @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<?> registrarPonto(@RequestBody LoginDto login) {
         try{
-            LocalDate dataHoje = LocalDate.now();
-            Time horaAgora = Time.valueOf(LocalTime.now());
-
-            var ponto = pontoService.registrarPonto(login, dataHoje, horaAgora);
+            var ponto = pontoService.registrarPonto(login);
             return ResponseEntity.ok(ponto);
         } catch (NotFoundException e) {
             return ResponseEntity.status(401).body("Erro ao registrar ponto: " + e.getMessage());
