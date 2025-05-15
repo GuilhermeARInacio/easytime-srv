@@ -92,7 +92,7 @@ public class TimeLog {
 
     public Object getUltimoBatimentoValue() {
         if (this.cont <= 0) {
-            throw new RuntimeException("No batimento exists to retrieve.");
+            return null;
         }
         try {
             Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(this.cont - 1));

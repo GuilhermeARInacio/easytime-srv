@@ -3,6 +3,7 @@ package easytime.srv.api.controller;
 import easytime.srv.api.infra.exceptions.InvalidUserException;
 import easytime.srv.api.infra.exceptions.ObjectAlreadyExistsException;
 import easytime.srv.api.model.user.UserDTO;
+import easytime.srv.api.model.user.UsuarioRetornoDto;
 import easytime.srv.api.service.UserService;
 import easytime.srv.api.tables.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatusCode;
 
@@ -85,7 +87,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Checa se listar usuário retorna 200")
     void whenListUsersOk() {
-        when(userService.listUsers()).thenReturn(List.of(new User()));
+        when(userService.listUsers()).thenReturn(List.of(Mockito.mock(UsuarioRetornoDto.class)));
         var response = userController.listUsers();
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
     }
@@ -101,7 +103,7 @@ class UserControllerTest {
     @Test
     @DisplayName("Checa se listar usuário pelo id retorna 200")
     void whenGetUserByIdOk() {
-        when(userService.getUserById(1)).thenReturn(Optional.of(user));
+        when(userService.getUserById(1)).thenReturn(Optional.of(Mockito.mock(UsuarioRetornoDto.class)));
         var response = userController.getUserById(1);
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
     }
@@ -115,7 +117,7 @@ class UserControllerTest {
 
     @Test
     void whenDeleteOk() {
-        when(userService.getUserById(1)).thenReturn(Optional.of(user));
+        when(userService.getUserById(1)).thenReturn(Optional.of(Mockito.mock(UsuarioRetornoDto.class)));
         var response = userController.delete(1);
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());
     }

@@ -61,7 +61,7 @@ class PontoControllerTest {
         ResponseEntity<?> response = pontoController.registrarPonto(login);
 
         // Assert
-        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(401, response.getStatusCodeValue());
         assertTrue(response.getBody().toString().contains("Usuário não encontrado."));
         verify(pontoService, times(1)).registrarPonto(any(), any(), any());
     }

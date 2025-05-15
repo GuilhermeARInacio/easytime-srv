@@ -13,6 +13,10 @@ public class ValidacaoHoraDuplicada implements ValidacaoPonto{
     public void validar(TimeLog timeLog, Time horaAgora) {
         var ultimoBatimento = timeLog.getUltimoBatimentoValue();
 
+        if (ultimoBatimento == null) {
+            return;
+        }
+
         if (ultimoBatimento instanceof Time ultimoHorario) {
             Duration diferenca = Duration.between(ultimoHorario.toLocalTime(), horaAgora.toLocalTime());
 

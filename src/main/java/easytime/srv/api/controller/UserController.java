@@ -3,6 +3,7 @@ package easytime.srv.api.controller;
 import easytime.srv.api.infra.exceptions.InvalidUserException;
 import easytime.srv.api.infra.exceptions.ObjectAlreadyExistsException;
 import easytime.srv.api.model.user.UserDTO;
+import easytime.srv.api.model.user.UsuarioRetornoDto;
 import easytime.srv.api.service.UserService;
 import easytime.srv.api.tables.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,7 +42,7 @@ public class UserController {
     @Operation(summary = "Listar todos usuários", description = "Sistema retorna todos os usuários cadastrados")
     @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<Object> listUsers() {
-        List<User> users = userService.listUsers();
+        List<UsuarioRetornoDto> users = userService.listUsers();
         if(users.isEmpty()){
             return ResponseEntity.status(404).body("Nenhum usuário cadastrado.");
         }
@@ -52,7 +53,7 @@ public class UserController {
     @Operation(summary = "Listar usuário por id", description = "Sistema retorna um usuário pelo id")
     @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<Object> getUserById(@PathVariable Integer id) {
-        Optional<User> user = userService.getUserById(id);
+        Optional<UsuarioRetornoDto> user = userService.getUserById(id);
         return user.<ResponseEntity<Object>>map(value -> ResponseEntity.status(200).body(value)).orElseGet(() -> ResponseEntity.status(404).body("Usuário não encontrado"));
     }
 
@@ -60,7 +61,7 @@ public class UserController {
     @Operation(summary = "Deletar usuário", description = "Usuário deleta um usuário pelo id")
     @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<Object> delete(@PathVariable Integer id) {
-        Optional<User> user = userService.getUserById(id);
+        Optional<UsuarioRetornoDto> user = userService.getUserById(id);
         if(user.isEmpty()){
             return ResponseEntity.status(404).body("Usuário não encontrado");
         }

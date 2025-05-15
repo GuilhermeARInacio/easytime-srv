@@ -2,6 +2,7 @@ package easytime.srv.api.service;
 
 
 import easytime.srv.api.model.user.UserDTO;
+import easytime.srv.api.model.user.UsuarioRetornoDto;
 import easytime.srv.api.tables.repositorys.UserRepository;
 import easytime.srv.api.tables.User;
 import easytime.srv.api.validacoes.user.ValidacaoUser;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class UserService {
@@ -25,12 +28,15 @@ public class UserService {
         return userRepository.save(User.toEntity(user));
     }
 
-    public List<User> listUsers() {
-        return userRepository.findAll();
+    public List<UsuarioRetornoDto> listUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(UsuarioRetornoDto::new)
+                .toList();
     }
 
-    public Optional<User> getUserById(Integer id) {
-        return userRepository.findById(id);
+    public Optional<UsuarioRetornoDto> getUserById(Integer id) {
+        return userRepository.findById(id).map(UsuarioRetornoDto::new);
     }
 
     public Optional<User> getUserByLogin(String login) {

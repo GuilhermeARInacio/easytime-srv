@@ -46,12 +46,12 @@ public class PontoController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "404",
-                    description = "Usuário inválido",
+                    responseCode = "401",
+                    description = "Usuário não autorizado",
                     content = @Content(
                             mediaType = "application/json",
                             examples = @ExampleObject(
-                                    name = "Retorna o código 404 e a mensagem de erro",
+                                    name = "Retorna o código 401 e a mensagem de erro",
                                     value = """
                                             {
                                                 "login":"abdc"
@@ -71,7 +71,7 @@ public class PontoController {
             var ponto = pontoService.registrarPonto(login, dataHoje, horaAgora);
             return ResponseEntity.ok(ponto);
         } catch (NotFoundException e) {
-            return ResponseEntity.status(404).body("Erro ao registrar ponto: " + e.getMessage());
+            return ResponseEntity.status(401).body("Erro ao registrar ponto: " + e.getMessage());
         }catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Erro ao registrar ponto: " + e.getMessage());
         }catch (Exception e) {
@@ -95,7 +95,7 @@ public class PontoController {
     public ResponseEntity<?> removerPonto(@PathVariable Integer id) {
         try{
             pontoService.removerPonto(id);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body("Ponto removido com sucesso.");
         }catch (NotFoundException e) {
             return ResponseEntity.status(404).body("Erro ao remover ponto: " + e.getMessage());
         }catch (Exception e) {
