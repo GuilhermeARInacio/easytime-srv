@@ -2,7 +2,6 @@ package easytime.srv.api.controller;
 
 import easytime.srv.api.model.pontos.ConsultaPontosDto;
 import easytime.srv.api.model.pontos.RegistroCompletoDto;
-import easytime.srv.api.model.pontos.TimeLogDto;
 import easytime.srv.api.model.user.DTOUsuario;
 import easytime.srv.api.model.user.LoginDto;
 import easytime.srv.api.service.PontoService;
@@ -13,18 +12,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.servlet.ServletRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
 
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @Controller

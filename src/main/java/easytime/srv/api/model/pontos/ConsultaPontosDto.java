@@ -1,17 +1,16 @@
 package easytime.srv.api.model.pontos;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
 public record ConsultaPontosDto(
-        @NotBlank @NotNull
+        @NotBlank(message = "O login deve ser preenchido.") @NotNull(message = "O login deve ser preenchido.")
         String login,
-        @NotBlank @NotNull
+        @NotNull(message = "A data de inicio deve ser preenchida.")
         LocalDate dtInicio,
-        @NotBlank @NotNull
+        @NotNull(message = "A data final deve ser preenchida.")
         LocalDate dtFinal
 ) {
 }

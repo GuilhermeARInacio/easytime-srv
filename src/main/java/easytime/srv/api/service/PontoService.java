@@ -58,7 +58,7 @@ public class PontoService {
         var user = userRepository.findByLogin(dto.login()).orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
 
         if (dto.dtInicio().isAfter(dto.dtFinal())) {
-            throw new IllegalArgumentException("Data inicial não pode ser maior que a data final.");
+            throw new IllegalArgumentException("A data de início não pode ser posterior à data final.");
         }
 
         var response = timeLogsRepository.findAllByUserAndDataBetween(user, dto.dtInicio(), dto.dtFinal());
