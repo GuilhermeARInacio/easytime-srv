@@ -10353,228 +10353,63 @@ alter table if exists users alter column role set data type varchar(50) default 
 2025-05-16 13:34:35 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
 alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
-2025-05-16 13:41:34 jdbc[3]: exception
+2025-05-16 14:12:46 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists appointments alter column registration_time set data type timestamp [*]default current_timestamp"; SQL statement:
 alter table if exists appointments alter column registration_time set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:41:34 jdbc[3]: exception
+2025-05-16 14:12:46 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists audit_logs alter column timestamp set data type timestamp [*]default current_timestamp"; SQL statement:
 alter table if exists audit_logs alter column timestamp set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:41:34 jdbc[3]: exception
+2025-05-16 14:12:46 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column creation_date set data type timestamp [*]default current_timestamp"; SQL statement:
 alter table if exists users alter column creation_date set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:41:34 jdbc[3]: exception
+2025-05-16 14:12:46 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column role set data type varchar(50) [*]default 'user'"; SQL statement:
 alter table if exists users alter column role set data type varchar(50) default 'user' [42000-220]
-2025-05-16 13:41:34 jdbc[3]: exception
+2025-05-16 14:12:46 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
 alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
-2025-05-16 13:47:53 jdbc[3]: exception
+2025-05-16 14:13:21 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists appointments alter column registration_time set data type timestamp [*]default current_timestamp"; SQL statement:
 alter table if exists appointments alter column registration_time set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:47:53 jdbc[3]: exception
+2025-05-16 14:13:21 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists audit_logs alter column timestamp set data type timestamp [*]default current_timestamp"; SQL statement:
 alter table if exists audit_logs alter column timestamp set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:47:53 jdbc[3]: exception
+2025-05-16 14:13:21 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column creation_date set data type timestamp [*]default current_timestamp"; SQL statement:
 alter table if exists users alter column creation_date set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:47:53 jdbc[3]: exception
+2025-05-16 14:13:21 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column role set data type varchar(50) [*]default 'user'"; SQL statement:
 alter table if exists users alter column role set data type varchar(50) default 'user' [42000-220]
-2025-05-16 13:47:53 jdbc[3]: exception
+2025-05-16 14:13:21 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
 alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
-2025-05-16 13:48:15 jdbc[3]: exception
+2025-05-16 14:15:01 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists appointments alter column registration_time set data type timestamp [*]default current_timestamp"; SQL statement:
 alter table if exists appointments alter column registration_time set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:48:15 jdbc[3]: exception
+2025-05-16 14:15:01 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists audit_logs alter column timestamp set data type timestamp [*]default current_timestamp"; SQL statement:
 alter table if exists audit_logs alter column timestamp set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:48:15 jdbc[3]: exception
+2025-05-16 14:15:01 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column creation_date set data type timestamp [*]default current_timestamp"; SQL statement:
 alter table if exists users alter column creation_date set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:48:15 jdbc[3]: exception
+2025-05-16 14:15:01 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column role set data type varchar(50) [*]default 'user'"; SQL statement:
 alter table if exists users alter column role set data type varchar(50) default 'user' [42000-220]
-2025-05-16 13:48:15 jdbc[3]: exception
+2025-05-16 14:15:01 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
 alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
-2025-05-16 13:48:51 jdbc[3]: exception
+2025-05-16 14:15:49 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists appointments alter column registration_time set data type timestamp [*]default current_timestamp"; SQL statement:
 alter table if exists appointments alter column registration_time set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:48:51 jdbc[3]: exception
+2025-05-16 14:15:49 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists audit_logs alter column timestamp set data type timestamp [*]default current_timestamp"; SQL statement:
 alter table if exists audit_logs alter column timestamp set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:48:51 jdbc[3]: exception
+2025-05-16 14:15:49 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column creation_date set data type timestamp [*]default current_timestamp"; SQL statement:
 alter table if exists users alter column creation_date set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:48:51 jdbc[3]: exception
+2025-05-16 14:15:49 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column role set data type varchar(50) [*]default 'user'"; SQL statement:
 alter table if exists users alter column role set data type varchar(50) default 'user' [42000-220]
-2025-05-16 13:48:51 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
-alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
-2025-05-16 13:48:54 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists appointments alter column registration_time set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists appointments alter column registration_time set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:48:54 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists audit_logs alter column timestamp set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists audit_logs alter column timestamp set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:48:54 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column creation_date set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists users alter column creation_date set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:48:54 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column role set data type varchar(50) [*]default 'user'"; SQL statement:
-alter table if exists users alter column role set data type varchar(50) default 'user' [42000-220]
-2025-05-16 13:48:54 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
-alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
-2025-05-16 13:50:08 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists appointments alter column registration_time set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists appointments alter column registration_time set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:50:08 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists audit_logs alter column timestamp set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists audit_logs alter column timestamp set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:50:08 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column creation_date set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists users alter column creation_date set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:50:08 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column role set data type varchar(50) [*]default 'user'"; SQL statement:
-alter table if exists users alter column role set data type varchar(50) default 'user' [42000-220]
-2025-05-16 13:50:08 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
-alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
-2025-05-16 13:51:49 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists appointments alter column registration_time set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists appointments alter column registration_time set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:51:49 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists audit_logs alter column timestamp set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists audit_logs alter column timestamp set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:51:49 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column creation_date set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists users alter column creation_date set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:51:49 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column role set data type varchar(50) [*]default 'user'"; SQL statement:
-alter table if exists users alter column role set data type varchar(50) default 'user' [42000-220]
-2025-05-16 13:51:49 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
-alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
-2025-05-16 13:51:53 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists appointments alter column registration_time set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists appointments alter column registration_time set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:51:53 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists audit_logs alter column timestamp set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists audit_logs alter column timestamp set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:51:53 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column creation_date set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists users alter column creation_date set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:51:53 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column role set data type varchar(50) [*]default 'user'"; SQL statement:
-alter table if exists users alter column role set data type varchar(50) default 'user' [42000-220]
-2025-05-16 13:51:53 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
-alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
-2025-05-16 13:56:29 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists appointments alter column registration_time set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists appointments alter column registration_time set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:56:29 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists audit_logs alter column timestamp set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists audit_logs alter column timestamp set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:56:29 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column creation_date set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists users alter column creation_date set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:56:29 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column role set data type varchar(50) [*]default 'user'"; SQL statement:
-alter table if exists users alter column role set data type varchar(50) default 'user' [42000-220]
-2025-05-16 13:56:29 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
-alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
-2025-05-16 13:57:09 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists appointments alter column registration_time set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists appointments alter column registration_time set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:57:09 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists audit_logs alter column timestamp set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists audit_logs alter column timestamp set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:57:10 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column creation_date set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists users alter column creation_date set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:57:10 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column role set data type varchar(50) [*]default 'user'"; SQL statement:
-alter table if exists users alter column role set data type varchar(50) default 'user' [42000-220]
-2025-05-16 13:57:10 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
-alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
-2025-05-16 13:57:13 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists appointments alter column registration_time set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists appointments alter column registration_time set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:57:13 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists audit_logs alter column timestamp set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists audit_logs alter column timestamp set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:57:13 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column creation_date set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists users alter column creation_date set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:57:13 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column role set data type varchar(50) [*]default 'user'"; SQL statement:
-alter table if exists users alter column role set data type varchar(50) default 'user' [42000-220]
-2025-05-16 13:57:13 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
-alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
-2025-05-16 13:58:16 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists appointments alter column registration_time set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists appointments alter column registration_time set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:58:16 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists audit_logs alter column timestamp set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists audit_logs alter column timestamp set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:58:16 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column creation_date set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists users alter column creation_date set data type timestamp default current_timestamp [42000-220]
-2025-05-16 13:58:16 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column role set data type varchar(50) [*]default 'user'"; SQL statement:
-alter table if exists users alter column role set data type varchar(50) default 'user' [42000-220]
-2025-05-16 13:58:16 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
-alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
-2025-05-16 14:00:10 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists appointments alter column registration_time set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists appointments alter column registration_time set data type timestamp default current_timestamp [42000-220]
-2025-05-16 14:00:10 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists audit_logs alter column timestamp set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists audit_logs alter column timestamp set data type timestamp default current_timestamp [42000-220]
-2025-05-16 14:00:10 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column creation_date set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists users alter column creation_date set data type timestamp default current_timestamp [42000-220]
-2025-05-16 14:00:10 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column role set data type varchar(50) [*]default 'user'"; SQL statement:
-alter table if exists users alter column role set data type varchar(50) default 'user' [42000-220]
-2025-05-16 14:00:10 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
-alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
-2025-05-16 14:02:15 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists appointments alter column registration_time set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists appointments alter column registration_time set data type timestamp default current_timestamp [42000-220]
-2025-05-16 14:02:15 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists audit_logs alter column timestamp set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists audit_logs alter column timestamp set data type timestamp default current_timestamp [42000-220]
-2025-05-16 14:02:15 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column creation_date set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists users alter column creation_date set data type timestamp default current_timestamp [42000-220]
-2025-05-16 14:02:15 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column role set data type varchar(50) [*]default 'user'"; SQL statement:
-alter table if exists users alter column role set data type varchar(50) default 'user' [42000-220]
-2025-05-16 14:02:15 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
-alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
-2025-05-16 14:02:19 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists appointments alter column registration_time set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists appointments alter column registration_time set data type timestamp default current_timestamp [42000-220]
-2025-05-16 14:02:19 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists audit_logs alter column timestamp set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists audit_logs alter column timestamp set data type timestamp default current_timestamp [42000-220]
-2025-05-16 14:02:19 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column creation_date set data type timestamp [*]default current_timestamp"; SQL statement:
-alter table if exists users alter column creation_date set data type timestamp default current_timestamp [42000-220]
-2025-05-16 14:02:19 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column role set data type varchar(50) [*]default 'user'"; SQL statement:
-alter table if exists users alter column role set data type varchar(50) default 'user' [42000-220]
-2025-05-16 14:02:19 jdbc[3]: exception
+2025-05-16 14:15:49 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists users alter column update_date set data type timestamp [*]default current_timestamp on update current_timestamp"; SQL statement:
 alter table if exists users alter column update_date set data type timestamp default current_timestamp on update current_timestamp [42000-220]
