@@ -1,5 +1,6 @@
 package easytime.srv.api.service;
 
+import easytime.srv.api.model.pontos.ConsultaPontosDto;
 import easytime.srv.api.model.pontos.TimeLogDto;
 import easytime.srv.api.model.user.LoginDto;
 import easytime.srv.api.tables.TimeLog;
@@ -15,6 +16,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PontoService {
@@ -49,5 +51,13 @@ public class PontoService {
         var timeLog = timeLogsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Ponto não encontrado."));
         timeLogsRepository.delete(timeLog);
+    }
+
+    public List<TimeLogDto> consultar(ConsultaPontosDto dto) {
+        var user = userRepository.findByLogin(dto.login()).orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
+
+        var response = timeLogsRepository.findAllByUserAndDataBetween(user, dto.dtInicio(), dto.dtFinal());
+        return response.stream().map(TimeLogDto::new).collect(Collectors.toList());
+
     }
 }
