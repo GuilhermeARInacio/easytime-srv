@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.ServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -67,7 +68,7 @@ public class PontoController {
     })
     @Operation(summary = "Bater ponto", description = "Usuário envia apenas o login e o ponto é registrado com a data e hora atuais.")
     @SecurityRequirement(name = "bearer-key")
-    public ResponseEntity<?> registrarPonto(@RequestBody LoginDto login) {
+    public ResponseEntity<?> registrarPonto(@Valid @RequestBody LoginDto login) {
         try{
             var ponto = pontoService.registrarPonto(login);
             return ResponseEntity.ok(ponto);
