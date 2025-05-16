@@ -1,6 +1,7 @@
 package easytime.srv.api.service;
 
 import easytime.srv.api.model.pontos.ConsultaPontosDto;
+import easytime.srv.api.model.pontos.RegistroCompletoDto;
 import easytime.srv.api.model.pontos.TimeLogDto;
 import easytime.srv.api.model.user.LoginDto;
 import easytime.srv.api.tables.TimeLog;
@@ -53,11 +54,19 @@ public class PontoService {
         timeLogsRepository.delete(timeLog);
     }
 
-    public List<TimeLogDto> consultar(ConsultaPontosDto dto) {
+    public List<RegistroCompletoDto> consultar(ConsultaPontosDto dto) {
         var user = userRepository.findByLogin(dto.login()).orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
 
-        var response = timeLogsRepository.findAllByUserAndDataBetween(user, dto.dtInicio(), dto.dtFinal());
-        return response.stream().map(TimeLogDto::new).collect(Collectors.toList());
+        if (dto.dtInicio().isAfter(dto.dtFinal())) {
+            throw new IllegalArgumentException("Data inicial não pode ser maior que a data final.");
+        }
 
+        var response = timeLogsRepository.findAllByUserAndDataBetween(user, dto.dtInicio(), dto.dtFinal());
+
+        if (response.isEmpty()) {
+            throw new NotFoundException("Nenhum ponto encontrado.");
+        }
+
+        return response.stream().map(RegistroCompletoDto::new).collect(Collectors.toList());
     }
 }

@@ -1,6 +1,7 @@
 package easytime.srv.api.controller;
 
 import easytime.srv.api.model.pontos.ConsultaPontosDto;
+import easytime.srv.api.model.pontos.RegistroCompletoDto;
 import easytime.srv.api.model.pontos.TimeLogDto;
 import easytime.srv.api.model.user.DTOUsuario;
 import easytime.srv.api.model.user.LoginDto;
@@ -13,6 +14,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.ServletRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -105,10 +108,15 @@ public class PontoController {
     }
 
     @GetMapping("/consulta")
-    public ResponseEntity<?> consultar(@RequestBody ConsultaPontosDto dto){
+    public ResponseEntity<?> consultar(@Valid @RequestBody ConsultaPontosDto dto){
         try{
-            List<TimeLogDto> response = pontoService.consultar(dto);
+            List<RegistroCompletoDto> response = pontoService.consultar(dto);
+
             return ResponseEntity.ok(response);
+        } catch (NotFoundException e){
+            return ResponseEntity.status(404).body(e.getMessage());
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e){
             return ResponseEntity.badRequest().body("Erro ao consultar pontos: " + e.getMessage());
         }
