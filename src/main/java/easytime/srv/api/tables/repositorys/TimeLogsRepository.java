@@ -6,9 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface TimeLogsRepository extends JpaRepository<TimeLog, Integer> {
     Optional<TimeLog> findByUserAndData(User user, LocalDate data);
+
+    List<TimeLog> findAllByUserAndDataBetween(User user, LocalDate dtInicio, LocalDate dtFinal);
 }
