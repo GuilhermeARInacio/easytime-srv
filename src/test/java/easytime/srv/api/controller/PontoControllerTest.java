@@ -40,7 +40,7 @@ class PontoControllerTest {
         Time horaAgora = Time.valueOf(LocalTime.now());
         TimeLogDto timeLogDto = new TimeLogDto("mkenzo", dataHoje, horaAgora, TimeLog.Status.PENDENTE);
 
-        when(pontoService.registrarPonto(login, dataHoje, horaAgora)).thenReturn(timeLogDto);
+        when(pontoService.registrarPonto(login)).thenReturn(timeLogDto);
 
         // Act
         ResponseEntity<?> response = pontoController.registrarPonto(login);
@@ -48,14 +48,14 @@ class PontoControllerTest {
         // Assert
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(timeLogDto, response.getBody());
-        verify(pontoService, times(1)).registrarPonto(login, dataHoje, horaAgora);
+        verify(pontoService, times(1)).registrarPonto(login);
     }
 
     @Test
     void registrarPonto_NotFoundException() {
         // Arrange
         LoginDto login = new LoginDto("invalid");
-        when(pontoService.registrarPonto(any(), any(), any())).thenThrow(new NotFoundException("Usuário não encontrado."));
+        when(pontoService.registrarPonto(any())).thenThrow(new NotFoundException("Usuário não encontrado."));
 
         // Act
         ResponseEntity<?> response = pontoController.registrarPonto(login);
@@ -63,14 +63,14 @@ class PontoControllerTest {
         // Assert
         assertEquals(401, response.getStatusCodeValue());
         assertTrue(response.getBody().toString().contains("Usuário não encontrado."));
-        verify(pontoService, times(1)).registrarPonto(any(), any(), any());
+        verify(pontoService, times(1)).registrarPonto(any());
     }
 
     @Test
     void registrarPonto_IllegalArgumentException() {
         // Arrange
         LoginDto login = new LoginDto("mkenzo");
-        when(pontoService.registrarPonto(any(), any(), any())).thenThrow(new IllegalArgumentException("Erro de validação."));
+        when(pontoService.registrarPonto(any())).thenThrow(new IllegalArgumentException("Erro de validação."));
 
         // Act
         ResponseEntity<?> response = pontoController.registrarPonto(login);
@@ -78,14 +78,14 @@ class PontoControllerTest {
         // Assert
         assertEquals(400, response.getStatusCodeValue());
         assertTrue(response.getBody().toString().contains("Erro de validação."));
-        verify(pontoService, times(1)).registrarPonto(any(), any(), any());
+        verify(pontoService, times(1)).registrarPonto(any());
     }
 
     @Test
     void registrarPonto_InternalServerError() {
         // Arrange
         LoginDto login = new LoginDto("mkenzo");
-        when(pontoService.registrarPonto(any(), any(), any())).thenThrow(new RuntimeException("Erro inesperado."));
+        when(pontoService.registrarPonto(any())).thenThrow(new RuntimeException("Erro inesperado."));
 
         // Act
         ResponseEntity<?> response = pontoController.registrarPonto(login);
@@ -93,7 +93,7 @@ class PontoControllerTest {
         // Assert
         assertEquals(500, response.getStatusCodeValue());
         assertTrue(response.getBody().toString().contains("Erro inesperado."));
-        verify(pontoService, times(1)).registrarPonto(any(), any(), any());
+        verify(pontoService, times(1)).registrarPonto(any());
     }
 
     @Test

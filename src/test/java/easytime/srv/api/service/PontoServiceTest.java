@@ -55,7 +55,7 @@ class PontoServiceTest {
         when(timeLogsRepository.findByUserAndData(user, dataHoje)).thenReturn(Optional.of(timeLog));
 
         // Act
-        TimeLogDto result = pontoService.registrarPonto(login, dataHoje, horaAgora);
+        TimeLogDto result = pontoService.registrarPonto(login);
 
         // Assert
         assertNotNull(result);
@@ -74,7 +74,7 @@ class PontoServiceTest {
 
         // Act & Assert
         NotFoundException exception = assertThrows(NotFoundException.class, () ->
-                pontoService.registrarPonto(login, dataHoje, horaAgora)
+                pontoService.registrarPonto(login)
         );
         assertEquals("Usuário não encontrado.", exception.getMessage());
         verify(timeLogsRepository, never()).save(any());
@@ -93,7 +93,7 @@ class PontoServiceTest {
         when(timeLogsRepository.findByUserAndData(user, dataHoje)).thenReturn(Optional.empty());
 
         // Act
-        TimeLogDto result = pontoService.registrarPonto(login, dataHoje, horaAgora);
+        TimeLogDto result = pontoService.registrarPonto(login);
 
         // Assert
         assertNotNull(result);
