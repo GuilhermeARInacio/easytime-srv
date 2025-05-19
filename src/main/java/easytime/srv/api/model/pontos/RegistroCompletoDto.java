@@ -6,6 +6,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 
 public record RegistroCompletoDto (
+        Integer id,
         LocalDate data,
         Time entrada1,
         Time saida1,
@@ -18,6 +19,7 @@ public record RegistroCompletoDto (
 
     public RegistroCompletoDto(TimeLog timeLog){
         this(
+                timeLog.getId(),
                 timeLog.getData(),
                 timeLog.getE1(),
                 timeLog.getS1(),
