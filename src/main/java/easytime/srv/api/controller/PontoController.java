@@ -101,7 +101,7 @@ public class PontoController {
         }
     }
 
-    @GetMapping("/consulta")
+    @PostMapping("/consulta")
     public ResponseEntity<?> consultar(@Valid @RequestBody ConsultaPontosDto dto){
         try{
             List<RegistroCompletoDto> response = pontoService.consultar(dto);
