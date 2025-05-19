@@ -3,11 +3,13 @@ package easytime.srv.api.model.pontos;
 import easytime.srv.api.tables.TimeLog;
 
 import java.sql.Time;
+import java.time.Duration;
 import java.time.LocalDate;
 
 public record RegistroCompletoDto (
         Integer id,
         LocalDate data,
+        Duration horasTrabalhadas,
         Time entrada1,
         Time saida1,
         Time entrada2,
@@ -21,6 +23,7 @@ public record RegistroCompletoDto (
         this(
                 timeLog.getId(),
                 timeLog.getData(),
+                Duration.ofHours((long) timeLog.getHoras_trabalhadas()),
                 timeLog.getE1(),
                 timeLog.getS1(),
                 timeLog.getE2(),
