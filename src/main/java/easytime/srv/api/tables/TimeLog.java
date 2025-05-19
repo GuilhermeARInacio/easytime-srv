@@ -1,5 +1,6 @@
 package easytime.srv.api.tables;
 
+import easytime.srv.api.model.pontos.AlterarPontoDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -101,5 +102,30 @@ public class TimeLog {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException("Error accessing attribute: " + e.getMessage(), e);
         }
+    }
+
+    public TimeLog alterarPonto(AlterarPontoDto dto) {
+        if (dto.data() != null && !String.valueOf(data).isEmpty()) {
+            this.setData(LocalDate.parse(dto.data()));
+        }
+        if (dto.entrada1() != null && !String.valueOf(E1).isEmpty()) {
+            this.setE1(Time.valueOf(dto.entrada1()));
+        }
+        if (dto.saida1() != null && !String.valueOf(S2).isEmpty()) {
+            this.setS1(Time.valueOf(dto.saida1()));
+        }
+        if (dto.entrada2() != null && !String.valueOf(E2).isEmpty()) {
+            this.setE2(Time.valueOf(dto.entrada2()));
+        }
+        if (dto.saida2() != null && !String.valueOf(S2).isEmpty()) {
+            this.setS2(Time.valueOf(dto.saida2()));
+        }
+        if (dto.entrada3() != null && !String.valueOf(E3).isEmpty()) {
+            this.setE3(Time.valueOf(dto.entrada3()));
+        }
+        if (dto.saida3() != null && !String.valueOf(S3).isEmpty()) {
+            this.setS3(Time.valueOf(dto.saida3()));
+        }
+        return this;
     }
 }

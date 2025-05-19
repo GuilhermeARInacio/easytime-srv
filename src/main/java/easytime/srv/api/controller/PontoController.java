@@ -1,5 +1,7 @@
 package easytime.srv.api.controller;
 
+import easytime.srv.api.infra.exceptions.InvalidUserException;
+import easytime.srv.api.model.pontos.AlterarPontoDto;
 import easytime.srv.api.model.pontos.ConsultaPontosDto;
 import easytime.srv.api.model.pontos.RegistroCompletoDto;
 import easytime.srv.api.model.user.DTOUsuario;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
 
+import java.time.DateTimeException;
 import java.util.List;
 
 @Controller
@@ -102,17 +105,53 @@ public class PontoController {
     }
 
     @GetMapping("/consulta")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Lista de pontos encontrados"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Login inválido"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Datas não encontradas"
+            )
+    })
+    @Operation(summary = "Remover registro de batimento de ponto", description = "Usuário envia o ID do registro.")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<?> consultar(@Valid @RequestBody ConsultaPontosDto dto){
         try{
             List<RegistroCompletoDto> response = pontoService.consultar(dto);
 
             return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (DateTimeException e){
+            return ResponseEntity.badRequest().body("Data ou horário inválido.");
+        } catch (InvalidUserException e) {
+            return ResponseEntity.status(401).body("Usuário inválido");
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Erro ao consultar pontos: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/alterar")
+    public ResponseEntity<?> alterarPonto(@Valid @RequestBody AlterarPontoDto dto){
+        try{
+            var ponto = pontoService.alterarPonto(dto);
+            return ResponseEntity.ok(ponto);
         } catch (NotFoundException e){
             return ResponseEntity.status(404).body(e.getMessage());
         } catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (InvalidUserException e) {
+            return ResponseEntity.status(401).body("Usuário inválido");
+        } catch (DateTimeException e){
+            return ResponseEntity.badRequest().body("Data ou horário inválido.");
         } catch (Exception e){
-            return ResponseEntity.badRequest().body("Erro ao consultar pontos: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Erro ao alterar ponto: " + e.getMessage());
         }
     }
 }
