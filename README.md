@@ -212,7 +212,6 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
     - **400 Bad Request**: Retorna uma mensagem de erro quando a senha enviada pelo usuário não é válida.
 
 ### Batimento de ponto
-
 **POST** `/ponto`
 - **Descrição**: Realiza o batimento de ponto do usuário.
     - **Request Body**:
@@ -234,8 +233,15 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
           - **400 Bad Request**: Retorna uma mensagem de erro quando o usuário não é válido ou não existe.
           - **401 Unauthorized**: Retorna uma mensagem de erro quando o usuário não está autenticado.
 
-### Consulta de ponto
+### Deletar registro de ponto
+**DELETE** `/ponto/{id}`
+- **Descrição**: Deleta o registro de ponto de acordo com o ID informado.
+    - **Response**:
+        - **200 OK**: Retorna uma mensagem de sucesso.
+        - **400 Bad Request**: Retorna uma mensagem de erro caso o ID informado não exista.
+        - **401 Unauthorized**: Retorna uma mensagem de erro caso o token esteja inválido ou vazio.
 
+### Consulta de ponto
 **POST** `/ponto/consulta`
 - **Descrição**: Lista os registros de pontos de um usuario especifico em um periodo de tempo.
     - **Request Body**:
