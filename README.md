@@ -20,6 +20,8 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
     - Rota para validar o código enviado e permitir a troca de senha.
 - **Batimento de ponto**:
     - Rota de batimento de ponto, onde o usuário pode registrar seu ponto de entrada ou saída.
+- **Consulta de ponto**:
+    - Rota de consulta de ponto, onde o usuário pode informar login e um periodo de tempo para visualizar os pontos registrados no periodo.
 
 ## Tecnologias Utilizadas
 - **Java 17**
@@ -210,7 +212,6 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
     - **400 Bad Request**: Retorna uma mensagem de erro quando a senha enviada pelo usuário não é válida.
 
 ### Batimento de ponto
-
 **POST** `/ponto`
 - **Descrição**: Realiza o batimento de ponto do usuário.
     - **Request Body**:
@@ -231,6 +232,59 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
             ```
           - **400 Bad Request**: Retorna uma mensagem de erro quando o usuário não é válido ou não existe.
           - **401 Unauthorized**: Retorna uma mensagem de erro quando o usuário não está autenticado.
+
+### Deletar registro de ponto
+**DELETE** `/ponto/{id}`
+- **Descrição**: Deleta o registro de ponto de acordo com o ID informado.
+    - **Response**:
+        - **200 OK**: Retorna uma mensagem de sucesso.
+        - **400 Bad Request**: Retorna uma mensagem de erro caso o ID informado não exista.
+        - **401 Unauthorized**: Retorna uma mensagem de erro caso o token esteja inválido ou vazio.
+
+### Consulta de ponto
+**POST** `/ponto/consulta`
+- **Descrição**: Lista os registros de pontos de um usuario especifico em um periodo de tempo.
+    - **Request Body**:
+      ```json
+      {
+          "login": "string",
+          "dtInicio": "2025-01-01",
+          "dtFinal": "2025-01-10"
+      }
+      ```
+        - **Response**:
+            - **200 OK**: Retorna uma lista de pontos.
+              ```json
+              [
+                  {
+                      "id": 1,
+                      "data": "2025-01-02",
+                      "horasTrabalhadas": "1",
+                      "entrada1": "08:02:37",
+                      "saida1": "12:01:23",
+                      "entrada2": "13:00:00",
+                      "saida2": "17:01:05",
+                      "entrada3": null,
+                      "saida3": null,
+                      "status": "PENDENTE"
+                  },
+                  {
+                      "id": 2,
+                      "data": "2025-01-03",
+                      "horasTrabalhadas": "1",
+                      "entrada1": "08:00:08",
+                      "saida1": "12:17:59",
+                      "entrada2": "13:01:10",
+                      "saida2": "17:10:02",
+                      "entrada3": null,
+                      "saida3": null,
+                      "status": "PENDENTE"
+                  }
+              ]
+              ```
+            - **404 Bad Request**: Retorna uma mensagem de erro quando não há registros no período.
+            - **401 Unauthorized**: Retorna uma mensagem de erro quando o usuário não está autenticado ou login não existe.
+
 
 ## Como Executar o Projeto
 1. Certifique-se de ter o **Java 17** e o **Maven** instalados.

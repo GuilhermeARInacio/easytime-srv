@@ -1,5 +1,8 @@
 package easytime.srv.api.service;
 
+import easytime.srv.api.infra.exceptions.InvalidUserException;
+import easytime.srv.api.model.pontos.ConsultaPontosDto;
+import easytime.srv.api.model.pontos.RegistroCompletoDto;
 import easytime.srv.api.model.pontos.TimeLogDto;
 import easytime.srv.api.model.user.LoginDto;
 import easytime.srv.api.tables.TimeLog;
@@ -16,6 +19,7 @@ import org.webjars.NotFoundException;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -127,5 +131,79 @@ class PontoServiceTest {
         );
         assertEquals("Ponto não encontrado.", exception.getMessage());
         verify(timeLogsRepository, never()).delete(any());
+    }
+
+    @Test
+    void consultar_Success() {
+        // Arrange
+        String login = "mkenzo";
+        LocalDate dtInicio = LocalDate.now().minusDays(1);
+        LocalDate dtFinal = LocalDate.now();
+        User user = new User();
+        user.setLogin(login);
+        TimeLog timeLog = new TimeLog(user, dtInicio);
+
+        when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
+        when(timeLogsRepository.findAllByUserAndDataBetween(user, dtInicio, dtFinal)).thenReturn(List.of(timeLog));
+
+        // Act
+        List<RegistroCompletoDto> result = pontoService.consultar(new ConsultaPontosDto(login, dtInicio, dtFinal));
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void consultar_UserNotFound() {
+        // Arrange
+        String login = "invalid";
+        LocalDate dtInicio = LocalDate.now().minusDays(1);
+        LocalDate dtFinal = LocalDate.now();
+
+        when(userRepository.findByLogin(login)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        InvalidUserException exception = assertThrows(InvalidUserException.class, () ->
+                pontoService.consultar(new ConsultaPontosDto(login, dtInicio, dtFinal))
+        );
+        assertEquals("Usuário não encontrado.", exception.getMessage());
+    }
+
+    @Test
+    void consultar_IllegalArgument() {
+        // Arrange
+        String login = "mkenzo";
+        LocalDate dtInicio = LocalDate.of(2025, 5, 10);
+        LocalDate dtFinal = LocalDate.of(2025, 5, 2);
+        User user = new User();
+        user.setLogin(login);
+
+        when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                pontoService.consultar(new ConsultaPontosDto(login, dtInicio, dtFinal))
+        );
+        assertEquals("A data de início não pode ser posterior à data final.", exception.getMessage());
+    }
+
+    @Test
+    void consultar_responseEmpty() {
+        // Arrange
+        String login = "mkenzo";
+        LocalDate dtInicio = LocalDate.now().minusDays(1);
+        LocalDate dtFinal = LocalDate.now();
+        User user = new User();
+        user.setLogin(login);
+        TimeLog timeLog = new TimeLog(user, dtInicio);
+
+        when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
+        when(timeLogsRepository.findAllByUserAndDataBetween(user, dtInicio, dtFinal)).thenReturn(Collections.emptyList());
+
+        // Act
+        NotFoundException exception = assertThrows(NotFoundException.class, () ->
+                pontoService.consultar(new ConsultaPontosDto(login, dtInicio, dtFinal)));
+        assertEquals("Nenhum ponto encontrado.", exception.getMessage());
     }
 }

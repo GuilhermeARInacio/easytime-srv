@@ -87,6 +87,16 @@ class TimeLogTest {
     }
 
     @Test
+    void testGetUltimoBatimentoValue_FieldInexistente() {
+        // Arrange
+        timeLog.setCont(7);
+
+        // Act & Assert
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> timeLog.getUltimoBatimentoValue());
+        assertTrue(exception.getMessage().contains("Erro acessando atributo:"));
+    }
+
+    @Test
     void testSetPonto_InvalidField() {
         // Arrange
         timeLog.setCont(7); // Invalid cont value
