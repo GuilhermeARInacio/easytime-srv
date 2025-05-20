@@ -99,7 +99,7 @@ public class TimeLog {
             field.setAccessible(true); // Allow access to private fields
             return field.get(this); // Get the value of the field for the current instance
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException("Error accessing attribute: " + e.getMessage(), e);
+            throw new RuntimeException("Erro acessando atributo: " + e.getMessage(), e);
         }
     }
 }

@@ -1,5 +1,6 @@
 package easytime.srv.api.service;
 
+import easytime.srv.api.model.user.UsuarioRetornoDto;
 import easytime.srv.api.validacoes.user.ValidacaoUser;
 import easytime.srv.api.model.user.UserDTO;
 import easytime.srv.api.tables.User;
@@ -55,7 +56,7 @@ class UserServiceTest {
         when(userRepository.findAll()).thenReturn(List.of(new User()));
 
         var users = userService.listUsers();
-        assertEquals(User.class, users.get(0).getClass());
+        assertEquals(UsuarioRetornoDto.class, users.get(0).getClass());
     }
 
     @Test
@@ -63,7 +64,7 @@ class UserServiceTest {
     void getUserById() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(new User()));
         var user = userService.getUserById(1);
-        assertEquals(User.class, user.get().getClass());
+        assertEquals(UsuarioRetornoDto.class, user.get().getClass());
     }
 
     @Test
