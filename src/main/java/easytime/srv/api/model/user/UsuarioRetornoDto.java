@@ -3,6 +3,7 @@ package easytime.srv.api.model.user;
 
 import easytime.srv.api.tables.User;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.NoArgsConstructor;
 
 public record UsuarioRetornoDto (
         @Schema(description = "ID do usuário", example = "1")
@@ -34,5 +35,4 @@ public record UsuarioRetornoDto (
                 usuario.getRole(),
                 usuario.getIsActive());
     }
-
 }

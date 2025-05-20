@@ -5,6 +5,7 @@ import easytime.srv.api.model.pontos.RegistroCompletoDto;
 import easytime.srv.api.model.user.DTOUsuario;
 import easytime.srv.api.model.user.LoginDto;
 import easytime.srv.api.service.PontoService;
+import easytime.srv.api.tables.TimeLog;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -98,6 +99,16 @@ public class PontoController {
             return ResponseEntity.status(404).body("Erro ao remover ponto: " + e.getMessage());
         }catch (Exception e) {
             return ResponseEntity.internalServerError().body("Erro ao remover ponto: " + e.getMessage());
+        }
+    }
+
+    @GetMapping()
+    public ResponseEntity<?> listarPontos() {
+        try{
+            List<RegistroCompletoDto> pontos = pontoService.listarPontos();
+            return ResponseEntity.ok(pontos);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erro ao listar pontos: " + e.getMessage());
         }
     }
 

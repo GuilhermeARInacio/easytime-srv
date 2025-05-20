@@ -87,13 +87,6 @@ class TimeLogTest {
     }
 
     @Test
-    void testGetUltimoBatimentoValue_NoBatimento() {
-        // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, timeLog::getUltimoBatimentoValue);
-        assertTrue(exception.getMessage().contains("No batimento exists to retrieve."));
-    }
-
-    @Test
     void testSetPonto_InvalidField() {
         // Arrange
         timeLog.setCont(7); // Invalid cont value

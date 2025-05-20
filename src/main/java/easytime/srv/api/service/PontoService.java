@@ -54,6 +54,16 @@ public class PontoService {
         timeLogsRepository.delete(timeLog);
     }
 
+    public List<RegistroCompletoDto> listarPontos(){
+        var response = timeLogsRepository.findAll();
+
+        if (response.isEmpty()) {
+            throw new NotFoundException("Nenhum ponto encontrado.");
+        }
+
+        return response.stream().map(RegistroCompletoDto::new).collect(Collectors.toList());
+    }
+
     public List<RegistroCompletoDto> consultar(ConsultaPontosDto dto) {
         var user = userRepository.findByLogin(dto.login()).orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
 

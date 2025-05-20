@@ -66,7 +66,7 @@ public class TimeLog {
 
     public void setPonto(Time hora) {
         try {
-            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(this.cont));;
+            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(this.cont));
 
             field.setAccessible(true);
             field.set(this, hora);
