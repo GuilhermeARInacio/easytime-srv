@@ -1,5 +1,6 @@
 package easytime.srv.api.service;
 
+import easytime.srv.api.infra.exceptions.InvalidUserException;
 import easytime.srv.api.model.pontos.ConsultaPontosDto;
 import easytime.srv.api.model.pontos.RegistroCompletoDto;
 import easytime.srv.api.model.pontos.TimeLogDto;
@@ -163,7 +164,7 @@ class PontoServiceTest {
         when(userRepository.findByLogin(login)).thenReturn(Optional.empty());
 
         // Act & Assert
-        NotFoundException exception = assertThrows(NotFoundException.class, () ->
+        InvalidUserException exception = assertThrows(InvalidUserException.class, () ->
                 pontoService.consultar(new ConsultaPontosDto(login, dtInicio, dtFinal))
         );
         assertEquals("Usuário não encontrado.", exception.getMessage());

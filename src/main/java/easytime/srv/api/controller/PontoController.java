@@ -1,5 +1,6 @@
 package easytime.srv.api.controller;
 
+import easytime.srv.api.infra.exceptions.InvalidUserException;
 import easytime.srv.api.model.pontos.ConsultaPontosDto;
 import easytime.srv.api.model.pontos.RegistroCompletoDto;
 import easytime.srv.api.model.user.DTOUsuario;
@@ -102,6 +103,22 @@ public class PontoController {
     }
 
     @PostMapping("/consulta")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Lista de pontos encontrados"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Pontos não encontrados"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Usuário não encontrado ou não autorizado"
+            )
+    })
+    @Operation(summary = "Listar registros de batimento de ponto de um certo periodo.", description = "Usuário envia login, data de inicio e data final do periodo.")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<?> consultar(@Valid @RequestBody ConsultaPontosDto dto){
         try{
             List<RegistroCompletoDto> response = pontoService.consultar(dto);
@@ -109,6 +126,8 @@ public class PontoController {
             return ResponseEntity.ok(response);
         } catch (NotFoundException e){
             return ResponseEntity.status(404).body(e.getMessage());
+        } catch (InvalidUserException e){
+            return ResponseEntity.status(401).body(e.getMessage());
         } catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e){
