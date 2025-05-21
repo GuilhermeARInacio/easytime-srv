@@ -119,16 +119,6 @@ public class PontoController {
     })
     @Operation(summary = "Listar registros de batimento de ponto de um certo periodo.", description = "Usuário envia login, data de inicio e data final do periodo.")
     @SecurityRequirement(name = "bearer-key")
-    @GetMapping()
-    public ResponseEntity<?> listarPontos() {
-        try{
-            List<RegistroCompletoDto> pontos = pontoService.listarPontos();
-            return ResponseEntity.ok(pontos);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Erro ao listar pontos: " + e.getMessage());
-        }
-    }
-
     @PostMapping("/consulta")
     public ResponseEntity<?> consultar(@Valid @RequestBody ConsultaPontosDto dto){
         try{
@@ -143,6 +133,16 @@ public class PontoController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e){
             return ResponseEntity.badRequest().body("Erro ao consultar pontos: " + e.getMessage());
+        }
+    }
+
+    @GetMapping()
+    public ResponseEntity<?> listarPontos() {
+        try{
+            List<RegistroCompletoDto> pontos = pontoService.listarPontos();
+            return ResponseEntity.ok(pontos);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erro ao listar pontos: " + e.getMessage());
         }
     }
 }
