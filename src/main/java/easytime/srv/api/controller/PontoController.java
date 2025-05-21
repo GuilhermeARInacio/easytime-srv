@@ -102,7 +102,33 @@ public class PontoController {
         }
     }
 
-    @PutMapping("/consulta")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Lista de pontos encontrados"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Pontos não encontrados"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Usuário não encontrado ou não autorizado"
+            )
+    })
+    @Operation(summary = "Listar registros de batimento de ponto.", description = "Lista todos os pontos registrados no sistema.")
+    @SecurityRequirement(name = "bearer-key")
+    @GetMapping()
+    public ResponseEntity<?> listarPontos() {
+        try{
+            List<RegistroCompletoDto> pontos = pontoService.listarPontos();
+            return ResponseEntity.ok(pontos);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erro ao listar pontos: " + e.getMessage());
+        }
+    }
+
+
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -119,7 +145,7 @@ public class PontoController {
     })
     @Operation(summary = "Listar registros de batimento de ponto de um certo periodo.", description = "Usuário envia login, data de inicio e data final do periodo.")
     @SecurityRequirement(name = "bearer-key")
-    @PostMapping("/consulta")
+    @PutMapping("/consulta")
     public ResponseEntity<?> consultar(@Valid @RequestBody ConsultaPontosDto dto){
         try{
             List<RegistroCompletoDto> response = pontoService.consultar(dto);
@@ -133,16 +159,6 @@ public class PontoController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e){
             return ResponseEntity.badRequest().body("Erro ao consultar pontos: " + e.getMessage());
-        }
-    }
-
-    @GetMapping()
-    public ResponseEntity<?> listarPontos() {
-        try{
-            List<RegistroCompletoDto> pontos = pontoService.listarPontos();
-            return ResponseEntity.ok(pontos);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Erro ao listar pontos: " + e.getMessage());
         }
     }
 }

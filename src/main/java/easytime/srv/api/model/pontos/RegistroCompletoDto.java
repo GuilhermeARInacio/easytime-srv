@@ -1,5 +1,6 @@
 package easytime.srv.api.model.pontos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import easytime.srv.api.tables.TimeLog;
 
 import java.sql.Time;
@@ -34,6 +35,11 @@ public record RegistroCompletoDto (
                 timeLog.getS3(),
                 timeLog.getStatus()
         );
+    }
+
+    @JsonProperty("horasTrabalhadas")
+    public double horasTrabalhadasEmHoras() {
+        return horasTrabalhadas == null ? 0 : horasTrabalhadas.toMinutes() / 60.0;
     }
 
 }
