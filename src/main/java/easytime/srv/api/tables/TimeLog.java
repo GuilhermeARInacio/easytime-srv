@@ -66,7 +66,7 @@ public class TimeLog {
 
     public void setPonto(Time hora) {
         try {
-            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(this.cont));;
+            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(this.cont));
 
             field.setAccessible(true);
             field.set(this, hora);
@@ -99,7 +99,7 @@ public class TimeLog {
             field.setAccessible(true); // Allow access to private fields
             return field.get(this); // Get the value of the field for the current instance
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException("Error accessing attribute: " + e.getMessage(), e);
+            throw new RuntimeException("Erro acessando atributo: " + e.getMessage(), e);
         }
     }
 }

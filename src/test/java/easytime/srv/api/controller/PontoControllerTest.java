@@ -1,5 +1,7 @@
 package easytime.srv.api.controller;
 
+import easytime.srv.api.model.pontos.ConsultaPontosDto;
+import easytime.srv.api.model.pontos.RegistroCompletoDto;
 import easytime.srv.api.model.pontos.TimeLogDto;
 import easytime.srv.api.model.user.LoginDto;
 import easytime.srv.api.service.PontoService;
@@ -15,6 +17,8 @@ import org.webjars.NotFoundException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -138,5 +142,51 @@ class PontoControllerTest {
         assertEquals(500, response.getStatusCodeValue());
         assertTrue(response.getBody().toString().contains("Erro inesperado."));
         verify(pontoService, times(1)).removerPonto(id);
+    }
+
+    @Test
+    void consultar_Success() {
+        // Arrange
+        ConsultaPontosDto dto = new ConsultaPontosDto("mkenzo", LocalDate.of(2025,05,01), LocalDate.of(2025,05,20));
+        List<RegistroCompletoDto> registros = new ArrayList<>();
+        when(pontoService.consultar(dto)).thenReturn(registros);
+
+        // Act
+        ResponseEntity<?> response = pontoController.consultar(dto);
+
+        // Assert
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(registros, response.getBody());
+        verify(pontoService, times(1)).consultar(dto);
+    }
+
+    @Test
+    void consultar_NotFoundException() {
+        // Arrange
+        ConsultaPontosDto dto = new ConsultaPontosDto("mkenzo", LocalDate.of(2025,05,01), LocalDate.of(2025,05,20));
+        when(pontoService.consultar(dto)).thenThrow(new NotFoundException("Registro não encontrado."));
+
+        // Act
+        ResponseEntity<?> response = pontoController.consultar(dto);
+
+        // Assert
+        assertEquals(404, response.getStatusCodeValue());
+        assertTrue(response.getBody().toString().contains("Registro não encontrado."));
+        verify(pontoService, times(1)).consultar(dto);
+    }
+
+    @Test
+    void consultar_IllegalArgumentException() {
+        // Arrange
+        ConsultaPontosDto dto = new ConsultaPontosDto("mkenzo", LocalDate.of(2025,05,01), LocalDate.of(2025,05,20));
+        when(pontoService.consultar(dto)).thenThrow(new IllegalArgumentException("Erro de validação."));
+
+        // Act
+        ResponseEntity<?> response = pontoController.consultar(dto);
+
+        // Assert
+        assertEquals(400, response.getStatusCodeValue());
+        assertTrue(response.getBody().toString().contains("Erro de validação."));
+        verify(pontoService, times(1)).consultar(dto);
     }
 }

@@ -1,5 +1,6 @@
 package easytime.srv.api.service;
 
+import easytime.srv.api.infra.exceptions.InvalidUserException;
 import easytime.srv.api.model.pontos.ConsultaPontosDto;
 import easytime.srv.api.model.pontos.RegistroCompletoDto;
 import easytime.srv.api.model.pontos.TimeLogDto;
@@ -54,11 +55,21 @@ public class PontoService {
         timeLogsRepository.delete(timeLog);
     }
 
+    public List<RegistroCompletoDto> listarPontos(){
+        var response = timeLogsRepository.findAll();
+
+        if (response.isEmpty()) {
+            throw new NotFoundException("Nenhum ponto encontrado.");
+        }
+
+        return response.stream().map(RegistroCompletoDto::new).collect(Collectors.toList());
+    }
+
     public List<RegistroCompletoDto> consultar(ConsultaPontosDto dto) {
-        var user = userRepository.findByLogin(dto.login()).orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
+        var user = userRepository.findByLogin(dto.login()).orElseThrow(() -> new InvalidUserException("Usuário não encontrado."));
 
         if (dto.dtInicio().isAfter(dto.dtFinal())) {
-            throw new IllegalArgumentException("Data inicial não pode ser maior que a data final.");
+            throw new IllegalArgumentException("A data de início não pode ser posterior à data final.");
         }
 
         var response = timeLogsRepository.findAllByUserAndDataBetween(user, dto.dtInicio(), dto.dtFinal());

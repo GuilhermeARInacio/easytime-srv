@@ -1,8 +1,8 @@
 package easytime.srv.api.controller;
 
+import easytime.srv.api.infra.exceptions.InvalidUserException;
 import easytime.srv.api.model.pontos.ConsultaPontosDto;
 import easytime.srv.api.model.pontos.RegistroCompletoDto;
-import easytime.srv.api.model.pontos.TimeLogDto;
 import easytime.srv.api.model.user.DTOUsuario;
 import easytime.srv.api.model.user.LoginDto;
 import easytime.srv.api.service.PontoService;
@@ -13,18 +13,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.servlet.ServletRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
 
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @Controller
@@ -107,7 +102,34 @@ public class PontoController {
         }
     }
 
-    @GetMapping("/consulta")
+    @PutMapping("/consulta")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Lista de pontos encontrados"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Pontos não encontrados"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Usuário não encontrado ou não autorizado"
+            )
+    })
+    @Operation(summary = "Listar registros de batimento de ponto de um certo periodo.", description = "Usuário envia login, data de inicio e data final do periodo.")
+    @SecurityRequirement(name = "bearer-key")
+    @GetMapping()
+    public ResponseEntity<?> listarPontos() {
+        try{
+            List<RegistroCompletoDto> pontos = pontoService.listarPontos();
+            return ResponseEntity.ok(pontos);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erro ao listar pontos: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/consulta")
     public ResponseEntity<?> consultar(@Valid @RequestBody ConsultaPontosDto dto){
         try{
             List<RegistroCompletoDto> response = pontoService.consultar(dto);
@@ -115,6 +137,8 @@ public class PontoController {
             return ResponseEntity.ok(response);
         } catch (NotFoundException e){
             return ResponseEntity.status(404).body(e.getMessage());
+        } catch (InvalidUserException e){
+            return ResponseEntity.status(401).body(e.getMessage());
         } catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e){
