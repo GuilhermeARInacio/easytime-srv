@@ -286,7 +286,7 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
             - **401 Unauthorized**: Retorna uma mensagem de erro quando o usuário não está autenticado ou login não existe.
 
 ### Alterar registro de ponto
-**POST** `/ponto`
+**PUT** `/ponto/alterar`
 - **Descrição**: Realiza a alteração do ponto do usuário.
     - **Request Body**:
       ```json
