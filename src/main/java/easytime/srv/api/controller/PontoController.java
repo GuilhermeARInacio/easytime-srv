@@ -146,7 +146,7 @@ public class PontoController {
     @Operation(summary = "Listar registros de batimento de ponto de um certo periodo.", description = "Usuário envia login, data de inicio e data final do periodo.")
     @SecurityRequirement(name = "bearer-key")
     @PutMapping("/consulta")
-    public ResponseEntity<?> consultar(@Valid @RequestBody ConsultaPontosDto dto){
+    public ResponseEntity<?> consultar(@RequestBody ConsultaPontosDto dto){
         try{
             List<RegistroCompletoDto> response = pontoService.consultar(dto);
 
