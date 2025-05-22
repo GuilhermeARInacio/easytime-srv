@@ -8,9 +8,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public record AlterarPontoDto(
-        @NotNull(message = "O login não pode ser nulo") @NotBlank(message = "O login não pode ser nulo")
+        @NotNull @NotBlank
         String login,
-        @NotNull(message = "O id não pode ser nulo")
+        @NotNull
         Integer idPonto,
         String data,
         LocalTime entrada1,

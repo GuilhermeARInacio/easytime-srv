@@ -138,6 +138,22 @@ public class PontoController {
     }
 
     @PutMapping("/alterar")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Registro alterado com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Usuário não autorizado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Campos inválidos"
+            )
+    })
+    @Operation(summary = "Alterar registro de ponto", description = "Altera um registro de ponto do usuário.")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<?> alterarPonto(@Valid @RequestBody AlterarPontoDto dto){
         try{
             var ponto = pontoService.alterarPonto(dto);
