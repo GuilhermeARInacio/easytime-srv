@@ -87,10 +87,13 @@ class TimeLogTest {
     }
 
     @Test
-    void testGetUltimoBatimentoValue_NoBatimento() {
+    void testGetUltimoBatimentoValue_FieldInexistente() {
+        // Arrange
+        timeLog.setCont(7);
+
         // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, timeLog::getUltimoBatimentoValue);
-        assertTrue(exception.getMessage().contains("No batimento exists to retrieve."));
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> timeLog.getUltimoBatimentoValue());
+        assertTrue(exception.getMessage().contains("Erro acessando atributo:"));
     }
 
     @Test

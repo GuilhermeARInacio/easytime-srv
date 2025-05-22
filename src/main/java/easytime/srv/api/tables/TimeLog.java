@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import java.lang.reflect.Field;
 import java.sql.Time;
+import java.time.Duration;
 import java.time.LocalDate;
 
 @Entity
@@ -59,7 +60,7 @@ public class TimeLog {
 
     private int cont = 0;
 
-    private float horas_trabalhadas = 0;
+    private Duration horas_trabalhadas = Duration.ZERO;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -67,15 +68,44 @@ public class TimeLog {
 
     public void setPonto(Time hora) {
         try {
-            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(this.cont));;
+            String fieldName = this.getUltimoBatimentoName(this.cont);
+            Field field = TimeLog.class.getDeclaredField(fieldName);
 
             field.setAccessible(true);
             field.set(this, hora);
+
+            if (fieldName.startsWith("S")) {
+                this.calcularHoras();
+            }
+
             this.cont++;
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException("Erro ao definir o campo: " + e);
         }
 
+    }
+
+    public void calcularHoras() {
+        try {
+            // Always calculate for the last entry/exit pair
+            if (this.cont > 0 && this.cont % 2 == 1) {
+                Field entradaF = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(cont - 2));
+                Field saidaF = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(cont - 1));
+
+                entradaF.setAccessible(true);
+                saidaF.setAccessible(true);
+
+                Time entrada = (Time) entradaF.get(this);
+                Time saida = (Time) saidaF.get(this);
+
+                if (entrada != null && saida != null) {
+                    Duration diff = Duration.between(entrada.toLocalTime(), saida.toLocalTime());
+                    this.horas_trabalhadas = this.horas_trabalhadas.plus(diff);
+                }
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException("Erro ao calcular horas: " + e);
+        }
     }
 
     public enum Status {
@@ -97,10 +127,10 @@ public class TimeLog {
         }
         try {
             Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(this.cont - 1));
-            field.setAccessible(true); // Allow access to private fields
-            return field.get(this); // Get the value of the field for the current instance
+            field.setAccessible(true);
+            return field.get(this);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException("Error accessing attribute: " + e.getMessage(), e);
+            throw new RuntimeException("Erro acessando atributo: " + e.getMessage(), e);
         }
     }
 
