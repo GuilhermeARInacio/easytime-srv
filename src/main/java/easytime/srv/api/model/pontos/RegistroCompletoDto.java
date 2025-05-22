@@ -26,7 +26,7 @@ public record RegistroCompletoDto (
                 timeLog.getId(),
                 timeLog.getUser().getLogin(),
                 timeLog.getData(),
-                Duration.ofHours((long) timeLog.getHoras_trabalhadas()),
+                timeLog.getHoras_trabalhadas(), // Pass Duration directly
                 timeLog.getE1(),
                 timeLog.getS1(),
                 timeLog.getE2(),
@@ -38,8 +38,10 @@ public record RegistroCompletoDto (
     }
 
     @JsonProperty("horasTrabalhadas")
-    public double horasTrabalhadasEmHoras() {
-        return horasTrabalhadas == null ? 0 : horasTrabalhadas.toMinutes() / 60.0;
+    public String horasTrabalhadasFormatado() {
+        if (horasTrabalhadas == null) return "00:00";
+        long hours = horasTrabalhadas.toHours();
+        long minutes = horasTrabalhadas.toMinutes() % 60;
+        return String.format("%02d:%02d", hours, minutes);
     }
-
 }

@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import java.lang.reflect.Field;
 import java.sql.Time;
+import java.time.Duration;
 import java.time.LocalDate;
 
 @Entity
@@ -58,7 +59,7 @@ public class TimeLog {
 
     private int cont = 0;
 
-    private float horas_trabalhadas = 0;
+    private Duration horas_trabalhadas = Duration.ZERO;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -66,23 +67,29 @@ public class TimeLog {
 
     public void setPonto(Time hora) {
         try {
-            Field field = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(this.cont));
+            String fieldName = this.getUltimoBatimentoName(this.cont);
+            Field field = TimeLog.class.getDeclaredField(fieldName);
 
             field.setAccessible(true);
             field.set(this, hora);
+
+            if (fieldName.startsWith("S")) {
+                this.calcularHoras();
+            }
+
             this.cont++;
-            this.calcularHoras();
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException("Erro ao definir o campo: " + e);
         }
 
     }
 
-    public void calcularHoras(){
+    public void calcularHoras() {
         try {
-            if (this.cont % 2 == 0) {
-                Field entradaF = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(cont-2));
-                Field saidaF = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(cont-1));
+            // Always calculate for the last entry/exit pair
+            if (this.cont > 0 && this.cont % 2 == 1) {
+                Field entradaF = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(cont - 2));
+                Field saidaF = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(cont - 1));
 
                 entradaF.setAccessible(true);
                 saidaF.setAccessible(true);
@@ -91,11 +98,9 @@ public class TimeLog {
                 Time saida = (Time) saidaF.get(this);
 
                 if (entrada != null && saida != null) {
-                    long diff = saida.getTime() - entrada.getTime();
-                    this.horas_trabalhadas += (float) diff / (1000 * 60 * 60);
-                    System.out.println(diff);
+                    Duration diff = Duration.between(entrada.toLocalTime(), saida.toLocalTime());
+                    this.horas_trabalhadas = this.horas_trabalhadas.plus(diff);
                 }
-                System.out.println(this.horas_trabalhadas);
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException("Erro ao calcular horas: " + e);
