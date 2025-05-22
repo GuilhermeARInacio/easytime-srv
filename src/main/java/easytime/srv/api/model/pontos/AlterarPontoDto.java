@@ -21,7 +21,7 @@ public record AlterarPontoDto(
         LocalTime saida3
 ) {
         public boolean isDataValida() {
-                if (data == null && data.trim().isEmpty()){
+                if (data == null || data.isBlank()) {
                         return false;
                 }
                 try {

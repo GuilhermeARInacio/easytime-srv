@@ -1,6 +1,7 @@
 package easytime.srv.api.service;
 
 import easytime.srv.api.infra.exceptions.InvalidUserException;
+import easytime.srv.api.model.pontos.AlterarPontoDto;
 import easytime.srv.api.model.pontos.ConsultaPontosDto;
 import easytime.srv.api.model.pontos.RegistroCompletoDto;
 import easytime.srv.api.model.pontos.TimeLogDto;
@@ -9,6 +10,7 @@ import easytime.srv.api.tables.TimeLog;
 import easytime.srv.api.tables.User;
 import easytime.srv.api.tables.repositorys.TimeLogsRepository;
 import easytime.srv.api.tables.repositorys.UserRepository;
+import easytime.srv.api.validacoes.alterar_ponto.ValidacaoAlterarPonto;
 import easytime.srv.api.validacoes.bater_ponto.ValidacaoPonto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +35,9 @@ class PontoServiceTest {
 
     @Mock
     private TimeLogsRepository timeLogsRepository;
+
+    @Mock
+    private List<ValidacaoAlterarPonto> validacoesAlterar;
 
     @Mock
     private List<ValidacaoPonto> validacoes;
@@ -205,5 +210,46 @@ class PontoServiceTest {
         NotFoundException exception = assertThrows(NotFoundException.class, () ->
                 pontoService.consultar(new ConsultaPontosDto(login, dtInicio, dtFinal)));
         assertEquals("Nenhum ponto encontrado.", exception.getMessage());
+    }
+
+    @Test
+    void alterarPonto_Success() {
+        AlterarPontoDto dto = mock(AlterarPontoDto.class);
+        when(dto.idPonto()).thenReturn(1);
+        when(dto.login()).thenReturn("user");
+        TimeLog timeLog = mock(TimeLog.class);
+        User user = new User();
+        when(timeLog.getUser()).thenReturn(user);
+        when(timeLogsRepository.findById(1)).thenReturn(Optional.of(timeLog));
+        when(userRepository.findByLogin("user")).thenReturn(Optional.of(user));
+
+        RegistroCompletoDto result = pontoService.alterarPonto(dto);
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void alterarPonto_TimeLogNotFound() {
+        AlterarPontoDto dto = mock(AlterarPontoDto.class);
+        when(dto.idPonto()).thenReturn(1);
+        when(timeLogsRepository.findById(1)).thenReturn(Optional.empty());
+
+        NotFoundException ex = assertThrows(NotFoundException.class, () -> pontoService.alterarPonto(dto));
+        assertEquals("Ponto não encontrado.", ex.getMessage());
+        verify(timeLogsRepository, never()).save(any());
+    }
+
+    @Test
+    void alterarPonto_UserNotFound() {
+        AlterarPontoDto dto = mock(AlterarPontoDto.class);
+        when(dto.idPonto()).thenReturn(1);
+        when(dto.login()).thenReturn("user");
+        TimeLog timeLog = mock(TimeLog.class);
+        when(timeLogsRepository.findById(1)).thenReturn(Optional.of(timeLog));
+        when(userRepository.findByLogin("user")).thenReturn(Optional.empty());
+
+        InvalidUserException ex = assertThrows(InvalidUserException.class, () -> pontoService.alterarPonto(dto));
+        assertEquals("Login inválido.", ex.getMessage());
+        verify(timeLogsRepository, never()).save(any());
     }
 }

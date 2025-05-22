@@ -77,19 +77,15 @@ public class PontoService {
     }
 
     public RegistroCompletoDto alterarPonto(AlterarPontoDto dto){
-        try {
-            var timeLog = timeLogsRepository.findById(dto.idPonto())
-                    .orElseThrow(() -> new NotFoundException("Ponto não encontrado."));
-            var user = userRepository.findByLogin(dto.login()).orElseThrow(() -> new InvalidUserException("Login inválido."));
+        var timeLog = timeLogsRepository.findById(dto.idPonto())
+                .orElseThrow(() -> new NotFoundException("Ponto não encontrado."));
+        var user = userRepository.findByLogin(dto.login()).orElseThrow(() -> new InvalidUserException("Login inválido."));
 
-            validacoesAlterar.forEach(validacao -> validacao.validar(dto, timeLog));
+        validacoesAlterar.forEach(validacao -> validacao.validar(dto, timeLog));
 
-            timeLog.alterarPonto(dto);
+        timeLog.alterarPonto(dto);
 
-            timeLogsRepository.save(timeLog);
-            return new RegistroCompletoDto(timeLog);
-        } catch (Exception e){
-            throw e;
-        }
+        timeLogsRepository.save(timeLog);
+        return new RegistroCompletoDto(timeLog);
     }
 }
