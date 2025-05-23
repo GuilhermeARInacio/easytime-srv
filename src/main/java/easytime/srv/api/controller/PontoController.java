@@ -104,7 +104,7 @@ public class PontoController {
         }
     }
 
-    @GetMapping("/consulta")
+    @PutMapping("/consulta")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",

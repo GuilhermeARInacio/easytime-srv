@@ -6,12 +6,13 @@ import easytime.srv.api.tables.TimeLog;
 import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public record RegistroCompletoDto (
         Integer id,
         String login,
         LocalDate data,
-        Duration horasTrabalhadas,
+        Time horasTrabalhadas,
         Time entrada1,
         Time saida1,
         Time entrada2,
@@ -39,9 +40,11 @@ public record RegistroCompletoDto (
 
     @JsonProperty("horasTrabalhadas")
     public String horasTrabalhadasFormatado() {
-        if (horasTrabalhadas == null) return "00:00";
-        long hours = horasTrabalhadas.toHours();
-        long minutes = horasTrabalhadas.toMinutes() % 60;
-        return String.format("%02d:%02d", hours, minutes);
+        if (horasTrabalhadas == null) return "00:00:00";
+
+        long hours = horasTrabalhadas.toLocalTime().getHour();
+        long minutes = horasTrabalhadas.toLocalTime().getMinute();
+        long seconds = horasTrabalhadas.toLocalTime().getSecond();
+        return String.format("%02dh %02dm %02ds", hours, minutes, seconds);
     }
 }
