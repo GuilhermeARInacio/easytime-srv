@@ -78,8 +78,8 @@ public class PontoService {
 
     public RegistroCompletoDto alterarPonto(AlterarPontoDto dto){
         var timeLog = timeLogsRepository.findById(dto.idPonto())
-                .orElseThrow(() -> new NotFoundException("Ponto não encontrado."));
-        var user = userRepository.findByLogin(dto.login()).orElseThrow(() -> new InvalidUserException("Login inválido."));
+                .orElseThrow(() -> new NotFoundException("Nenhum ponto encontrado."));
+        var user = userRepository.findByLogin(dto.login()).orElseThrow(() -> new InvalidUserException("Login inválido. Verifique os dados informados."));
 
         validacoesAlterar.forEach(validacao -> validacao.validar(dto, timeLog));
 

@@ -18,7 +18,7 @@ class RegistroCompletoDtoTest {
     void constructor_setsAllFields() {
         RegistroCompletoDto dto = new RegistroCompletoDto(
                 1, "user", LocalDate.of(2024, 6, 1),
-                Duration.ofMinutes(125),
+                Time.valueOf("8:00:00"),
                 Time.valueOf("08:00:00"), Time.valueOf("12:00:00"),
                 Time.valueOf("13:00:00"), Time.valueOf("17:00:00"),
                 null, null,
@@ -28,7 +28,7 @@ class RegistroCompletoDtoTest {
         assertEquals(1, dto.id());
         assertEquals("user", dto.login());
         assertEquals(LocalDate.of(2024, 6, 1), dto.data());
-        assertEquals(Duration.ofMinutes(125), dto.horasTrabalhadas());
+        assertEquals(Time.valueOf("8:00:00"), dto.horasTrabalhadas());
         assertEquals(Time.valueOf("08:00:00"), dto.entrada1());
         assertEquals(Time.valueOf("12:00:00"), dto.saida1());
         assertEquals(Time.valueOf("13:00:00"), dto.entrada2());
@@ -46,7 +46,7 @@ class RegistroCompletoDtoTest {
         when(timeLog.getId()).thenReturn(10);
         when(timeLog.getUser()).thenReturn(user);
         when(timeLog.getData()).thenReturn(LocalDate.of(2024, 6, 2));
-        when(timeLog.getHoras_trabalhadas()).thenReturn(Duration.ofHours(7).plusMinutes(30));
+        when(timeLog.getHoras_trabalhadas()).thenReturn(Time.valueOf("7:30:00"));
         when(timeLog.getE1()).thenReturn(Time.valueOf("08:00:00"));
         when(timeLog.getS1()).thenReturn(Time.valueOf("12:00:00"));
         when(timeLog.getE2()).thenReturn(Time.valueOf("13:00:00"));
@@ -60,7 +60,7 @@ class RegistroCompletoDtoTest {
         assertEquals(10, dto.id());
         assertEquals("user1", dto.login());
         assertEquals(LocalDate.of(2024, 6, 2), dto.data());
-        assertEquals(Duration.ofMinutes(450), dto.horasTrabalhadas());
+        assertEquals(Time.valueOf("7:30:00"), dto.horasTrabalhadas());
         assertEquals(Time.valueOf("08:00:00"), dto.entrada1());
         assertEquals(Time.valueOf("12:00:00"), dto.saida1());
         assertEquals(Time.valueOf("13:00:00"), dto.entrada2());
@@ -68,27 +68,5 @@ class RegistroCompletoDtoTest {
         assertNull(dto.entrada3());
         assertNull(dto.saida3());
         assertEquals(TimeLog.Status.APROVADO, dto.status());
-    }
-
-    @Test
-    void horasTrabalhadasFormatado_returnsFormattedString() {
-        RegistroCompletoDto dto = new RegistroCompletoDto(
-                1, "user", LocalDate.now(),
-                Duration.ofHours(2).plusMinutes(5),
-                null, null, null, null, null, null,
-                TimeLog.Status.PENDENTE
-        );
-        assertEquals("02:05", dto.horasTrabalhadasFormatado());
-    }
-
-    @Test
-    void horasTrabalhadasFormatado_returnsZeroWhenNull() {
-        RegistroCompletoDto dto = new RegistroCompletoDto(
-                1, "user", LocalDate.now(),
-                null,
-                null, null, null, null, null, null,
-                TimeLog.Status.PENDENTE
-        );
-        assertEquals("00:00", dto.horasTrabalhadasFormatado());
     }
 }
