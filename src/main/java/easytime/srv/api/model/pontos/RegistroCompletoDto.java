@@ -37,14 +37,4 @@ public record RegistroCompletoDto (
                 timeLog.getStatus()
         );
     }
-
-    @JsonProperty("horasTrabalhadas")
-    public String horasTrabalhadasFormatado() {
-        if (horasTrabalhadas == null) return "00:00:00";
-
-        long hours = horasTrabalhadas.toLocalTime().getHour();
-        long minutes = horasTrabalhadas.toLocalTime().getMinute();
-        long seconds = horasTrabalhadas.toLocalTime().getSecond();
-        return String.format("%02dh %02dm %02ds", hours, minutes, seconds);
-    }
 }

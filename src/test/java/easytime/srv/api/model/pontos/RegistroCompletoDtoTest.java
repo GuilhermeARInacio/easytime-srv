@@ -69,26 +69,4 @@ class RegistroCompletoDtoTest {
         assertNull(dto.saida3());
         assertEquals(TimeLog.Status.APROVADO, dto.status());
     }
-
-    @Test
-    void horasTrabalhadasFormatado_returnsFormattedString() {
-        RegistroCompletoDto dto = new RegistroCompletoDto(
-                1, "user", LocalDate.now(),
-                Time.valueOf("2:05:00"),
-                null, null, null, null, null, null,
-                TimeLog.Status.PENDENTE
-        );
-        assertEquals("02h 05m 00s", dto.horasTrabalhadasFormatado());
-    }
-
-    @Test
-    void horasTrabalhadasFormatado_returnsZeroWhenNull() {
-        RegistroCompletoDto dto = new RegistroCompletoDto(
-                1, "user", LocalDate.now(),
-                null,
-                null, null, null, null, null, null,
-                TimeLog.Status.PENDENTE
-        );
-        assertEquals("00:00:00", dto.horasTrabalhadasFormatado());
-    }
 }

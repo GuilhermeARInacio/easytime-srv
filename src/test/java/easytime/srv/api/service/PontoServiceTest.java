@@ -235,7 +235,7 @@ class PontoServiceTest {
         when(timeLogsRepository.findById(1)).thenReturn(Optional.empty());
 
         NotFoundException ex = assertThrows(NotFoundException.class, () -> pontoService.alterarPonto(dto));
-        assertEquals("Ponto não encontrado.", ex.getMessage());
+        assertEquals("Nenhum ponto encontrado.", ex.getMessage());
         verify(timeLogsRepository, never()).save(any());
     }
 
@@ -249,7 +249,7 @@ class PontoServiceTest {
         when(userRepository.findByLogin("user")).thenReturn(Optional.empty());
 
         InvalidUserException ex = assertThrows(InvalidUserException.class, () -> pontoService.alterarPonto(dto));
-        assertEquals("Login inválido.", ex.getMessage());
+        assertEquals("Login inválido. Verifique os dados informados.", ex.getMessage());
         verify(timeLogsRepository, never()).save(any());
     }
 }
