@@ -1,5 +1,6 @@
 package easytime.srv.api.service;
 
+import easytime.srv.api.infra.security.TokenDto;
 import easytime.srv.api.infra.security.TokenService;
 import easytime.srv.api.model.user.DTOUsuario;
 import easytime.srv.api.validacoes.Login.ValidacaoLogin;
@@ -22,7 +23,7 @@ public class LoginService {
     @Autowired
     private TokenService tokenService;
 
-    public String login( DTOUsuario usuario) {
+    public TokenDto login( DTOUsuario usuario) {
 
         validacoes.forEach(v -> v.validar(usuario));
 
@@ -30,6 +31,7 @@ public class LoginService {
         var authentication = manager.authenticate(authenticationToken);
 
         String usuarioAutenticacao = (String) authentication.getPrincipal();
-        return tokenService.gerarToken(new DTOUsuario(usuarioAutenticacao, usuarioAutenticacao));
+        String token = tokenService.gerarToken(new DTOUsuario(usuarioAutenticacao, usuarioAutenticacao));
+        return new TokenDto(token);
     }
 }
