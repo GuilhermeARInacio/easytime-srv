@@ -2,12 +2,14 @@ package easytime.srv.api.controller;
 
 import easytime.srv.api.infra.exceptions.CampoInvalidoException;
 import easytime.srv.api.infra.exceptions.UsuarioESenhaNotFoundException;
+import easytime.srv.api.infra.security.TokenDto;
 import easytime.srv.api.model.user.DTOUsuario;
 import easytime.srv.api.service.LoginService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatusCode;
@@ -32,7 +34,7 @@ class LoginControllerTest {
 
     @Test
     void shouldReturn200WhenLoginCalled() {
-        when(loginService.login(any())).thenReturn("token");
+        when(loginService.login(any())).thenReturn(Mockito.mock(TokenDto.class));
 
         var response = loginController.login(new DTOUsuario("user", "password"));
         assertEquals(HttpStatusCode.valueOf(200), response.getStatusCode());

@@ -1,5 +1,6 @@
 package easytime.srv.api.tables;
 
+import easytime.srv.api.model.pontos.AlterarPontoDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,7 +60,7 @@ public class TimeLog {
 
     private int cont = 0;
 
-    private Duration horas_trabalhadas = Duration.ZERO;
+    private Time horas_trabalhadas = Time.valueOf("00:00:00");
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -74,7 +75,7 @@ public class TimeLog {
             field.set(this, hora);
 
             if (fieldName.startsWith("S")) {
-                this.calcularHoras();
+                this.calcularHoras(this.cont);
             }
 
             this.cont++;
@@ -84,12 +85,11 @@ public class TimeLog {
 
     }
 
-    public void calcularHoras() {
+    public void calcularHoras(int cont) {
         try {
-            // Always calculate for the last entry/exit pair
-            if (this.cont > 0 && this.cont % 2 == 1) {
-                Field entradaF = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(cont - 2));
-                Field saidaF = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(cont - 1));
+            if (this.cont > 0) {
+                Field entradaF = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(cont - 1));
+                Field saidaF = TimeLog.class.getDeclaredField(this.getUltimoBatimentoName(cont));
 
                 entradaF.setAccessible(true);
                 saidaF.setAccessible(true);
@@ -98,8 +98,8 @@ public class TimeLog {
                 Time saida = (Time) saidaF.get(this);
 
                 if (entrada != null && saida != null) {
-                    Duration diff = Duration.between(entrada.toLocalTime(), saida.toLocalTime());
-                    this.horas_trabalhadas = this.horas_trabalhadas.plus(diff);
+                    long diff = saida.getTime() - entrada.getTime();
+                    this.horas_trabalhadas = new Time(this.horas_trabalhadas.getTime() + diff);
                 }
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -131,5 +131,43 @@ public class TimeLog {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException("Erro acessando atributo: " + e.getMessage(), e);
         }
+    }
+
+    public TimeLog alterarPonto(AlterarPontoDto dto) {
+        if (dto.data() != null && !String.valueOf(data).isEmpty()) {
+            this.setData(LocalDate.parse(dto.data()));
+        }
+        if (dto.entrada1() != null && !String.valueOf(E1).isEmpty()) {
+            this.setE1(Time.valueOf(dto.entrada1()));
+        }
+        if (dto.saida1() != null && !String.valueOf(S1).isEmpty()) {
+            this.setS1(Time.valueOf(dto.saida1()));
+        }
+        if (dto.entrada2() != null && !String.valueOf(E2).isEmpty()) {
+            this.setE2(Time.valueOf(dto.entrada2()));
+        }
+        if (dto.saida2() != null && !String.valueOf(S2).isEmpty()) {
+            this.setS2(Time.valueOf(dto.saida2()));
+        }
+        if (dto.entrada3() != null && !String.valueOf(E3).isEmpty()) {
+            this.setE3(Time.valueOf(dto.entrada3()));
+        }
+        if (dto.saida3() != null && !String.valueOf(S3).isEmpty()) {
+            this.setS3(Time.valueOf(dto.saida3()));
+        }
+
+        this.horas_trabalhadas = Time.valueOf("00:00:00");
+
+        if (this.E1 != null && this.S1 != null) {
+            this.calcularHoras(1);
+        }
+        if (this.E2 != null && this.S2 != null) {
+            this.calcularHoras(3);
+        }
+        if (this.E3 != null && this.S3 != null) {
+            this.calcularHoras(5);
+        }
+
+        return this;
     }
 }

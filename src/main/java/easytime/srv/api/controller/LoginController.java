@@ -3,6 +3,7 @@ package easytime.srv.api.controller;
 import easytime.srv.api.infra.exceptions.CampoInvalidoException;
 import easytime.srv.api.infra.exceptions.CampoVazioException;
 import easytime.srv.api.infra.exceptions.UsuarioESenhaNotFoundException;
+import easytime.srv.api.infra.security.TokenDto;
 import easytime.srv.api.model.user.DTOUsuario;
 import easytime.srv.api.service.LoginService;
 import easytime.srv.api.tables.repositorys.UserRepository;
@@ -64,7 +65,7 @@ public class LoginController {
     })
     @Operation(summary = "Fazer login", description = "Usuário envia usuário e senha válidos para obter um token JWT")
 //    @SecurityRequirement(name = "bearer-key")
-    public ResponseEntity<String> login(@RequestBody DTOUsuario usuario) {
+    public ResponseEntity<?> login(@RequestBody DTOUsuario usuario) {
         try{
             var token = loginService.login(usuario);
 

@@ -1,5 +1,6 @@
 package easytime.srv.api.service;
 
+import easytime.srv.api.infra.security.TokenDto;
 import easytime.srv.api.infra.security.TokenService;
 import easytime.srv.api.model.user.DTOUsuario;
 import easytime.srv.api.validacoes.Login.ValidacaoLogin;
@@ -53,7 +54,7 @@ class LoginServiceTest {
         Authentication authentication = new UsernamePasswordAuthenticationToken("login", "senha");
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
         DTOUsuario dto = new DTOUsuario("login", "senha");
-        String token = loginService.login(dto);
+        TokenDto token = loginService.login(dto);
         assertEquals(String.class, token.getClass());
     }
 }

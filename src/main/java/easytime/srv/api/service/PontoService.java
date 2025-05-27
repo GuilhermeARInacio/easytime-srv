@@ -1,6 +1,7 @@
 package easytime.srv.api.service;
 
 import easytime.srv.api.infra.exceptions.InvalidUserException;
+import easytime.srv.api.model.pontos.AlterarPontoDto;
 import easytime.srv.api.model.pontos.ConsultaPontosDto;
 import easytime.srv.api.model.pontos.RegistroCompletoDto;
 import easytime.srv.api.model.pontos.TimeLogDto;
@@ -9,6 +10,7 @@ import easytime.srv.api.tables.TimeLog;
 import easytime.srv.api.tables.User;
 import easytime.srv.api.tables.repositorys.TimeLogsRepository;
 import easytime.srv.api.tables.repositorys.UserRepository;
+import easytime.srv.api.validacoes.alterar_ponto.ValidacaoAlterarPonto;
 import easytime.srv.api.validacoes.bater_ponto.ValidacaoPonto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,9 @@ public class PontoService {
 
     @Autowired
     private List<ValidacaoPonto> validacoes;
+
+    @Autowired
+    private List<ValidacaoAlterarPonto> validacoesAlterar;
 
     public TimeLogDto registrarPonto(LoginDto login) {
         User user = userRepository.findByLogin(login.login()).orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
@@ -55,16 +60,6 @@ public class PontoService {
         timeLogsRepository.delete(timeLog);
     }
 
-    public List<RegistroCompletoDto> listarPontos(){
-        var response = timeLogsRepository.findAll();
-
-        if (response.isEmpty()) {
-            throw new NotFoundException("Nenhum ponto encontrado.");
-        }
-
-        return response.stream().map(RegistroCompletoDto::new).collect(Collectors.toList());
-    }
-
     public List<RegistroCompletoDto> consultar(ConsultaPontosDto dto) {
         var user = userRepository.findByLogin(dto.login()).orElseThrow(() -> new InvalidUserException("Usuário não encontrado."));
 
@@ -79,5 +74,18 @@ public class PontoService {
         }
 
         return response.stream().map(RegistroCompletoDto::new).collect(Collectors.toList());
+    }
+
+    public RegistroCompletoDto alterarPonto(AlterarPontoDto dto){
+        var timeLog = timeLogsRepository.findById(dto.idPonto())
+                .orElseThrow(() -> new NotFoundException("Nenhum ponto encontrado."));
+        var user = userRepository.findByLogin(dto.login()).orElseThrow(() -> new InvalidUserException("Login inválido. Verifique os dados informados."));
+
+        validacoesAlterar.forEach(validacao -> validacao.validar(dto, timeLog));
+
+        timeLog.alterarPonto(dto);
+
+        timeLogsRepository.save(timeLog);
+        return new RegistroCompletoDto(timeLog);
     }
 }
