@@ -6,13 +6,15 @@ import jakarta.validation.constraints.NotNull;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public record AlterarPontoDto(
         @NotNull @NotBlank
         String login,
         @NotNull
         Integer idPonto,
-        String data,
+        @NotNull @NotBlank String data,
         LocalTime entrada1,
         LocalTime saida1,
         LocalTime entrada2,
@@ -25,10 +27,11 @@ public record AlterarPontoDto(
                         return false;
                 }
                 try {
-                        LocalDate.parse(data);
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        LocalDate.parse(data, formatter);
                         return true;
-                } catch (DateTimeException e) {
-                        throw new IllegalArgumentException("Data inválida: " + data, e);
+                } catch (DateTimeParseException e) {
+                        return false;
                 }
         }
 }

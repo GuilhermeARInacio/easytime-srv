@@ -17,7 +17,7 @@ class RegistroCompletoDtoTest {
     @Test
     void constructor_setsAllFields() {
         RegistroCompletoDto dto = new RegistroCompletoDto(
-                1, "user", LocalDate.of(2024, 6, 1),
+                1, "user", "",
                 Time.valueOf("8:00:00"),
                 Time.valueOf("08:00:00"), Time.valueOf("12:00:00"),
                 Time.valueOf("13:00:00"), Time.valueOf("17:00:00"),
@@ -27,7 +27,7 @@ class RegistroCompletoDtoTest {
 
         assertEquals(1, dto.id());
         assertEquals("user", dto.login());
-        assertEquals(LocalDate.of(2024, 6, 1), dto.data());
+        assertEquals("", dto.data());
         assertEquals(Time.valueOf("8:00:00"), dto.horasTrabalhadas());
         assertEquals(Time.valueOf("08:00:00"), dto.entrada1());
         assertEquals(Time.valueOf("12:00:00"), dto.saida1());

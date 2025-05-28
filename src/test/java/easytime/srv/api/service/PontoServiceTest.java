@@ -10,6 +10,7 @@ import easytime.srv.api.tables.TimeLog;
 import easytime.srv.api.tables.User;
 import easytime.srv.api.tables.repositorys.TimeLogsRepository;
 import easytime.srv.api.tables.repositorys.UserRepository;
+import easytime.srv.api.util.DateUtil;
 import easytime.srv.api.validacoes.alterar_ponto.ValidacaoAlterarPonto;
 import easytime.srv.api.validacoes.bater_ponto.ValidacaoPonto;
 import org.junit.jupiter.api.BeforeEach;
@@ -142,14 +143,14 @@ class PontoServiceTest {
     void consultar_Success() {
         // Arrange
         String login = "mkenzo";
-        LocalDate dtInicio = LocalDate.now().minusDays(1);
-        LocalDate dtFinal = LocalDate.now();
+        String dtInicio = "01/01/2023";
+        String dtFinal = "";
         User user = new User();
         user.setLogin(login);
-        TimeLog timeLog = new TimeLog(user, dtInicio);
+        TimeLog timeLog = new TimeLog(user, DateUtil.convertUserDateToDBDate(dtInicio));
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-        when(timeLogsRepository.findAllByUserAndDataBetween(user, dtInicio, dtFinal)).thenReturn(List.of(timeLog));
+        when(timeLogsRepository.findAllByUserAndDataBetween(any(User.class), any(LocalDate.class), any(LocalDate.class))).thenReturn(List.of(timeLog));
 
         // Act
         List<RegistroCompletoDto> result = pontoService.consultar(new ConsultaPontosDto(login, dtInicio, dtFinal));
@@ -163,8 +164,8 @@ class PontoServiceTest {
     void consultar_UserNotFound() {
         // Arrange
         String login = "invalid";
-        LocalDate dtInicio = LocalDate.now().minusDays(1);
-        LocalDate dtFinal = LocalDate.now();
+        String dtInicio = "";
+        String dtFinal = "";
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.empty());
 
@@ -179,8 +180,8 @@ class PontoServiceTest {
     void consultar_IllegalArgument() {
         // Arrange
         String login = "mkenzo";
-        LocalDate dtInicio = LocalDate.of(2025, 5, 10);
-        LocalDate dtFinal = LocalDate.of(2025, 5, 2);
+        String dtInicio = "";
+        String dtFinal = "";
         User user = new User();
         user.setLogin(login);
 
@@ -197,14 +198,14 @@ class PontoServiceTest {
     void consultar_responseEmpty() {
         // Arrange
         String login = "mkenzo";
-        LocalDate dtInicio = LocalDate.now().minusDays(1);
-        LocalDate dtFinal = LocalDate.now();
+        String dtInicio = "";
+        String dtFinal = "";
         User user = new User();
         user.setLogin(login);
-        TimeLog timeLog = new TimeLog(user, dtInicio);
+        TimeLog timeLog = new TimeLog(user, LocalDate.now());
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-        when(timeLogsRepository.findAllByUserAndDataBetween(user, dtInicio, dtFinal)).thenReturn(Collections.emptyList());
+        when(timeLogsRepository.findAllByUserAndDataBetween(any(User.class), any(LocalDate.class), any(LocalDate.class))).thenReturn(Collections.emptyList());
 
         // Act
         NotFoundException exception = assertThrows(NotFoundException.class, () ->

@@ -10,6 +10,7 @@ import easytime.srv.api.tables.TimeLog;
 import easytime.srv.api.tables.User;
 import easytime.srv.api.tables.repositorys.TimeLogsRepository;
 import easytime.srv.api.tables.repositorys.UserRepository;
+import easytime.srv.api.util.DateUtil;
 import easytime.srv.api.validacoes.alterar_ponto.ValidacaoAlterarPonto;
 import easytime.srv.api.validacoes.bater_ponto.ValidacaoPonto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,11 +64,13 @@ public class PontoService {
     public List<RegistroCompletoDto> consultar(ConsultaPontosDto dto) {
         var user = userRepository.findByLogin(dto.login()).orElseThrow(() -> new InvalidUserException("Usuário não encontrado."));
 
-        if (dto.dtInicio().isAfter(dto.dtFinal())) {
+        var dateInicio = DateUtil.convertUserDateToDBDate(dto.dtInicio());
+        var dateFinal = DateUtil.convertUserDateToDBDate(dto.dtFinal());
+        if (dateInicio.isAfter(dateFinal)) {
             throw new IllegalArgumentException("A data de início não pode ser posterior à data final.");
         }
 
-        var response = timeLogsRepository.findAllByUserAndDataBetween(user, dto.dtInicio(), dto.dtFinal());
+        var response = timeLogsRepository.findAllByUserAndDataBetween(user, dateInicio, dateFinal);
 
         if (response.isEmpty()) {
             throw new NotFoundException("Nenhum ponto encontrado.");
@@ -78,8 +81,7 @@ public class PontoService {
 
     public RegistroCompletoDto alterarPonto(AlterarPontoDto dto){
         var timeLog = timeLogsRepository.findById(dto.idPonto())
-                .orElseThrow(() -> new NotFoundException("Nenhum ponto encontrado."));
-        var user = userRepository.findByLogin(dto.login()).orElseThrow(() -> new InvalidUserException("Login inválido. Verifique os dados informados."));
+                .orElseThrow(() -> new NotFoundException("ID de ponto não localizado. Verifique se o código está correto."));
 
         validacoesAlterar.forEach(validacao -> validacao.validar(dto, timeLog));
 

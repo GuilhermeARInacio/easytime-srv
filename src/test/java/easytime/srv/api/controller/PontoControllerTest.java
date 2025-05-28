@@ -45,9 +45,8 @@ class PontoControllerTest {
     void registrarPonto_Success() {
         // Arrange
         LoginDto login = new LoginDto("mkenzo");
-        LocalDate dataHoje = LocalDate.now();
         Time horaAgora = Time.valueOf(LocalTime.now());
-        TimeLogDto timeLogDto = new TimeLogDto("mkenzo", dataHoje, horaAgora, TimeLog.Status.PENDENTE);
+        TimeLogDto timeLogDto = new TimeLogDto("mkenzo", "", horaAgora, TimeLog.Status.PENDENTE);
 
         when(pontoService.registrarPonto(login)).thenReturn(timeLogDto);
 
@@ -146,7 +145,7 @@ class PontoControllerTest {
     @Test
     void consultar_Success() {
         // Arrange
-        ConsultaPontosDto dto = new ConsultaPontosDto("mkenzo", LocalDate.of(2025,05,01), LocalDate.of(2025,05,20));
+        ConsultaPontosDto dto = new ConsultaPontosDto("mkenzo", "", "");
         List<RegistroCompletoDto> registros = new ArrayList<>();
         when(pontoService.consultar(dto)).thenReturn(registros);
 
@@ -161,7 +160,7 @@ class PontoControllerTest {
     @Test
     void consultar_NotFoundException() {
         // Arrange
-        ConsultaPontosDto dto = new ConsultaPontosDto("mkenzo", LocalDate.of(2025, 5, 1), LocalDate.of(2025, 5,20));
+        ConsultaPontosDto dto = new ConsultaPontosDto("mkenzo", "", "");
         when(pontoService.consultar(dto)).thenThrow(new NotFoundException("Registro não encontrado."));
 
         // Act
@@ -174,7 +173,7 @@ class PontoControllerTest {
     @Test
     void consultar_IllegalArgumentException() {
         // Arrange
-        ConsultaPontosDto dto = new ConsultaPontosDto("mkenzo", LocalDate.of(2025,05,01), LocalDate.of(2025,05,20));
+        ConsultaPontosDto dto = new ConsultaPontosDto("mkenzo", "", "");
         when(pontoService.consultar(dto)).thenThrow(new IllegalArgumentException("Erro de validação."));
 
         // Act
@@ -187,7 +186,7 @@ class PontoControllerTest {
 
     @Test
     void consultar_DateTimeException() {
-        ConsultaPontosDto dto = new ConsultaPontosDto("user", LocalDate.now(), LocalDate.now());
+        ConsultaPontosDto dto = new ConsultaPontosDto("user", "", "");
         when(pontoService.consultar(dto)).thenThrow(new DateTimeException("invalid date"));
 
         ResponseEntity<?> response = pontoController.consultar(dto);
@@ -198,7 +197,7 @@ class PontoControllerTest {
 
     @Test
     void consultar_InvalidUserException() {
-        ConsultaPontosDto dto = new ConsultaPontosDto("user", LocalDate.now(), LocalDate.now());
+        ConsultaPontosDto dto = new ConsultaPontosDto("user", "", "");
         when(pontoService.consultar(dto)).thenThrow(new InvalidUserException("invalid user"));
 
         ResponseEntity<?> response = pontoController.consultar(dto);
@@ -209,7 +208,7 @@ class PontoControllerTest {
 
     @Test
     void consultar_GenericException() {
-        ConsultaPontosDto dto = new ConsultaPontosDto("user", LocalDate.now(), LocalDate.now());
+        ConsultaPontosDto dto = new ConsultaPontosDto("user", "", "");
         when(pontoService.consultar(dto)).thenThrow(new RuntimeException("unexpected"));
 
         ResponseEntity<?> response = pontoController.consultar(dto);

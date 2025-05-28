@@ -67,7 +67,7 @@ public class PontoController {
     })
     @Operation(summary = "Bater ponto", description = "Usuário envia apenas o login e o ponto é registrado com a data e hora atuais.")
     @SecurityRequirement(name = "bearer-key")
-    public ResponseEntity<?> registrarPonto(@RequestBody LoginDto login) {
+    public ResponseEntity<?> registrarPonto(@Valid @RequestBody LoginDto login) {
         try{
             var ponto = pontoService.registrarPonto(login);
             return ResponseEntity.ok(ponto);
@@ -126,10 +126,8 @@ public class PontoController {
             List<RegistroCompletoDto> response = pontoService.consultar(dto);
 
             return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException | DateTimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (DateTimeException e){
-            return ResponseEntity.badRequest().body("Data ou horário inválido.");
         } catch (InvalidUserException e) {
             return ResponseEntity.status(401).body("Usuário inválido");
         } catch (Exception e){
@@ -160,14 +158,18 @@ public class PontoController {
             return ResponseEntity.ok(ponto);
         } catch (NotFoundException e){
             return ResponseEntity.status(404).body(e.getMessage());
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException | DateTimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (InvalidUserException e) {
             return ResponseEntity.status(401).body("Usuário inválido");
-        } catch (DateTimeException e){
-            return ResponseEntity.badRequest().body("Data ou horário inválido.");
         } catch (Exception e){
             return ResponseEntity.badRequest().body("Erro ao alterar ponto: " + e.getMessage());
         }
+    }
+
+    @PostMapping("/aprovar")
+    public ResponseEntity<?> aprovarPonto(@RequestBody LoginDto dto) {
+        // Implementar lógica de aprovação de ponto
+        return ResponseEntity.ok("Ponto aprovado com sucesso.");
     }
 }

@@ -1,6 +1,7 @@
 package easytime.srv.api.tables;
 
 import easytime.srv.api.model.pontos.AlterarPontoDto;
+import easytime.srv.api.util.DateUtil;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -66,6 +67,12 @@ public class TimeLog {
     @Column(nullable = false)
     private Status status = Status.PENDENTE;
 
+    public enum Status {
+        PENDENTE,
+        APROVADO,
+        REPROVADO
+    }
+
     public void setPonto(Time hora) {
         try {
             String fieldName = this.getUltimoBatimentoName(this.cont);
@@ -107,12 +114,6 @@ public class TimeLog {
         }
     }
 
-    public enum Status {
-        PENDENTE,
-        APROVADO,
-        REPROVADO
-    }
-
     public String getUltimoBatimentoName(int cont){
         boolean isEntrada = cont % 2 == 0;
         int indice = (cont / 2) + 1;
@@ -135,7 +136,7 @@ public class TimeLog {
 
     public TimeLog alterarPonto(AlterarPontoDto dto) {
         if (dto.data() != null && !String.valueOf(data).isEmpty()) {
-            this.setData(LocalDate.parse(dto.data()));
+            this.setData(DateUtil.convertUserDateToDBDate(dto.data()));
         }
         if (dto.entrada1() != null && !String.valueOf(E1).isEmpty()) {
             this.setE1(Time.valueOf(dto.entrada1()));
@@ -167,7 +168,6 @@ public class TimeLog {
         if (this.E3 != null && this.S3 != null) {
             this.calcularHoras(5);
         }
-
         return this;
     }
 }

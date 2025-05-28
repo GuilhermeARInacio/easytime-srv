@@ -1,17 +1,15 @@
 package easytime.srv.api.model.pontos;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import easytime.srv.api.tables.TimeLog;
+import easytime.srv.api.util.DateUtil;
 
 import java.sql.Time;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 public record RegistroCompletoDto (
         Integer id,
         String login,
-        LocalDate data,
+        String data,
         Time horasTrabalhadas,
         Time entrada1,
         Time saida1,
@@ -26,7 +24,7 @@ public record RegistroCompletoDto (
         this(
                 timeLog.getId(),
                 timeLog.getUser().getLogin(),
-                timeLog.getData(),
+                DateUtil.convertDBDateToUserDate(timeLog.getData()),
                 timeLog.getHoras_trabalhadas(), // Pass Duration directly
                 timeLog.getE1(),
                 timeLog.getS1(),

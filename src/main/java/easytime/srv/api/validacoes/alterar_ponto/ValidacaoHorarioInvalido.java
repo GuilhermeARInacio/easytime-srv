@@ -22,8 +22,6 @@ public class ValidacaoHorarioInvalido implements ValidacaoAlterarPonto{
                 if(time != null && (time.isBefore(LocalTime.of(6, 0)) || time.isAfter(LocalTime.of(23, 0)))) {
                     throw new IllegalArgumentException("Horários entre 23h e 6h não são permitidos.");
                 }
-            } catch (IllegalArgumentException e){
-                throw e;
             } catch (Exception e) {
                 throw new RuntimeException("Erro ao validar campo: " + campo, e);
             }
