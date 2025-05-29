@@ -37,11 +37,11 @@ public class EmailController {
     @Operation(summary = "Redefinir senha", description = "Usuário envia o código de validação recebido por email e a nova senha desejada, sistema então atualiza essa senha.")
     public ResponseEntity<Object> validateCode(@RequestBody @Valid ValidationCode validationCode) {
         try {
-            emailService.validateCode(validationCode.code());
+            emailService.validateCode(validationCode.code().toUpperCase());
             emailService.redefinirSenha(validationCode.email(), validationCode.senha());
             return ResponseEntity.ok("Senha redefinida com sucesso.");
         } catch (NotFoundException e) {
-            return ResponseEntity.status(404).body("Tente enviar um novo código, ocorreu um erro pois "+e.getMessage());
+            return ResponseEntity.status(404).body("Tente enviar um novo código, ocorreu um erro pois " + e.getMessage());
         }catch (IllegalArgumentException e) {
             return ResponseEntity.status(401).body("Tente enviar um novo código, ocorreu um erro pois " + e.getMessage());
         }catch (CampoInvalidoException e ) {
