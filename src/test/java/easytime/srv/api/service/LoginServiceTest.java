@@ -55,6 +55,6 @@ class LoginServiceTest {
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
         DTOUsuario dto = new DTOUsuario("login", "senha");
         TokenDto token = loginService.login(dto);
-        assertEquals(String.class, token.getClass());
+        assertEquals(TokenDto.class, token.getClass());
     }
 }
