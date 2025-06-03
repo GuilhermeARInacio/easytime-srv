@@ -63,7 +63,7 @@ public class LoginController {
                     )
             )
     })
-    @Operation(summary = "Fazer login", description = "Usuário envia usuário e senha válidos para obter um token JWT")
+    @Operation(summary = "Fazer userLogin", description = "Usuário envia usuário e senha válidos para obter um token JWT")
 //    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<?> login(@RequestBody DTOUsuario usuario) {
         try{

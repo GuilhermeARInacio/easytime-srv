@@ -23,14 +23,14 @@ class ValidacaoUsuarioTest {
     }
 
     @Test
-    @DisplayName("Verifica se o usuario é vazio no login")
+    @DisplayName("Verifica se o usuario é vazio no userLogin")
     void whenCampoVazio() {
         String usuario = "";
         assertThrows(CampoVazioException.class, () -> validacaoUsuario.validar(new DTOUsuario(usuario, "senha")));
     }
 
     @Test
-    @DisplayName("Verifica se o usuario é valido no login")
+    @DisplayName("Verifica se o usuario é valido no userLogin")
     void whenUsuarioInvalido(){
         String usuario = "12345678";
         assertThrows(CampoInvalidoException.class, () -> validacaoUsuario.validar(new DTOUsuario(usuario, "senha")));

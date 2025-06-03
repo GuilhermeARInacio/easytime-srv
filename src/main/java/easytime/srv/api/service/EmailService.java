@@ -56,7 +56,7 @@ public class EmailService {
             String htmlTemplate = carregaTemplate();
 
             String htmlContent = htmlTemplate
-                    .replace("{{login}}", user.getLogin())
+                    .replace("{{userLogin}}", user.getLogin())
                     .replace("{{code}}", code.getCode());
 
             helper.setFrom(from);

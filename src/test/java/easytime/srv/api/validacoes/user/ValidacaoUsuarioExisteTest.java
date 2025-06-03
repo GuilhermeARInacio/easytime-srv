@@ -43,7 +43,7 @@ class ValidacaoUsuarioExisteTest {
     }
 
     @Test
-    @DisplayName("Usuário é inválido quando login já existe")
+    @DisplayName("Usuário é inválido quando userLogin já existe")
     void whenUserLoginExists() {
         when(userRepository.findByEmail(any())).thenReturn(Optional.empty());
         when(userRepository.findByLogin(any())).thenReturn(Optional.of(new User()));

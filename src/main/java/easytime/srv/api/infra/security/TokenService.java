@@ -37,7 +37,7 @@ public class TokenService {
             return JWT.require(algoritmo)
                     .withIssuer("easytime-srv")
                     .build()
-                    .verify(tokenJWT)
+                    .verify(tokenJWT.replace("Bearer ", ""))
                     .getSubject();
         } catch (JWTVerificationException exception) {
             throw new RuntimeException("Token JWT inválido ou expirado!");
@@ -47,5 +47,4 @@ public class TokenService {
     private Instant dataExpiracao() {
         return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("-03:00"));
     }
-
 }

@@ -48,13 +48,13 @@ class LoginServiceTest {
     }
 
     @Test
-    @DisplayName("Verifica se o login retorna um token")
+    @DisplayName("Verifica se o userLogin retorna um token")
     void whenLoginThenReturnToken() {
         doNothing().when(validacaoLogin).validar(any());
-        Authentication authentication = new UsernamePasswordAuthenticationToken("login", "senha");
+        Authentication authentication = new UsernamePasswordAuthenticationToken("userLogin", "senha");
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
-        DTOUsuario dto = new DTOUsuario("login", "senha");
+        DTOUsuario dto = new DTOUsuario("userLogin", "senha");
         TokenDto token = loginService.login(dto);
-        assertEquals(String.class, token.getClass());
+        assertEquals(TokenDto.class, token.getClass());
     }
 }
