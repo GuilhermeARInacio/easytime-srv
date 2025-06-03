@@ -15,7 +15,7 @@ public class ValidacaoPedidoAlterarAlreadyExists implements ValidacaoAlterarPont
 
     @Override
     public void validar(AlterarPontoDto dto, TimeLog timeLog, String userLogin) throws IllegalArgumentException {
-        var pedidoExists = pedidoPontoRepository.existsByPonto_IdAndTipoPonto(dto.idPonto(), PedidoPonto.Tipo.ALTERACAO);
+        var pedidoExists = pedidoPontoRepository.existsByPonto_IdAndTipoPedido(dto.idPonto(), PedidoPonto.Tipo.ALTERACAO);
         if(pedidoExists) {
             throw new IllegalArgumentException("Já existe um pedido de alteração para este ponto.");
         }

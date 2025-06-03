@@ -14,5 +14,6 @@ public interface PedidoPontoRepository extends JpaRepository<PedidoPonto, Intege
     Optional<PedidoPonto> findPedidoPontoByPonto_Id(Integer pontoId);
     List<PedidoPonto> findAllByStatus(PedidoPonto.Status status);
     @NotNull List<PedidoPonto> findAll();
-    boolean existsByPonto_IdAndTipoPonto(Integer pontoId, PedidoPonto.Tipo tipoPonto);
+
+    boolean existsByPonto_IdAndTipoPedido(Integer pontoId, PedidoPonto.Tipo tipoPedido);
 }
