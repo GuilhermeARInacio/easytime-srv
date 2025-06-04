@@ -107,7 +107,7 @@ class PontoControllerTest {
 
         ResponseEntity<?> response = pontoController.removerPonto(id, token);
 
-        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         verify(pontoService, times(1)).removerPonto(id, token);
     }
 
