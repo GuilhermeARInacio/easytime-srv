@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import easytime.srv.api.tables.PedidoPonto;
 import easytime.srv.api.util.DateTimeUtil;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public record PedidoPontoDto(
         Integer id,
         String login,

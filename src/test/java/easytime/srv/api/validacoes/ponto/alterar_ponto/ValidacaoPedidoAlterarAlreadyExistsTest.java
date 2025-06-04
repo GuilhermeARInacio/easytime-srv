@@ -40,7 +40,7 @@ class ValidacaoPedidoAlterarAlreadyExistsTest {
 
     @Test
     void validar_pedidoNaoExiste_naoLancaExcecao() {
-        when(pedidoPontoRepository.existsByPonto_IdAndTipoPonto(1, PedidoPonto.Tipo.ALTERACAO)).thenReturn(false);
+        when(pedidoPontoRepository.existsByPonto_IdAndTipoPedido(1, PedidoPonto.Tipo.ALTERACAO)).thenReturn(false);
         TimeLog timeLog = mock(TimeLog.class);
 
         assertDoesNotThrow(() -> validacao.validar(getDto(), timeLog, "user"));
@@ -48,7 +48,7 @@ class ValidacaoPedidoAlterarAlreadyExistsTest {
 
     @Test
     void validar_pedidoJaExiste_lancaIllegalArgumentException() {
-        when(pedidoPontoRepository.existsByPonto_IdAndTipoPonto(1, PedidoPonto.Tipo.ALTERACAO)).thenReturn(true);
+        when(pedidoPontoRepository.existsByPonto_IdAndTipoPedido(1, PedidoPonto.Tipo.ALTERACAO)).thenReturn(true);
         TimeLog timeLog = mock(TimeLog.class);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,

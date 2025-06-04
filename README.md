@@ -19,11 +19,20 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
     - Rota para enviar um código de validação para um email válido.
     - Rota para validar o código enviado e permitir a troca de senha.
 - **Batimento de ponto**:
-    - Rota de batimento de ponto, onde o usuário pode registrar seu ponto de entrada ou saída.
+    - Rota de batimento de ponto, onde o usuário pode registrar um pedido de registro de ponto no sistema.
 - **Consulta de ponto**:
     - Rota de consulta de ponto, onde o usuário pode informar login e um periodo de tempo para visualizar os pontos registrados no periodo.
 - **Alteração de registro de ponto**:
-    - Rota de alteração de registro de ponto, onde o usuário informa o login e o ID do registro e pode alterar os horários de entrada ou saída ou a data.
+    - Rota de alteração de registro de ponto, onde o usuário informa o login e o ID do registro e então registra um pedido de alteração no sistema.
+-**Aprovar pedido de ponto**
+    - Rota para aprovar um pedido de ponto pendente, onde o usuário administrador informa o ID do pedido e aprova o ponto.
+-**Reprovar pedido de ponto**
+    - Rota para reprovar um pedido de ponto pendente, onde o usuário administrador informa o ID do pedido e reprova o ponto.
+    - Rota para remover um registro de ponto, onde o usuário admin informa o ID do ponto a ser removido.
+-**Listar pontos**
+    - Rota para listar todos os pontos registrados no sistema.
+    - Rota para listar todos os pedidos pendentes.
+    - Rota para listar todos os pedidos registrados no sistema.
 
 ## Tecnologias Utilizadas
 - **Java 17**
@@ -230,7 +239,7 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
 
 ### Deletar registro de ponto
 **DELETE** `/ponto/{id}`
-- **Descrição**: Deleta o registro de ponto de acordo com o ID informado.
+- **Descrição**: Usuário admin deleta o registro de ponto de acordo com o ID informado.
     - **Response**:
         - **200 OK**: Retorna uma mensagem de sucesso.
         - **400 Bad Request**: Retorna uma mensagem de erro caso o ID informado não exista.
@@ -252,6 +261,7 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
               [
                   {
                       "id": 1,
+                      "login": "João Silva",
                       "data": "2025-01-02",
                       "horasTrabalhadas": "1",
                       "entrada1": "08:02:37",
@@ -264,6 +274,7 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
                   },
                   {
                       "id": 2,
+                      "login": "João Silva",
                       "data": "2025-01-03",
                       "horasTrabalhadas": "1",
                       "entrada1": "08:00:08",
@@ -417,9 +428,6 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
 
 - **Descrição**: Retorna uma lista com todos os pedidos registrados no sistema.
 
-#### **Segurança**:
-- Este endpoint requer autenticação via **Bearer Token** no cabeçalho da requisição.
-
 #### **Response**:
 - **200 OK**: Retorna uma lista com todos os pedidos.
   ```json
@@ -440,6 +448,7 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
       }
   ]
 - **500 Internal Server Error**: Um erro inesperado aconteceu.
+
 ## Como Executar o Projeto
 1. Certifique-se de ter o **Java 17** e o **Maven** instalados.
 2. Clone o repositório:
