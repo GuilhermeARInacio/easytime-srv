@@ -91,6 +91,14 @@ public class PontoController {
             @ApiResponse(
                     responseCode = "404",
                     description = "ID não encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Usuário não autorizado"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Erro interno do servidor"
             )
     })
     @Operation(summary = "Remover registro de batimento de ponto", description = "Usuário envia o ID do registro.")
@@ -102,7 +110,7 @@ public class PontoController {
         }catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro ao remover ponto: " + e.getMessage());
         }catch (IllegalCallerException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Erro ao remover ponto: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Erro ao remover ponto: " + e.getMessage());
         }catch (Exception e) {
             return ResponseEntity.internalServerError().body("Erro ao remover ponto: " + e.getMessage());
         }
@@ -121,6 +129,10 @@ public class PontoController {
             @ApiResponse(
                     responseCode = "404",
                     description = "Datas não encontradas"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Request inválida"
             )
     })
     @Operation(summary = "Remover registro de batimento de ponto", description = "Usuário envia o ID do registro.")
@@ -151,7 +163,11 @@ public class PontoController {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Campos inválidos"
+                    description = "Campos não encontrados"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Request inválida"
             )
     })
     @Operation(summary = "Alterar registro de ponto", description = "Altera um registro de ponto do usuário.")
@@ -165,7 +181,7 @@ public class PontoController {
         } catch (IllegalArgumentException | DateTimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (InvalidUserException e) {
-            return ResponseEntity.status(401).body("Usuário inválido");
+            return ResponseEntity.status(401).body(e.getMessage());
         } catch (Exception e){
             return ResponseEntity.badRequest().body("Erro ao alterar ponto: " + e.getMessage());
         }
