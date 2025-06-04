@@ -11,8 +11,8 @@ public class ValidacaoUsuario implements ValidacaoLogin {
         if(dto.login().isEmpty() || dto.login().isBlank()) {
             throw new CampoVazioException("O usuario não pode ser vazio");
         }
-        if(!dto.login().matches(".*[a-zA-Z].*")) {
-            throw new CampoInvalidoException("Formato do usuario inválido");
+        if(!dto.login().matches("^(?=.*[a-zA-Z])[a-zA-Z0-9._]+$")){
+            throw new CampoInvalidoException("O usuário deve ter pelo menos uma letra, pode ter números, pontos e underlines");
         }
     }
 }

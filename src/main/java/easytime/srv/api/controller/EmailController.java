@@ -22,7 +22,6 @@ public class EmailController {
 
     @PostMapping("/send-email")
     @Operation(summary = "Enviar email com código de validação", description = "Usuário envia email que deseja receber o código de validação e sistema envia para esse endereço um email com o código de validação.")
-    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<String> sendEmail(@RequestBody @Valid EmailRequest emailRequest) {
         try{
             emailService.sendEmail(emailRequest);
@@ -36,14 +35,13 @@ public class EmailController {
 
     @PostMapping("/redefine-senha")
     @Operation(summary = "Redefinir senha", description = "Usuário envia o código de validação recebido por email e a nova senha desejada, sistema então atualiza essa senha.")
-    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<Object> validateCode(@RequestBody @Valid ValidationCode validationCode) {
         try {
-            emailService.validateCode(validationCode.code());
+            emailService.validateCode(validationCode.code().toUpperCase());
             emailService.redefinirSenha(validationCode.email(), validationCode.senha());
             return ResponseEntity.ok("Senha redefinida com sucesso.");
         } catch (NotFoundException e) {
-            return ResponseEntity.status(404).body("Tente enviar um novo código, ocorreu um erro pois "+e.getMessage());
+            return ResponseEntity.status(404).body("Tente enviar um novo código, ocorreu um erro pois " + e.getMessage());
         }catch (IllegalArgumentException e) {
             return ResponseEntity.status(401).body("Tente enviar um novo código, ocorreu um erro pois " + e.getMessage());
         }catch (CampoInvalidoException e ) {
