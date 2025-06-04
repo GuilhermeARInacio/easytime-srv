@@ -175,7 +175,7 @@ public class PontoController {
     public ResponseEntity<?> alterarPonto(@Valid @RequestBody AlterarPontoDto dto, @RequestHeader("Authorization") String token){
         try{
             pontoService.alterarPonto(dto, token);
-            return ResponseEntity.ok("Pedido de atualização de ponto enviado com sucesso, espere a aprovação do gestor.");
+            return ResponseEntity.ok("Pedido de alteração criado com sucesso. Aguarde aprovação do gestor.");
         } catch (NotFoundException e){
             return ResponseEntity.status(404).body(e.getMessage());
         } catch (IllegalArgumentException | DateTimeException e){
@@ -235,7 +235,7 @@ public class PontoController {
     public ResponseEntity<?> aprovarPonto(@PathVariable Integer idPedido, @RequestHeader("Authorization") String token) {
         try {
             pontoService.aprovarPonto(idPedido, token);
-            return ResponseEntity.ok("Ponto aprovado com sucesso.");
+            return ResponseEntity.ok("Registro de ponto atualizado com sucesso após aprovação.");
         }catch (NotFoundException e) {
             return ResponseEntity.status(404).body("Erro ao aprovar ponto: " + e.getMessage());
         } catch (IllegalArgumentException e) {
@@ -260,7 +260,7 @@ public class PontoController {
     public ResponseEntity<?> reprovarPonto(@PathVariable Integer idPedido, @RequestHeader("Authorization") String token) {
         try {
             pontoService.reprovarPonto(idPedido, token);
-            return ResponseEntity.ok("Ponto reprovado com sucesso.");
+            return ResponseEntity.ok("Pedido de alteração foi rejeitado pelo gestor.");
         }catch (NotFoundException e) {
             return ResponseEntity.status(404).body("Erro ao reprovar ponto: " + e.getMessage());
         } catch (IllegalArgumentException e) {
