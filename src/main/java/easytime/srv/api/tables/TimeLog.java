@@ -1,6 +1,7 @@
 package easytime.srv.api.tables;
 
-import easytime.srv.api.model.pontos.AlterarPontoDto;
+import easytime.srv.api.model.pontos.AlterarPonto;
+import easytime.srv.api.util.DateTimeUtil;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,6 @@ import lombok.ToString;
 
 import java.lang.reflect.Field;
 import java.sql.Time;
-import java.time.Duration;
 import java.time.LocalDate;
 
 @Entity
@@ -62,10 +62,6 @@ public class TimeLog {
 
     private Time horas_trabalhadas = Time.valueOf("00:00:00");
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status = Status.PENDENTE;
-
     public void setPonto(Time hora) {
         try {
             String fieldName = this.getUltimoBatimentoName(this.cont);
@@ -107,12 +103,6 @@ public class TimeLog {
         }
     }
 
-    public enum Status {
-        PENDENTE,
-        APROVADO,
-        REPROVADO
-    }
-
     public String getUltimoBatimentoName(int cont){
         boolean isEntrada = cont % 2 == 0;
         int indice = (cont / 2) + 1;
@@ -133,27 +123,27 @@ public class TimeLog {
         }
     }
 
-    public TimeLog alterarPonto(AlterarPontoDto dto) {
-        if (dto.data() != null && !String.valueOf(data).isEmpty()) {
-            this.setData(LocalDate.parse(dto.data()));
+    public void alterarPonto(AlterarPonto dto) {
+        if (dto.getData() != null && !String.valueOf(data).isEmpty()) {
+            this.setData(DateTimeUtil.convertUserDateToDBDate(dto.getData()));
         }
-        if (dto.entrada1() != null && !String.valueOf(E1).isEmpty()) {
-            this.setE1(Time.valueOf(dto.entrada1()));
+        if (dto.getEntrada1() != null && !String.valueOf(E1).isEmpty()) {
+            this.setE1(Time.valueOf(dto.getEntrada1()));
         }
-        if (dto.saida1() != null && !String.valueOf(S1).isEmpty()) {
-            this.setS1(Time.valueOf(dto.saida1()));
+        if (dto.getSaida1() != null && !String.valueOf(S1).isEmpty()) {
+            this.setS1(Time.valueOf(dto.getSaida1()));
         }
-        if (dto.entrada2() != null && !String.valueOf(E2).isEmpty()) {
-            this.setE2(Time.valueOf(dto.entrada2()));
+        if (dto.getEntrada2() != null && !String.valueOf(E2).isEmpty()) {
+            this.setE2(Time.valueOf(dto.getEntrada2()));
         }
-        if (dto.saida2() != null && !String.valueOf(S2).isEmpty()) {
-            this.setS2(Time.valueOf(dto.saida2()));
+        if (dto.getSaida2() != null && !String.valueOf(S2).isEmpty()) {
+            this.setS2(Time.valueOf(dto.getSaida2()));
         }
-        if (dto.entrada3() != null && !String.valueOf(E3).isEmpty()) {
-            this.setE3(Time.valueOf(dto.entrada3()));
+        if (dto.getEntrada3() != null && !String.valueOf(E3).isEmpty()) {
+            this.setE3(Time.valueOf(dto.getEntrada3()));
         }
-        if (dto.saida3() != null && !String.valueOf(S3).isEmpty()) {
-            this.setS3(Time.valueOf(dto.saida3()));
+        if (dto.getSaida3() != null && !String.valueOf(S3).isEmpty()) {
+            this.setS3(Time.valueOf(dto.getSaida3()));
         }
 
         this.horas_trabalhadas = Time.valueOf("00:00:00");
@@ -167,7 +157,5 @@ public class TimeLog {
         if (this.E3 != null && this.S3 != null) {
             this.calcularHoras(5);
         }
-
-        return this;
     }
 }

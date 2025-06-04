@@ -19,11 +19,20 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
     - Rota para enviar um código de validação para um email válido.
     - Rota para validar o código enviado e permitir a troca de senha.
 - **Batimento de ponto**:
-    - Rota de batimento de ponto, onde o usuário pode registrar seu ponto de entrada ou saída.
+    - Rota de batimento de ponto, onde o usuário pode registrar um pedido de registro de ponto no sistema.
 - **Consulta de ponto**:
     - Rota de consulta de ponto, onde o usuário pode informar login e um periodo de tempo para visualizar os pontos registrados no periodo.
 - **Alteração de registro de ponto**:
-    - Rota de alteração de registro de ponto, onde o usuário informa o login e o ID do registro e pode alterar os horários de entrada ou saída ou a data.
+    - Rota de alteração de registro de ponto, onde o usuário informa o login e o ID do registro e então registra um pedido de alteração no sistema.
+-**Aprovar pedido de ponto**
+    - Rota para aprovar um pedido de ponto pendente, onde o usuário administrador informa o ID do pedido e aprova o ponto.
+-**Reprovar pedido de ponto**
+    - Rota para reprovar um pedido de ponto pendente, onde o usuário administrador informa o ID do pedido e reprova o ponto.
+    - Rota para remover um registro de ponto, onde o usuário admin informa o ID do ponto a ser removido.
+-**Listar pontos**
+    - Rota para listar todos os pontos registrados no sistema.
+    - Rota para listar todos os pedidos pendentes.
+    - Rota para listar todos os pedidos registrados no sistema.
 
 ## Tecnologias Utilizadas
 - **Java 17**
@@ -214,12 +223,7 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
 ### Batimento de ponto
 **POST** `/ponto`
 - **Descrição**: Realiza o batimento de ponto do usuário.
-    - **Request Body**:
-      ```json
-      {
-        "usuario": "string"
-      }
-      ```
+ 
       - **Response**:
           - **200 OK**: Retorna o ponto batido.
             ```json
@@ -235,7 +239,7 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
 
 ### Deletar registro de ponto
 **DELETE** `/ponto/{id}`
-- **Descrição**: Deleta o registro de ponto de acordo com o ID informado.
+- **Descrição**: Usuário admin deleta o registro de ponto de acordo com o ID informado.
     - **Response**:
         - **200 OK**: Retorna uma mensagem de sucesso.
         - **400 Bad Request**: Retorna uma mensagem de erro caso o ID informado não exista.
@@ -247,7 +251,6 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
     - **Request Body**:
       ```json
       {
-          "login": "string",
           "dtInicio": "2025-01-01",
           "dtFinal": "2025-01-10"
       }
@@ -258,6 +261,7 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
               [
                   {
                       "id": 1,
+                      "login": "João Silva",
                       "data": "2025-01-02",
                       "horasTrabalhadas": "1",
                       "entrada1": "08:02:37",
@@ -270,6 +274,7 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
                   },
                   {
                       "id": 2,
+                      "login": "João Silva",
                       "data": "2025-01-03",
                       "horasTrabalhadas": "1",
                       "entrada1": "08:00:08",
@@ -291,7 +296,6 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
     - **Request Body**:
       ```json
       {
-          "login": "string",
           "idPonto": 1,
           "data": "2025-01-01",
           "entrada1": "08:00:00",
@@ -303,22 +307,147 @@ O projeto foi desenvolvido em **Java** utilizando o framework **Spring Boot** e 
       }
       ```
         - **Response**:
-            - **200 OK**: Retorna o ponto alterado.
-              ```json
-              {
-                  "id": 7,
-                  "data": "2025-01-01",
-                  "entrada1": "08:00:00",
-                  "saida1": "12:00:00",
-                  "entrada2": "13:00:00",
-                  "saida2": "17:00:00",
-                  "entrada3": null,
-                  "saida3": null,
-                  "status": "PENDENTE"
-              }
-              ```
+            - **200 OK**: Retorna mensagem de sucesso da ação.
+            - - **404 Not Found**: Retorna uma mensagem de erro quando os campos estão inválidos.
             - **400 Bad Request**: Retorna uma mensagem de erro quando os campos estão inválidos.
             - **401 Unauthorized**: Retorna uma mensagem de erro quando o usuário não está autenticado.
+
+### Listar pontos
+
+**GET** `/ponto`
+
+- **Descrição**: Retorna uma lista com todos os pontos registrados.
+
+#### Response
+
+- **200 OK**: Retorna lista com pontos.
+    ```json
+    [
+        {
+            "id": 1,
+            "data": "2025-01-02",
+            "horasTrabalhadas": "1",
+            "entrada1": "08:02:37",
+            "saida1": "12:01:23",
+            "entrada2": "13:00:00",
+            "saida2": "17:01:05",
+            "entrada3": null,
+            "saida3": null,
+            "status": "PENDENTE"
+        },
+        {
+            "id": 2,
+            "data": "2025-01-03",
+            "horasTrabalhadas": "1",
+            "entrada1": "08:00:08",
+            "saida1": "12:17:59",
+            "entrada2": "13:01:10",
+            "saida2": "17:10:02",
+            "entrada3": null,
+            "saida3": null,
+            "status": "PENDENTE"
+        }
+    ]
+    ```
+- **404 Not Found**: Nenhum ponto encontrado.
+- **500 Internal Server Error**: Um erro inesperado aconteceu.
+
+### Lista os pedidos pendentes
+**GET** `/pedidos/pendentes`
+
+- **Descrição**: Retorna uma lista com os pedidos pendentes.
+
+#### **Response**:
+- **200 OK**: Retorna uma lista de pedidos pendentes.
+  ```json
+  [
+      {
+          "id": 1,
+          "login": "João Silva",
+          "dataPedido": "02/01/2025",
+          "tipoPedido": "ALTERACAO",
+          "status": "PENDENTE"
+      },
+      {
+          "id": 2,
+          "login": "Maria Oliveira",
+          "dataPedido": "02/01/2025",
+          "tipoPedido": "REGISTRO",
+          "status": "PENDENTE"
+      }
+  ]
+- **500 Internal Server Error**: Um erro inesperado aconteceu.
+
+### Aprova um pedido de ponto
+**POST** `/aprovar/{idPedido}`
+
+- **Descrição**: Aprova um pedido de ponto com base no ID fornecido.
+
+#### **Parâmetros**:
+- **Path Parameter**:
+    - `idPedido` (Integer): ID do pedido a ser aprovado.
+- **Header**:
+    - `Authorization` (String): Token de autenticação no formato `Bearer <seu-token-aqui>`.
+
+#### **Response**:
+- **200 OK**: Retorna uma mensagem confirmando que o pedido foi aprovado com sucesso.
+  ```json
+  {
+      "message": "Ponto aprovado com sucesso."
+  }
+
+- **404 Not Found**: Nenhum ponto encontrado.
+- **400 Bad Requesst**: O usuário passou algum dado inválido.
+- **401 UNAUTHORIZED**: O usuário não está autenticado ou o token é inválido, ou o usuário não possui permissão para essa ação.
+- **500 Internal Server Error**: Um erro inesperado aconteceu.
+
+### Reprova um pedido de ponto
+**POST** `/reprovar/{idPedido}`
+
+- **Descrição**: Permite que um usuário administrador reprove um pedido de ponto com base no ID fornecido.
+
+#### **Parâmetros**:
+- **Path Parameter**:
+    - `idPedido` (Integer): ID do pedido a ser reprovado.
+- **Header**:
+    - `Authorization` (String): Token de autenticação no formato `Bearer <seu-token-aqui>`.
+
+#### **Response**:
+- **200 OK**: Retorna uma mensagem confirmando que o pedido foi reprovado com sucesso.
+  ```json
+  {
+      "message": "Ponto reprovado com sucesso."
+  }
+- **404 Not Found**: Nenhum ponto encontrado.
+- **400 Bad Requesst**: O usuário passou algum dado inválido.
+- **401 UNAUTHORIZED**: O usuário não está autenticado ou o token é inválido, ou o usuário não possui permissão para essa ação.
+- **500 Internal Server Error**: Um erro inesperado aconteceu.
+
+### Lista todos os pedidos
+**GET** `/pedidos/all`
+
+- **Descrição**: Retorna uma lista com todos os pedidos registrados no sistema.
+
+#### **Response**:
+- **200 OK**: Retorna uma lista com todos os pedidos.
+  ```json
+  [
+      {
+          "id": 1,
+          "login": "João Silva",
+          "dataPedido": "02/01/2025",
+          "tipoPedido": "ALTERACAO",
+          "status": "PENDENTE"
+      },
+      {
+          "id": 2,
+          "login": "Maria Oliveira",
+          "dataPedido": "02/01/2025",
+          "tipoPedido": "REGISTRO",
+          "status": "PENDENTE"
+      }
+  ]
+- **500 Internal Server Error**: Um erro inesperado aconteceu.
 
 ## Como Executar o Projeto
 1. Certifique-se de ter o **Java 17** e o **Maven** instalados.

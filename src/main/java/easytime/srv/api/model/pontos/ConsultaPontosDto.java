@@ -6,8 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record ConsultaPontosDto(
-        String login,
-        LocalDate dtInicio,
-        LocalDate dtFinal
+        @NotNull @NotBlank String dtInicio,
+        @NotNull @NotBlank String dtFinal
 ) {
 }

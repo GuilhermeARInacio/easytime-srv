@@ -1,4 +1,4 @@
-package easytime.srv.api.validacoes.alterar_ponto;
+package easytime.srv.api.validacoes.ponto.alterar_ponto;
 
 import easytime.srv.api.model.pontos.AlterarPontoDto;
 import easytime.srv.api.tables.TimeLog;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component
 public class ValidacaoHorarioInvalido implements ValidacaoAlterarPonto{
-    public void validar(AlterarPontoDto dto, TimeLog timeLog) {
+    public void validar(AlterarPontoDto dto, TimeLog timeLog, String userLogin) {
         List<String> campos = Arrays.asList("entrada1", "saida1", "entrada2", "saida2", "entrada3", "saida3");
 
         for(String campo : campos) {
@@ -22,9 +22,9 @@ public class ValidacaoHorarioInvalido implements ValidacaoAlterarPonto{
                 if(time != null && (time.isBefore(LocalTime.of(6, 0)) || time.isAfter(LocalTime.of(23, 0)))) {
                     throw new IllegalArgumentException("Horários entre 23h e 6h não são permitidos.");
                 }
-            } catch (IllegalArgumentException e){
-                throw e;
-            } catch (Exception e) {
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException(e.getMessage());
+            }catch (Exception e) {
                 throw new RuntimeException("Erro ao validar campo: " + campo, e);
             }
         }
