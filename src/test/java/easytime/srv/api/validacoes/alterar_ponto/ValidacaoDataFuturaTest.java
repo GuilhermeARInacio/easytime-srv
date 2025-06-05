@@ -1,8 +1,9 @@
-// src/test/java/easytime/srv/api/validacoes/alterar_ponto/ValidacaoDataFuturaTest.java
+// File: src/test/java/easytime/srv/api/validacoes/ponto/alterar_ponto/ValidacaoDataFuturaTest.java
 package easytime.srv.api.validacoes.alterar_ponto;
 
 import easytime.srv.api.model.pontos.AlterarPontoDto;
 import easytime.srv.api.tables.TimeLog;
+import easytime.srv.api.validacoes.ponto.alterar_ponto.ValidacaoDataFutura;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -14,42 +15,51 @@ import static org.mockito.Mockito.mock;
 class ValidacaoDataFuturaTest {
 
     private final ValidacaoDataFutura validacao = new ValidacaoDataFutura();
-
+    private final AlterarPontoDto alterarPontoDto = new AlterarPontoDto(
+            1, // idPonto
+            "01/06/2024", // data
+            LocalTime.of(8, 0), // entrada1
+            LocalTime.of(12, 0), // saida1
+            LocalTime.of(13, 0), // entrada2
+            LocalTime.of(17, 0), // saida2
+            null, // entrada3
+            null  // saida3
+    );
     @Test
     void validar_dataHoje_naoLancaExcecao() {
-        String today = LocalDate.now().toString();
-        AlterarPontoDto dto = new AlterarPontoDto(
-                "user", 1, today,
-                LocalTime.of(8,0), null, null, null, null, null
-        );
         TimeLog timeLog = mock(TimeLog.class);
 
-        assertDoesNotThrow(() -> validacao.validar(dto, timeLog));
+        assertDoesNotThrow(() -> validacao.validar(alterarPontoDto, timeLog, "user"));
     }
 
     @Test
     void validar_dataPassada_naoLancaExcecao() {
-        String past = LocalDate.now().minusDays(1).toString();
-        AlterarPontoDto dto = new AlterarPontoDto(
-                "user", 1, past,
-                LocalTime.of(8,0), null, null, null, null, null
-        );
+
         TimeLog timeLog = mock(TimeLog.class);
 
-        assertDoesNotThrow(() -> validacao.validar(dto, timeLog));
+        assertDoesNotThrow(() -> validacao.validar(alterarPontoDto, timeLog, "user"));
     }
 
     @Test
     void validar_dataFutura_lancaExcecao() {
-        String future = LocalDate.now().plusDays(1).toString();
+        LocalDate futureDate = LocalDate.now().plusDays(7);
+        String formattedDate = futureDate.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
         AlterarPontoDto dto = new AlterarPontoDto(
-                "user", 1, future,
-                LocalTime.of(8,0), null, null, null, null, null
+                1, // idPonto
+                formattedDate, // data
+                LocalTime.of(8, 0), // entrada1
+                LocalTime.of(12, 0), // saida1
+                LocalTime.of(13, 0), // entrada2
+                LocalTime.of(17, 0), // saida2
+                null, // entrada3
+                null  // saida3
         );
+
         TimeLog timeLog = mock(TimeLog.class);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
-                () -> validacao.validar(dto, timeLog));
+                () -> validacao.validar(dto, timeLog, "user"));
         assertEquals("Data não pode ser futura.", ex.getMessage());
     }
 }

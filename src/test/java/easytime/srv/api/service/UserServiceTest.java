@@ -33,7 +33,7 @@ class UserServiceTest {
 
     private UserDTO userDTO;
 
-    private UsuarioRetornoDto usuarioRetornoDto = new UsuarioRetornoDto(1, "email", "login", "password", "sector", "jobTitle", "", true);
+    private UsuarioRetornoDto usuarioRetornoDto = new UsuarioRetornoDto(1, "email", "userLogin", "password", "sector", "jobTitle", "", true);
 
     @BeforeEach
     void setUp() {
@@ -70,7 +70,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Deve listar um usuário pelo login com sucesso")
+    @DisplayName("Deve listar um usuário pelo userLogin com sucesso")
     void getUserByLogin() {
         when(userRepository.findByLogin(any())).thenReturn(Optional.of(new User()));
         var user = userService.getUserByLogin("");

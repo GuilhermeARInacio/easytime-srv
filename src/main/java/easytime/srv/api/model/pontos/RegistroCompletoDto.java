@@ -1,40 +1,35 @@
 package easytime.srv.api.model.pontos;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import easytime.srv.api.tables.TimeLog;
+import easytime.srv.api.util.DateTimeUtil;
 
 import java.sql.Time;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 public record RegistroCompletoDto (
         Integer id,
         String login,
-        LocalDate data,
+        String data,
         Time horasTrabalhadas,
         Time entrada1,
         Time saida1,
         Time entrada2,
         Time saida2,
         Time entrada3,
-        Time saida3,
-        TimeLog.Status status
+        Time saida3
 ){
 
     public RegistroCompletoDto(TimeLog timeLog){
         this(
                 timeLog.getId(),
                 timeLog.getUser().getLogin(),
-                timeLog.getData(),
+                DateTimeUtil.convertDBDateToUserDate(timeLog.getData()),
                 timeLog.getHoras_trabalhadas(), // Pass Duration directly
                 timeLog.getE1(),
                 timeLog.getS1(),
                 timeLog.getE2(),
                 timeLog.getS2(),
                 timeLog.getE3(),
-                timeLog.getS3(),
-                timeLog.getStatus()
+                timeLog.getS3()
         );
     }
 }

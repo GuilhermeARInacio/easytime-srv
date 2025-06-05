@@ -1,6 +1,7 @@
 package easytime.srv.api.validacoes.bater_ponto;
 
 import easytime.srv.api.tables.TimeLog;
+import easytime.srv.api.validacoes.ponto.bater_ponto.ValidacaoHoraDuplicada;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

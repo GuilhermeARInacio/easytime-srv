@@ -1,4 +1,4 @@
-package easytime.srv.api.validacoes.bater_ponto;
+package easytime.srv.api.validacoes.ponto.bater_ponto;
 
 import easytime.srv.api.tables.TimeLog;
 
