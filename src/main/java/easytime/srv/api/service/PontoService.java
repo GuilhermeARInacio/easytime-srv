@@ -120,24 +120,24 @@ public class PontoService {
         pedidoPontoRepository.save(pedidoAlteracao);
     }
 
-    public void aprovarPonto(Integer id, String token) {
+    public String aprovarPonto(Integer id, String token) {
         var login = tokenService.getSubject(token);
         var pedidoPonto = pedidoPontoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Pedido de ponto não localizado. Verifique se o código está correto."));
 
         validacoesFinalizar.forEach(v -> v.validar(pedidoPonto, login));
 
-        finalizarPedidoPonto(pedidoPonto, login, PedidoPonto.Status.APROVADO);
+        return finalizarPedidoPonto(pedidoPonto, login, PedidoPonto.Status.APROVADO);
     }
 
-    public void reprovarPonto(Integer idPedido, String token){
+    public String reprovarPonto(Integer idPedido, String token){
         var login = tokenService.getSubject(token);
         var pedidoPonto = pedidoPontoRepository.findById(idPedido)
                 .orElseThrow(() -> new NotFoundException("Pedido de ponto não localizado. Verifique se o código está correto."));
 
         validacoesFinalizar.forEach(v -> v.validar(pedidoPonto, login));
 
-        finalizarPedidoPonto(pedidoPonto, login, PedidoPonto.Status.REPROVADO);
+        return finalizarPedidoPonto(pedidoPonto, login, PedidoPonto.Status.REPROVADO);
     }
 
     public List<RegistroCompletoDto> listarPontos() {
@@ -170,17 +170,24 @@ public class PontoService {
         return new UserWithLogin(user, login);
     }
 
-    private void finalizarPedidoPonto(PedidoPonto pedidoPonto, String login, PedidoPonto.Status status) {
+    private String finalizarPedidoPonto(PedidoPonto pedidoPonto, String login, PedidoPonto.Status status) {
         pedidoPonto.setStatus(status);
         pedidoPonto.setGestorLogin(login);
         pedidoPonto.setDataAprovacao(LocalDateTime.now());
 
-        if (status == PedidoPonto.Status.APROVADO &&
-                pedidoPonto.getTipoPedido() == PedidoPonto.Tipo.ALTERACAO) {
+        if ( pedidoPonto.getTipoPedido() == PedidoPonto.Tipo.ALTERACAO) {
             pedidoPonto.getPonto().alterarPonto(pedidoPonto.getAlteracaoPonto());
             timeLogsRepository.save(pedidoPonto.getPonto());
+            pedidoPontoRepository.save(pedidoPonto);
+            return status == PedidoPonto.Status.APROVADO?
+                    "Ponto alterado com sucesso após aprovação do gestor."
+                    :"Pedido de alteração de ponto reprovado pelo gestor.";
         }
 
         pedidoPontoRepository.save(pedidoPonto);
+
+        return status == PedidoPonto.Status.APROVADO?
+                "Registro ponto aprovado pelo gestor."
+                :"Registro ponto reprovado pelo gestor.";
     }
 }
