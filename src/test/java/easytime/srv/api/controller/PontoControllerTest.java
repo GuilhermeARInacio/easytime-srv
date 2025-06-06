@@ -289,9 +289,9 @@ class PontoControllerTest {
 
     @Test
     void aprovarPonto_Success() {
-        doNothing().when(pontoService).aprovarPonto(id, token);
+       when(pontoService.aprovarPonto(anyInt(), anyString())).thenReturn("Ponto aprovado");
 
-        ResponseEntity<?> response = pontoController.aprovarPonto(id, token);
+        var response = pontoController.aprovarPonto(id, token);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         verify(pontoService, times(1)).aprovarPonto(id, token);
