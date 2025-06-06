@@ -69,9 +69,9 @@ public class PontoController {
     })
     @Operation(summary = "Bater ponto", description = "Usuário envia apenas o userLogin e o ponto é registrado com a data e hora atuais.")
     @SecurityRequirement(name = "bearer-key")
-    public ResponseEntity<?> registrarPonto(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> registrarPonto(@RequestBody BaterPonto dto, @RequestHeader("Authorization") String token) {
         try{
-            var ponto = pontoService.registrarPonto(token);
+            var ponto = pontoService.registrarPonto(dto, token);
             return ResponseEntity.ok(ponto);
         } catch (NotFoundException e) {
             return ResponseEntity.status(401).body("Erro ao registrar ponto: " + e.getMessage());

@@ -65,6 +65,8 @@ class PontoServiceTest {
         userDTO.setRole("user");
         userDTO.setIsActive(true);
 
+        BaterPonto dto = new BaterPonto("08:00:00");
+
         var user = User.toEntity(userDTO);
         var timelog = new TimeLog(user, LocalDate.now());
 
@@ -80,7 +82,7 @@ class PontoServiceTest {
 
         when(pedidoPontoRepository.findPedidoPontoByPonto_Id(any())).thenReturn(Optional.of(pedido));
 
-        pontoService.registrarPonto("");
+        pontoService.registrarPonto(dto, "");
 
         verify(timeLogsRepository).save(any());
         verify(pedidoPontoRepository).save(any());
@@ -100,6 +102,7 @@ class PontoServiceTest {
 
         var user = User.toEntity(userDTO);
         var timeLog = new TimeLog(user, LocalDate.now());
+        BaterPonto dto = new BaterPonto("08:00:00");
 
         when(tokenService.getSubject(any(String.class))).thenReturn("login");
         when(userRepository.findByLogin(any(String.class))).thenReturn(Optional.of(user));
@@ -109,7 +112,7 @@ class PontoServiceTest {
         PedidoPonto pedido = new PedidoPonto(timeLog);
         when(pedidoPontoRepository.findPedidoPontoByPonto_Id(any())).thenReturn(Optional.of(pedido));
 
-        assertNotNull(pontoService.registrarPonto(""));
+        assertNotNull(pontoService.registrarPonto(dto, ""));
         verify(timeLogsRepository).save(any());
         verify(pedidoPontoRepository, never()).save(isA(PedidoPonto.class));
     }
@@ -118,7 +121,9 @@ class PontoServiceTest {
     void registrarPonto_PedidoNotFound_Throws() {
         String token = "token";
         String login = "user";
+        BaterPonto dto = new BaterPonto("08:00:00");
         LocalDate today = LocalDate.now();
+
         var user = mock(easytime.srv.api.tables.User.class);
         when(tokenService.getSubject(token)).thenReturn(login);
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
@@ -128,9 +133,8 @@ class PontoServiceTest {
         when(pedidoPontoRepository.save(any())).thenAnswer(i -> i.getArgument(0));
         when(pedidoPontoRepository.findPedidoPontoByPonto_Id(any())).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> pontoService.registrarPonto(token));
+        assertThrows(NotFoundException.class, () -> pontoService.registrarPonto(dto, token));
     }
-
 
     @Test
     void removerPonto_Success() {

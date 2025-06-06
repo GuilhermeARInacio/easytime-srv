@@ -48,11 +48,11 @@ public class PontoService {
     @Autowired
     private List<ValidacaoFinalizarPonto> validacoesFinalizar;
 
-    public TimeLogDto registrarPonto(String token) {
+    public TimeLogDto registrarPonto(BaterPonto dto, String token) {
         var userWithLogin = getUserAndLogin(token);
 
         LocalDate dataHoje = LocalDate.now();
-        Time horaAgora = Time.valueOf(LocalTime.now());
+        Time horaAgora = Time.valueOf(dto.horarioAtual());
 
         var timeLogOptional = timeLogsRepository.findByUserAndData(userWithLogin.user(), dataHoje);
         TimeLog timeLog;

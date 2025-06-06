@@ -41,44 +41,50 @@ class PontoControllerTest {
             PedidoPonto.Status.PENDENTE
     );
     private final ConsultaPontosDto consultaPontosDto = new ConsultaPontosDto("", "");
+
     @Test
     void registrarPonto_Success() {
-        when(pontoService.registrarPonto(token)).thenReturn(timeLogDto);
+        BaterPonto dto = new BaterPonto("08:00:00");
 
-        ResponseEntity<?> response = pontoController.registrarPonto(token);
+        when(pontoService.registrarPonto(dto, token)).thenReturn(timeLogDto);
+
+        ResponseEntity<?> response = pontoController.registrarPonto(dto, token);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(pontoService, times(1)).registrarPonto(token);
+        verify(pontoService, times(1)).registrarPonto(dto, token);
     }
 
     @Test
     void registrarPonto_NotFoundException() {
-        when(pontoService.registrarPonto(token)).thenThrow(new NotFoundException("not found"));
+        BaterPonto dto = new BaterPonto("08:00:00");
+        when(pontoService.registrarPonto(dto, token)).thenThrow(new NotFoundException("not found"));
 
-        ResponseEntity<?> response = pontoController.registrarPonto(token);
+        ResponseEntity<?> response = pontoController.registrarPonto(dto, token);
 
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
-        verify(pontoService, times(1)).registrarPonto(token);
+        verify(pontoService, times(1)).registrarPonto(dto, token);
     }
 
     @Test
     void registrarPonto_IllegalArgumentException() {
-        when(pontoService.registrarPonto(token)).thenThrow(new IllegalArgumentException("bad arg"));
+        BaterPonto dto = new BaterPonto("08:00:00");
+        when(pontoService.registrarPonto(dto, token)).thenThrow(new IllegalArgumentException("bad arg"));
 
-        ResponseEntity<?> response = pontoController.registrarPonto(token);
+        ResponseEntity<?> response = pontoController.registrarPonto(dto, token);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(pontoService, times(1)).registrarPonto(token);
+        verify(pontoService, times(1)).registrarPonto(dto, token);
     }
 
     @Test
     void registrarPonto_GenericException() {
-        when(pontoService.registrarPonto(token)).thenThrow(new RuntimeException("fail"));
+        BaterPonto dto = new BaterPonto("08:00:00");
+        when(pontoService.registrarPonto(dto, token)).thenThrow(new RuntimeException("fail"));
 
-        ResponseEntity<?> response = pontoController.registrarPonto(token);
+        ResponseEntity<?> response = pontoController.registrarPonto(dto, token);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        verify(pontoService, times(1)).registrarPonto(token);
+        verify(pontoService, times(1)).registrarPonto(dto, token);
     }
 
     @Test
