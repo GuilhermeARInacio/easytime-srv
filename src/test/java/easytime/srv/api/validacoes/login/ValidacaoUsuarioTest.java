@@ -1,4 +1,4 @@
-package easytime.srv.api.validacoes.Login;
+package easytime.srv.api.validacoes.login;
 
 import easytime.srv.api.infra.exceptions.CampoInvalidoException;
 import easytime.srv.api.infra.exceptions.CampoVazioException;
@@ -11,10 +11,11 @@ import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ValidacaoSenhaTest {
+class ValidacaoUsuarioTest {
 
     @InjectMocks
-    private ValidacaoSenha validacaoSenha;
+    private ValidacaoUsuario validacaoUsuario;
+
 
     @BeforeEach
     void setUp() {
@@ -22,16 +23,16 @@ class ValidacaoSenhaTest {
     }
 
     @Test
-    @DisplayName("Verifica se a senha é vazia no userLogin")
+    @DisplayName("Verifica se o usuario é vazio no userLogin")
     void whenCampoVazio() {
-        String senha = "";
-        assertThrows(CampoVazioException.class, () -> validacaoSenha.validar(new DTOUsuario("user", senha)));
+        String usuario = "";
+        assertThrows(CampoVazioException.class, () -> validacaoUsuario.validar(new DTOUsuario(usuario, "senha")));
     }
 
     @Test
-    @DisplayName("Verifica se a senha é válida no userLogin")
-    void whenSenhaInvalida(){
-        String senha = "12345678";
-        assertThrows(CampoInvalidoException.class, () -> validacaoSenha.validar(new DTOUsuario("user", senha)));
+    @DisplayName("Verifica se o usuario é valido no userLogin")
+    void whenUsuarioInvalido(){
+        String usuario = "12345678";
+        assertThrows(CampoInvalidoException.class, () -> validacaoUsuario.validar(new DTOUsuario(usuario, "senha")));
     }
 }

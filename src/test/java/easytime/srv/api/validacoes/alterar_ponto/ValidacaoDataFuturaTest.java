@@ -16,14 +16,16 @@ class ValidacaoDataFuturaTest {
 
     private final ValidacaoDataFutura validacao = new ValidacaoDataFutura();
     private final AlterarPontoDto alterarPontoDto = new AlterarPontoDto(
-            1, // idPonto
-            "01/06/2024", // data
-            LocalTime.of(8, 0), // entrada1
-            LocalTime.of(12, 0), // saida1
-            LocalTime.of(13, 0), // entrada2
-            LocalTime.of(17, 0), // saida2
-            null, // entrada3
-            null  // saida3
+            "user",
+            1,
+            "01/06/2024",
+            LocalTime.of(8, 0),
+            LocalTime.of(12, 0),
+            LocalTime.of(13, 0),
+            LocalTime.of(17, 0),
+            null,
+            null,
+            "Justificativa"
     );
     @Test
     void validar_dataHoje_naoLancaExcecao() {
@@ -46,14 +48,16 @@ class ValidacaoDataFuturaTest {
         String formattedDate = futureDate.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
         AlterarPontoDto dto = new AlterarPontoDto(
-                1, // idPonto
-                formattedDate, // data
-                LocalTime.of(8, 0), // entrada1
-                LocalTime.of(12, 0), // saida1
-                LocalTime.of(13, 0), // entrada2
-                LocalTime.of(17, 0), // saida2
-                null, // entrada3
-                null  // saida3
+                "user",
+                1,
+                formattedDate,
+                LocalTime.of(8, 0),
+                LocalTime.of(12, 0),
+                LocalTime.of(13, 0),
+                LocalTime.of(17, 0),
+                null,
+                null,
+                "Justificativa"
         );
 
         TimeLog timeLog = mock(TimeLog.class);

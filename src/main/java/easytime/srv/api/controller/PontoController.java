@@ -205,72 +205,72 @@ public class PontoController {
             return ResponseEntity.internalServerError().body("Erro ao listar pontos: " + e.getMessage());
         }
     }
+//
+//    @GetMapping("/pedidos/pendentes")
+//    @SecurityRequirement(name = "bearer-key")
+//    @Operation(summary = "Lista os pedidos pendentes.", description = "Retorna uma lista com os pedidos pendentes.")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Lista os pontos pendentes com sucesso"),
+//            @ApiResponse(responseCode = "500", description = "Internal server error")
+//    })
+//    public ResponseEntity<?> listarPedidosPendentes() {
+//        try {
+//            List<PedidoPontoDto> pedidos = pontoService.listarPedidoPendentes();
+//            return ResponseEntity.ok(pedidos);
+//        } catch (Exception e) {
+//            return ResponseEntity.internalServerError().body("Erro ao listar pedidos pendentes: " + e.getMessage());
+//        }
+//    }
 
-    @GetMapping("/pedidos/pendentes")
-    @SecurityRequirement(name = "bearer-key")
-    @Operation(summary = "Lista os pedidos pendentes.", description = "Retorna uma lista com os pedidos pendentes.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista os pontos pendentes com sucesso"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    public ResponseEntity<?> listarPedidosPendentes() {
-        try {
-            List<PedidoPontoDto> pedidos = pontoService.listarPedidoPendentes();
-            return ResponseEntity.ok(pedidos);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Erro ao listar pedidos pendentes: " + e.getMessage());
-        }
-    }
+//    @PostMapping("/aprovar/{idPedido}")
+//    @SecurityRequirement(name = "bearer-key")
+//    @Operation(summary = "Aprova um pedido de ponto", description = "Aprova um pedido de ponto pelo ID.")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Pedido aprovado com sucesso"),
+//            @ApiResponse(responseCode = "400", description = "Request inválida"),
+//            @ApiResponse(responseCode = "401", description = "Usuário não autorizado ou sem permissão"),
+//            @ApiResponse(responseCode = "404", description = "Pedido não encontrado"),
+//            @ApiResponse(responseCode = "500", description = "Internal server error")
+//    })
+//    public ResponseEntity<?> aprovarPonto(@PathVariable Integer idPedido, @RequestHeader("Authorization") String token) {
+//        try {
+//            var mensagem = pontoService.aprovarPonto(idPedido, token);
+//            return ResponseEntity.ok(mensagem);
+//        }catch (NotFoundException e) {
+//            return ResponseEntity.status(404).body("Erro ao aprovar ponto: " + e.getMessage());
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.status(400).body(e.getMessage());
+//        }catch (InvalidUserException | IllegalCallerException e ) {
+//            return ResponseEntity.status(401).body(e.getMessage());
+//        } catch (Exception e) {
+//            return ResponseEntity.internalServerError().body("Erro ao aprovar ponto: " + e.getMessage());
+//        }
+//    }
 
-    @PostMapping("/aprovar/{idPedido}")
-    @SecurityRequirement(name = "bearer-key")
-    @Operation(summary = "Aprova um pedido de ponto", description = "Aprova um pedido de ponto pelo ID.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Pedido aprovado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Request inválida"),
-            @ApiResponse(responseCode = "401", description = "Usuário não autorizado ou sem permissão"),
-            @ApiResponse(responseCode = "404", description = "Pedido não encontrado"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    public ResponseEntity<?> aprovarPonto(@PathVariable Integer idPedido, @RequestHeader("Authorization") String token) {
-        try {
-            var mensagem = pontoService.aprovarPonto(idPedido, token);
-            return ResponseEntity.ok(mensagem);
-        }catch (NotFoundException e) {
-            return ResponseEntity.status(404).body("Erro ao aprovar ponto: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        }catch (InvalidUserException | IllegalCallerException e ) {
-            return ResponseEntity.status(401).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Erro ao aprovar ponto: " + e.getMessage());
-        }
-    }
-
-    @PostMapping("/reprovar/{idPedido}")
-    @SecurityRequirement(name = "bearer-key")
-    @Operation(summary = "Reprova pedido de ponto", description = "Usuário admin reprova o pedido de ponto pelo ID  .")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Pedido reprovado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Request inválida"),
-            @ApiResponse(responseCode = "401", description = "Usuário não autorizado ou sem permissão"),
-            @ApiResponse(responseCode = "404", description = "Pedido não encontrado"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    public ResponseEntity<?> reprovarPonto(@PathVariable Integer idPedido, @RequestHeader("Authorization") String token) {
-        try {
-            var mensagem = pontoService.reprovarPonto(idPedido, token);
-            return ResponseEntity.ok(mensagem);
-        }catch (NotFoundException e) {
-            return ResponseEntity.status(404).body("Erro ao reprovar ponto: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        }catch (InvalidUserException | IllegalCallerException e) {
-            return ResponseEntity.status(401).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Erro ao reprovar ponto: " + e.getMessage());
-        }
-    }
+//    @PostMapping("/reprovar/{idPedido}")
+//    @SecurityRequirement(name = "bearer-key")
+//    @Operation(summary = "Reprova pedido de ponto", description = "Usuário admin reprova o pedido de ponto pelo ID  .")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Pedido reprovado com sucesso"),
+//            @ApiResponse(responseCode = "400", description = "Request inválida"),
+//            @ApiResponse(responseCode = "401", description = "Usuário não autorizado ou sem permissão"),
+//            @ApiResponse(responseCode = "404", description = "Pedido não encontrado"),
+//            @ApiResponse(responseCode = "500", description = "Internal server error")
+//    })
+//    public ResponseEntity<?> reprovarPonto(@PathVariable Integer idPedido, @RequestHeader("Authorization") String token) {
+//        try {
+//            var mensagem = pontoService.reprovarPonto(idPedido, token);
+//            return ResponseEntity.ok(mensagem);
+//        }catch (NotFoundException e) {
+//            return ResponseEntity.status(404).body("Erro ao reprovar ponto: " + e.getMessage());
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.status(400).body(e.getMessage());
+//        }catch (InvalidUserException | IllegalCallerException e) {
+//            return ResponseEntity.status(401).body(e.getMessage());
+//        } catch (Exception e) {
+//            return ResponseEntity.internalServerError().body("Erro ao reprovar ponto: " + e.getMessage());
+//        }
+//    }
 
     @GetMapping("/pedidos/all")
     @SecurityRequirement(name = "bearer-key")

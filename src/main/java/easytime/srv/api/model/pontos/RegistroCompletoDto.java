@@ -15,7 +15,8 @@ public record RegistroCompletoDto (
         Time entrada2,
         Time saida2,
         Time entrada3,
-        Time saida3
+        Time saida3,
+        TimeLog.Status status
 ){
 
     public RegistroCompletoDto(TimeLog timeLog){
@@ -23,13 +24,14 @@ public record RegistroCompletoDto (
                 timeLog.getId(),
                 timeLog.getUser().getLogin(),
                 DateTimeUtil.convertDBDateToUserDate(timeLog.getData()),
-                timeLog.getHoras_trabalhadas(), // Pass Duration directly
+                timeLog.getHoras_trabalhadas(),
                 timeLog.getE1(),
                 timeLog.getS1(),
                 timeLog.getE2(),
                 timeLog.getS2(),
                 timeLog.getE3(),
-                timeLog.getS3()
+                timeLog.getS3(),
+                timeLog.getStatus()
         );
     }
 }

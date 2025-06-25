@@ -62,6 +62,17 @@ public class TimeLog {
 
     private Time horas_trabalhadas = Time.valueOf("00:00:00");
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Setter
+    private TimeLog.Status status = TimeLog.Status.PENDENTE;
+
+    public enum Status {
+        PENDENTE,
+        APROVADO,
+        REPROVADO
+    }
+
     public void setPonto(Time hora) {
         try {
             String fieldName = this.getUltimoBatimentoName(this.cont);

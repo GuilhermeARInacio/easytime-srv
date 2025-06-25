@@ -40,10 +40,16 @@ class ValidacaoLoginNaoPertenceTest {
 
     private AlterarPontoDto getDto() {
         return new AlterarPontoDto(
-                1, "01/06/2024",
-                LocalTime.of(8, 0), LocalTime.of(12, 0),
-                LocalTime.of(13, 0), LocalTime.of(17, 0),
-                null, null
+                "login",
+                1,
+                "01/06/2024",
+                LocalTime.of(8, 0),
+                LocalTime.of(12, 0),
+                LocalTime.of(13, 0),
+                LocalTime.of(17, 0),
+                null,
+                null,
+                "Justificativa"
         );
     }
 

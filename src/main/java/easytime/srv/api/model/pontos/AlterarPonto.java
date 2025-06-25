@@ -17,6 +17,7 @@ public class AlterarPonto {
     private LocalTime saida2;
     private LocalTime entrada3;
     private LocalTime saida3;
+    private String justificativa;
 
     public AlterarPonto(AlterarPontoDto dto) {
         this.data = dto.data();
@@ -26,5 +27,6 @@ public class AlterarPonto {
         this.saida2 = dto.saida2();
         this.entrada3 = dto.entrada3();
         this.saida3 = dto.saida3();
+        this.justificativa = dto.justificativa();
     }
 }

@@ -1,4 +1,4 @@
-package easytime.srv.api.validacoes.Login;
+package easytime.srv.api.validacoes.login;
 
 import easytime.srv.api.model.user.DTOUsuario;
 

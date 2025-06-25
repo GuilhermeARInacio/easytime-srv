@@ -1,10 +1,9 @@
 package easytime.srv.api.model.pontos;
 
-import easytime.srv.api.tables.TimeLog;
-
 import java.time.LocalTime;
 
 public record AlterarPontoDto(
+        String login,
         Integer idPonto,
         String data,
         LocalTime entrada1,
@@ -12,6 +11,7 @@ public record AlterarPontoDto(
         LocalTime entrada2,
         LocalTime saida2,
         LocalTime entrada3,
-        LocalTime saida3
+        LocalTime saida3,
+        String justificativa
 ) {
 }

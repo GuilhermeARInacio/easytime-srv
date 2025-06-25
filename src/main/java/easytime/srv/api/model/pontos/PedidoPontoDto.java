@@ -18,7 +18,7 @@ public record PedidoPontoDto(
           pedidoPonto.getId(),
           pedidoPonto.getUser().getLogin(),
           pedidoPonto.getPonto().getId(),
-          pedidoPonto.getStatus().name(),
+          pedidoPonto.getPonto().getStatus().name(),
           pedidoPonto.getTipoPedido().name(),
                 pedidoPonto.getGestorLogin(),
                 DateTimeUtil.convertDBDateTimeToUserDateTime(pedidoPonto.getDataAprovacao())

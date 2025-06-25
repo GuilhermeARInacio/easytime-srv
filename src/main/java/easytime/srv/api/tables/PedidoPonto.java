@@ -40,23 +40,11 @@ public class PedidoPonto {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @Setter
-    private Status status = Status.PENDENTE;
-
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Tipo tipoPedido;
 
     public enum Tipo{
         ALTERACAO,
         REGISTRO
-    }
-
-    public enum Status {
-        PENDENTE,
-        APROVADO,
-        REPROVADO
     }
 
     private LocalDateTime horarioCriacao;
