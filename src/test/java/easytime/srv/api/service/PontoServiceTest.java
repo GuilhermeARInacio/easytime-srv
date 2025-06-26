@@ -3,6 +3,7 @@ package easytime.srv.api.service;
 
 import easytime.srv.api.infra.exceptions.InvalidUserException;
 import easytime.srv.api.infra.security.TokenService;
+import easytime.srv.api.model.Status;
 import easytime.srv.api.model.pontos.*;
 import easytime.srv.api.model.user.UserDTO;
 import easytime.srv.api.tables.PedidoPonto;
@@ -271,69 +272,69 @@ class PontoServiceTest {
         assertThrows(NotFoundException.class, () -> pontoService.alterarPonto(dto, token));
     }
 
-//    @Test
-//    void aprovarPonto_Success() {
-//        String token = "token";
-//        String login = "gestor";
-//        PedidoPonto pedido = mock(PedidoPonto.class);
-//        when(tokenService.getSubject(token)).thenReturn(login);
-//        when(pedidoPontoRepository.findById(1)).thenReturn(Optional.of(pedido));
-//        doNothing().when(validacaoFinalizarPonto).validar(pedido, login);
-//        when(pedido.getTipoPedido()).thenReturn(PedidoPonto.Tipo.REGISTRO);
-//        when(pedidoPontoRepository.save(any())).thenReturn(pedido);
-//
-//        assertDoesNotThrow(() -> pontoService.aprovarPonto(1, token));
-//    }
-//
-//    @Test
-//    void aprovarPonto_NotFound_Throws() {
-//        String token = "token";
-//        String login = "gestor";
-//        when(tokenService.getSubject(token)).thenReturn(login);
-//        when(pedidoPontoRepository.findById(1)).thenReturn(Optional.empty());
-//
-//        assertThrows(NotFoundException.class, () -> pontoService.aprovarPonto(1, token));
-//    }
-//
-//    @Test
-//    void aprovarPonto_Alteracao_Aprovado_ExecutesAlterarPonto() {
-//        String token = "token";
-//        String login = "gestor";
-//        int pedidoId = 1;
-//
-//        PedidoPonto pedido = mock(PedidoPonto.class);
-//        TimeLog timeLog = mock(TimeLog.class);
-//        AlterarPonto alterarPonto = mock(AlterarPonto.class);
-//
-//        when(tokenService.getSubject(token)).thenReturn(login);
-//        when(pedidoPontoRepository.findById(pedidoId)).thenReturn(Optional.of(pedido));
-//        when(pedido.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
-//        when(pedido.getPonto()).thenReturn(timeLog);
-//        when(pedido.getAlteracaoPonto()).thenReturn(alterarPonto);
-//
-//        doNothing().when(validacaoFinalizarPonto).validar(pedido, login);
-//        when(pedidoPontoRepository.save(any())).thenReturn(pedido);
-//
-//        // Call the method
-//        pontoService.aprovarPonto(pedidoId, token);
-//
-//        // Verify that alterarPonto and save were called
-//        verify(timeLog).alterarPonto(alterarPonto);
-//        verify(timeLogsRepository).save(timeLog);
-//    }
-//
-//    @Test
-//    void reprovarPonto_Success() {
-//        String token = "token";
-//        String login = "gestor";
-//        PedidoPonto pedido = mock(PedidoPonto.class);
-//        when(tokenService.getSubject(token)).thenReturn(login);
-//        when(pedidoPontoRepository.findById(1)).thenReturn(Optional.of(pedido));
-//        doNothing().when(validacaoFinalizarPonto).validar(pedido, login);
-//        //when(pedido.getTipoPonto()).thenReturn(PedidoPonto.Tipo.REGISTRO);
-//
-//        assertDoesNotThrow(() -> pontoService.reprovarPonto(1, token));
-//    }
+    @Test
+    void aprovarPonto_Success() {
+        String token = "token";
+        String login = "gestor";
+        PedidoPonto pedido = mock(PedidoPonto.class);
+        when(tokenService.getSubject(token)).thenReturn(login);
+        when(pedidoPontoRepository.findById(1)).thenReturn(Optional.of(pedido));
+        doNothing().when(validacaoFinalizarPonto).validar(pedido, login);
+        when(pedido.getTipoPedido()).thenReturn(PedidoPonto.Tipo.REGISTRO);
+        when(pedidoPontoRepository.save(any())).thenReturn(pedido);
+
+        assertDoesNotThrow(() -> pontoService.aprovarPonto(1, token));
+    }
+
+    @Test
+    void aprovarPonto_NotFound_Throws() {
+        String token = "token";
+        String login = "gestor";
+        when(tokenService.getSubject(token)).thenReturn(login);
+        when(pedidoPontoRepository.findById(1)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> pontoService.aprovarPonto(1, token));
+    }
+
+    @Test
+    void aprovarPonto_Alteracao_Aprovado_ExecutesAlterarPonto() {
+        String token = "token";
+        String login = "gestor";
+        int pedidoId = 1;
+
+        PedidoPonto pedido = mock(PedidoPonto.class);
+        TimeLog timeLog = mock(TimeLog.class);
+        AlterarPonto alterarPonto = mock(AlterarPonto.class);
+
+        when(tokenService.getSubject(token)).thenReturn(login);
+        when(pedidoPontoRepository.findById(pedidoId)).thenReturn(Optional.of(pedido));
+        when(pedido.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
+        when(pedido.getPonto()).thenReturn(timeLog);
+        when(pedido.getAlteracaoPonto()).thenReturn(alterarPonto);
+
+        doNothing().when(validacaoFinalizarPonto).validar(pedido, login);
+        when(pedidoPontoRepository.save(any())).thenReturn(pedido);
+
+        // Call the method
+        pontoService.aprovarPonto(pedidoId, token);
+
+        // Verify that alterarPonto and save were called
+        verify(timeLog).alterarPonto(alterarPonto);
+        verify(timeLogsRepository).save(timeLog);
+    }
+
+    @Test
+    void reprovarPonto_Success() {
+        String token = "token";
+        String login = "gestor";
+        PedidoPonto pedido = mock(PedidoPonto.class);
+        when(tokenService.getSubject(token)).thenReturn(login);
+        when(pedidoPontoRepository.findById(1)).thenReturn(Optional.of(pedido));
+        doNothing().when(validacaoFinalizarPonto).validar(pedido, login);
+        //when(pedido.getTipoPonto()).thenReturn(PedidoPonto.Tipo.REGISTRO);
+
+        assertDoesNotThrow(() -> pontoService.reprovarPonto(1, token));
+    }
 
     @Test
     void listarPontos_Success() {
@@ -371,25 +372,25 @@ class PontoServiceTest {
         assertFalse(pontoService.listarAllPedidos().isEmpty());
     }
 
-//    @Test
-//    void listarPedidoPendentes_Success() {
-//        UserDTO userDTO = new UserDTO();
-//        userDTO.setNome("Test User");
-//        userDTO.setEmail("testuser@example.com");
-//        userDTO.setLogin("testuser");
-//        userDTO.setPassword("password123");
-//        userDTO.setSector("IT");
-//        userDTO.setJobTitle("Developer");
-//        userDTO.setRole("user");
-//        userDTO.setIsActive(true);
-//
-//        var user = User.toEntity(userDTO);
-//        var timelog = new TimeLog(user, LocalDate.now());
-//
-//        var pedido = new PedidoPonto(timelog);
-//        when(pedidoPontoRepository.findAllByStatus(PedidoPonto.Status.PENDENTE)).thenReturn(List.of(pedido));
-//        assertFalse(pontoService.listarPedidoPendentes().isEmpty());
-//    }
+    @Test
+    void listarPedidoPendentes_Success() {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setNome("Test User");
+        userDTO.setEmail("testuser@example.com");
+        userDTO.setLogin("testuser");
+        userDTO.setPassword("password123");
+        userDTO.setSector("IT");
+        userDTO.setJobTitle("Developer");
+        userDTO.setRole("user");
+        userDTO.setIsActive(true);
+
+        var user = User.toEntity(userDTO);
+        var timelog = new TimeLog(user, LocalDate.now());
+
+        var pedido = new PedidoPonto(timelog);
+        when(pedidoPontoRepository.findAllByStatusPedido(Status.PENDENTE)).thenReturn(List.of(pedido));
+        assertFalse(pontoService.listarPedidoPendentes().isEmpty());
+    }
 
     @Test
     void getUserAndLogin_InvalidUser_Throws() throws Exception {

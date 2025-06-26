@@ -1,6 +1,7 @@
 package easytime.srv.api.tables;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import easytime.srv.api.model.Status;
 import easytime.srv.api.model.pontos.AlterarPonto;
 import easytime.srv.api.model.pontos.AlterarPontoDto;
 import jakarta.persistence.*;
@@ -46,6 +47,11 @@ public class PedidoPonto {
         ALTERACAO,
         REGISTRO
     }
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Setter
+    private Status statusPedido = Status.PENDENTE;
 
     private LocalDateTime horarioCriacao;
 

@@ -1,6 +1,6 @@
-// File: src/test/java/easytime/srv/api/tables/PedidoPontoTest.java
 package easytime.srv.api.tables;
 
+import easytime.srv.api.model.Status;
 import easytime.srv.api.model.pontos.AlterarPonto;
 import easytime.srv.api.model.pontos.AlterarPontoDto;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class PedidoPontoTest {
         assertEquals(PedidoPonto.Tipo.ALTERACAO, pedido.getTipoPedido());
         assertNotNull(pedido.getHorarioCriacao());
         assertNotNull(pedido.getAlteracaoPonto());
-        assertEquals(TimeLog.Status.PENDENTE, pedido.getPonto().getStatus());
+        assertEquals(Status.PENDENTE, pedido.getStatusPedido());
     }
 
     @Test
@@ -43,7 +43,7 @@ class PedidoPontoTest {
         assertEquals(PedidoPonto.Tipo.REGISTRO, pedido.getTipoPedido());
         assertNotNull(pedido.getHorarioCriacao());
         assertNull(pedido.getAlteracaoPonto());
-        assertEquals(TimeLog.Status.PENDENTE, pedido.getPonto().getStatus());
+        assertEquals(Status.PENDENTE, pedido.getStatusPedido());
     }
 
     @Test
@@ -52,19 +52,19 @@ class PedidoPontoTest {
         pedido.setGestorLogin("gestor");
         LocalDateTime now = LocalDateTime.now();
         pedido.setDataAprovacao(now);
-        pedido.getPonto().setStatus(TimeLog.Status.APROVADO);
+        pedido.setStatusPedido(Status.APROVADO);
 
         assertEquals("gestor", pedido.getGestorLogin());
         assertEquals(now, pedido.getDataAprovacao());
-        assertEquals(TimeLog.Status.APROVADO, pedido.getPonto().getStatus());
+        assertEquals(Status.APROVADO, pedido.getStatusPedido());
     }
 
     @Test
     void enums_haveExpectedValues() {
         assertEquals("ALTERACAO", PedidoPonto.Tipo.ALTERACAO.name());
         assertEquals("REGISTRO", PedidoPonto.Tipo.REGISTRO.name());
-        assertEquals("PENDENTE", TimeLog.Status.PENDENTE.name());
-        assertEquals("APROVADO", TimeLog.Status.APROVADO.name());
-        assertEquals("REPROVADO", TimeLog.Status.REPROVADO.name());
+        assertEquals("PENDENTE", Status.PENDENTE.name());
+        assertEquals("APROVADO", Status.APROVADO.name());
+        assertEquals("REJEITADO", Status.REJEITADO.name());
     }
 }

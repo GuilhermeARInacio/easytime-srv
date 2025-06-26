@@ -1,5 +1,6 @@
 package easytime.srv.api.model.pontos;
 
+import easytime.srv.api.model.Status;
 import easytime.srv.api.tables.TimeLog;
 import easytime.srv.api.util.DateTimeUtil;
 
@@ -16,7 +17,7 @@ public record RegistroCompletoDto (
         Time saida2,
         Time entrada3,
         Time saida3,
-        TimeLog.Status status
+        Status status
 ){
 
     public RegistroCompletoDto(TimeLog timeLog){
@@ -31,7 +32,7 @@ public record RegistroCompletoDto (
                 timeLog.getS2(),
                 timeLog.getE3(),
                 timeLog.getS3(),
-                timeLog.getStatus()
+                timeLog.getStatusRegistro()
         );
     }
 }

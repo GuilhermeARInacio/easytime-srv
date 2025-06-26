@@ -1,5 +1,6 @@
 package easytime.srv.api.model.pontos;
 
+import easytime.srv.api.model.Status;
 import easytime.srv.api.tables.PedidoPonto;
 import easytime.srv.api.tables.TimeLog;
 import easytime.srv.api.util.DateTimeUtil;
@@ -16,7 +17,7 @@ public record TimeLogDto(
         @Schema(description = "Horário do ponto", example = "08:00:00")
         Time horarioBatida,
         @Schema(description = "Status do ponto", example = "PENDENTE")
-        TimeLog.Status status
+        Status status
 ) {
 
     public TimeLogDto(PedidoPonto pedido){
@@ -24,7 +25,7 @@ public record TimeLogDto(
                 pedido.getPonto().getUser().getLogin(),
                 DateTimeUtil.convertDBDateToUserDate(pedido.getPonto().getData()),
                 (Time) pedido.getPonto().getUltimoBatimentoValue(),
-                pedido.getPonto().getStatus()
+                pedido.getPonto().getStatusRegistro()
         );
     }
 }

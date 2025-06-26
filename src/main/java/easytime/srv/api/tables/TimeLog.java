@@ -1,5 +1,6 @@
 package easytime.srv.api.tables;
 
+import easytime.srv.api.model.Status;
 import easytime.srv.api.model.pontos.AlterarPonto;
 import easytime.srv.api.util.DateTimeUtil;
 import jakarta.persistence.*;
@@ -65,13 +66,7 @@ public class TimeLog {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Setter
-    private TimeLog.Status status = TimeLog.Status.PENDENTE;
-
-    public enum Status {
-        PENDENTE,
-        APROVADO,
-        REPROVADO
-    }
+    private Status statusRegistro = Status.PENDENTE;
 
     public void setPonto(Time hora) {
         try {

@@ -1,6 +1,7 @@
 // File: src/test/java/easytime/srv/api/validacoes/ponto/finalizarPonto/ValidacaoPedidoStatusTest.java
 package easytime.srv.api.validacoes.ponto.finalizarPonto;
 
+import easytime.srv.api.model.Status;
 import easytime.srv.api.tables.PedidoPonto;
 import easytime.srv.api.tables.TimeLog;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +22,7 @@ class ValidacaoPedidoStatusTest {
     @Test
     void validar_statusAprovado_lancaIllegalArgumentException() {
         PedidoPonto pedido = mock(PedidoPonto.class);
-        when(pedido.getPonto().getStatus()).thenReturn(TimeLog.Status.APROVADO);
+        when(pedido.getStatusPedido()).thenReturn(Status.APROVADO);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
                 () -> validacao.validar(pedido, "user"));
@@ -31,7 +32,7 @@ class ValidacaoPedidoStatusTest {
     @Test
     void validar_statusReprovado_lancaIllegalArgumentException() {
         PedidoPonto pedido = mock(PedidoPonto.class);
-        when(pedido.getPonto().getStatus()).thenReturn(TimeLog.Status.REPROVADO);
+        when(pedido.getStatusPedido()).thenReturn(Status.REJEITADO);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
                 () -> validacao.validar(pedido, "user"));
@@ -41,7 +42,7 @@ class ValidacaoPedidoStatusTest {
     @Test
     void validar_statusPendente_naoLancaExcecao() {
         PedidoPonto pedido = mock(PedidoPonto.class);
-        when(pedido.getPonto().getStatus()).thenReturn(TimeLog.Status.PENDENTE);
+        when(pedido.getStatusPedido()).thenReturn(Status.PENDENTE);
 
         assertDoesNotThrow(() -> validacao.validar(pedido, "user"));
     }
