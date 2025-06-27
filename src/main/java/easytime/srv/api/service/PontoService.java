@@ -182,10 +182,11 @@ public class PontoService {
             pedidoPontoRepository.save(pedidoPonto);
             return "Ponto alterado com sucesso após aprovação do gestor.";
         } else if (pedidoPonto.getTipoPedido() == PedidoPonto.Tipo.ALTERACAO && status == Status.REJEITADO) {
-            pedidoPonto.setStatusPedido(Status.REJEITADO);
+            pedidoPontoRepository.save(pedidoPonto);
             return "Pedido de alteração de ponto reprovado pelo gestor.";
         }
 
+        pedidoPonto.getPonto().setStatusRegistro(status);
         pedidoPontoRepository.save(pedidoPonto);
 
         return status == Status.APROVADO?

@@ -11,7 +11,7 @@ public class ValidacaoPedidoStatus implements ValidacaoFinalizarPonto{
     public void validar(PedidoPonto pedido, String userLogin) {
         if(pedido.getStatusPedido() == Status.APROVADO ||
            pedido.getStatusPedido() == Status.REJEITADO) {
-            throw new IllegalArgumentException("Pedido já finalizado.");
+            throw new IllegalArgumentException("Esse pedido já foi finalizado.");
         }
     }
 }
