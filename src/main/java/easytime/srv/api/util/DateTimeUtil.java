@@ -6,12 +6,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateTimeUtil {
+
     public static LocalDate convertUserDateToDBDate(String dateBr) {
         try{
             DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             return LocalDate.parse(dateBr, inputFormatter);
         }catch(Exception e){
-            throw new DateTimeException("Data inválida: " + dateBr + ", Por favor, insira uma data válida no formato DD/MM/AAAA.");
+            throw new DateTimeException("Data inválida: " + dateBr + ", Por favor, insira uma data válida no formato dd/MM/yyyy.");
         }
     }
 
@@ -22,7 +23,7 @@ public class DateTimeUtil {
 
     public static String convertDBDateTimeToUserDateTime(LocalDateTime dateBr) {
         if(dateBr == null) return null;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy-HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm");
         return dateBr.format(formatter);
     }
 }
