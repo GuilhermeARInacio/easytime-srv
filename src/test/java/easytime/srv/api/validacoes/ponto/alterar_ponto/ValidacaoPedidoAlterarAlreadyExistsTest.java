@@ -1,6 +1,7 @@
 // File: src/test/java/easytime/srv/api/validacoes/ponto/alterar_ponto/ValidacaoPedidoAlterarAlreadyExistsTest.java
 package easytime.srv.api.validacoes.ponto.alterar_ponto;
 
+import easytime.srv.api.model.Status;
 import easytime.srv.api.model.pontos.AlterarPontoDto;
 import easytime.srv.api.tables.PedidoPonto;
 import easytime.srv.api.tables.TimeLog;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -40,7 +42,8 @@ class ValidacaoPedidoAlterarAlreadyExistsTest {
                 LocalTime.of(17, 0),
                 null,
                 null,
-                "Justificativa de teste"
+                "Justificativa de teste",
+                Status.PENDENTE
         );
     }
 
@@ -54,7 +57,7 @@ class ValidacaoPedidoAlterarAlreadyExistsTest {
 
     @Test
     void validar_pedidoJaExiste_lancaIllegalArgumentException() {
-        when(pedidoPontoRepository.existsByPonto_IdAndTipoPedido(1, PedidoPonto.Tipo.ALTERACAO)).thenReturn(true);
+        when(pedidoPontoRepository.existsByPonto_IdAndTipoPedidoAndStatusPedido(1, PedidoPonto.Tipo.ALTERACAO, Status.APROVADO)).thenReturn(true);
         TimeLog timeLog = mock(TimeLog.class);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,

@@ -21,7 +21,5 @@ public class ValidacaoLoginNaoPertence implements ValidacaoAlterarPonto{
         if(!user.getRole().equals("admin") && !timeLog.getUser().getLogin().equals(userLogin)) {
             throw new IllegalCallerException("Você não tem permissão para alterar registros de ponto de outros usuários.");
         }
-        /// ///
-
     }
 }

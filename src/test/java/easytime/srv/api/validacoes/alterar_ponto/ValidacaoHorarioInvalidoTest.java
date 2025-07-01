@@ -1,6 +1,7 @@
 // File: src/test/java/easytime/srv/api/validacoes/ponto/alterar_ponto/ValidacaoHorarioInvalidoTest.java
 package easytime.srv.api.validacoes.alterar_ponto;
 
+import easytime.srv.api.model.Status;
 import easytime.srv.api.model.pontos.AlterarPontoDto;
 import easytime.srv.api.tables.TimeLog;
 import easytime.srv.api.validacoes.ponto.alterar_ponto.ValidacaoHorarioInvalido;
@@ -27,7 +28,8 @@ class ValidacaoHorarioInvalidoTest {
                 LocalTime.of(18, 0),
                 null,
                 null,
-                "Justificativa"
+                "Justificativa",
+                Status.PENDENTE
         );
         TimeLog timeLog = mock(TimeLog.class);
 
@@ -46,7 +48,8 @@ class ValidacaoHorarioInvalidoTest {
                 null,
                 null,
                 null,
-                "Justificativa"
+                "Justificativa",
+                Status.PENDENTE
         );
         TimeLog timeLog = mock(TimeLog.class);
 
@@ -66,7 +69,8 @@ class ValidacaoHorarioInvalidoTest {
                 null,
                 null,
                 null,
-                "justificativa"
+                "justificativa",
+                Status.PENDENTE
         );
         TimeLog timeLog = mock(TimeLog.class);
 
@@ -86,7 +90,8 @@ class ValidacaoHorarioInvalidoTest {
                 null,
                 null,
                 null,
-                "justificativa"
+                "justificativa",
+                Status.PENDENTE
         );
         TimeLog timeLog = mock(TimeLog.class);
 

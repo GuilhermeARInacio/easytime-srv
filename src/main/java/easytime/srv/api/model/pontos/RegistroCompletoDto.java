@@ -17,10 +17,11 @@ public record RegistroCompletoDto (
         Time saida2,
         Time entrada3,
         Time saida3,
-        Status status
+        Status status,
+        boolean temAlteracao
 ){
 
-    public RegistroCompletoDto(TimeLog timeLog){
+    public RegistroCompletoDto(TimeLog timeLog, boolean temAlteracao) {
         this(
                 timeLog.getId(),
                 timeLog.getUser().getLogin(),
@@ -32,7 +33,10 @@ public record RegistroCompletoDto (
                 timeLog.getS2(),
                 timeLog.getE3(),
                 timeLog.getS3(),
-                timeLog.getStatusRegistro()
+                timeLog.getStatusRegistro(),
+                temAlteracao
         );
     }
+
+
 }

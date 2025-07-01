@@ -277,10 +277,13 @@ class PontoServiceTest {
         String token = "token";
         String login = "gestor";
         PedidoPonto pedido = mock(PedidoPonto.class);
+        TimeLog timeLog = mock(TimeLog.class);
+
         when(tokenService.getSubject(token)).thenReturn(login);
         when(pedidoPontoRepository.findById(1)).thenReturn(Optional.of(pedido));
         doNothing().when(validacaoFinalizarPonto).validar(pedido, login);
         when(pedido.getTipoPedido()).thenReturn(PedidoPonto.Tipo.REGISTRO);
+        when(pedido.getPonto()).thenReturn(timeLog);
         when(pedidoPontoRepository.save(any())).thenReturn(pedido);
 
         assertDoesNotThrow(() -> pontoService.aprovarPonto(1, token));
@@ -328,9 +331,12 @@ class PontoServiceTest {
         String token = "token";
         String login = "gestor";
         PedidoPonto pedido = mock(PedidoPonto.class);
+        TimeLog timeLog = mock(TimeLog.class);
+
         when(tokenService.getSubject(token)).thenReturn(login);
         when(pedidoPontoRepository.findById(1)).thenReturn(Optional.of(pedido));
         doNothing().when(validacaoFinalizarPonto).validar(pedido, login);
+        when(pedido.getPonto()).thenReturn(timeLog);
         //when(pedido.getTipoPonto()).thenReturn(PedidoPonto.Tipo.REGISTRO);
 
         assertDoesNotThrow(() -> pontoService.reprovarPonto(1, token));

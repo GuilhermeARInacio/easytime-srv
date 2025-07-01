@@ -287,4 +287,29 @@ public class PontoController {
             return ResponseEntity.internalServerError().body("Erro ao listar todos os pedidos: " + e.getMessage());
         }
     }
+
+    @GetMapping("/pedido/{idPonto}")
+    @SecurityRequirement(name = "bearer-key")
+    @Operation(summary = "r pedido de ponto", description = "Usuário consulta um pedido de alteração.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pedido consultado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Request inválida"),
+            @ApiResponse(responseCode = "401", description = "Usuário não autorizado ou sem permissão"),
+            @ApiResponse(responseCode = "404", description = "Pedido não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<?> consultarPedidoId(@PathVariable Integer idPonto, @RequestHeader("Authorization") String token) {
+        try {
+            AlterarPontoDto response = pontoService.consultarPedidoId(idPonto);
+            return ResponseEntity.ok(response);
+        }catch (NotFoundException e) {
+            return ResponseEntity.status(404).body("Erro ao consulta pedido de alteração: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        }catch (InvalidUserException | IllegalCallerException e) {
+            return ResponseEntity.status(401).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erro ao consulta pedido de alteração: " + e.getMessage());
+        }
+    }
 }

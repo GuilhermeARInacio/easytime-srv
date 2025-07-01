@@ -33,7 +33,7 @@ class DateTimeUtilTest {
     @Test
     void convertDBDateTimeToUserDateTime_ValidDateTime_ReturnsString() {
         LocalDateTime dateTime = LocalDateTime.of(2024, 6, 1, 14, 30);
-        assertEquals("01/06/2024-14:30", DateTimeUtil.convertDBDateTimeToUserDateTime(dateTime));
+        assertEquals("01/06/2024 - 14:30", DateTimeUtil.convertDBDateTimeToUserDateTime(dateTime));
     }
 
     @Test

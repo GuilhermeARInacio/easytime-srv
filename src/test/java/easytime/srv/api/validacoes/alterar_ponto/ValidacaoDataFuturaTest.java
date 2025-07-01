@@ -1,6 +1,7 @@
 // File: src/test/java/easytime/srv/api/validacoes/ponto/alterar_ponto/ValidacaoDataFuturaTest.java
 package easytime.srv.api.validacoes.alterar_ponto;
 
+import easytime.srv.api.model.Status;
 import easytime.srv.api.model.pontos.AlterarPontoDto;
 import easytime.srv.api.tables.TimeLog;
 import easytime.srv.api.validacoes.ponto.alterar_ponto.ValidacaoDataFutura;
@@ -25,7 +26,8 @@ class ValidacaoDataFuturaTest {
             LocalTime.of(17, 0),
             null,
             null,
-            "Justificativa"
+            "Justificativa",
+            Status.PENDENTE
     );
     @Test
     void validar_dataHoje_naoLancaExcecao() {
@@ -57,7 +59,8 @@ class ValidacaoDataFuturaTest {
                 LocalTime.of(17, 0),
                 null,
                 null,
-                "Justificativa"
+                "Justificativa",
+                Status.PENDENTE
         );
 
         TimeLog timeLog = mock(TimeLog.class);

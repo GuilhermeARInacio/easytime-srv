@@ -2,6 +2,7 @@
 package easytime.srv.api.validacoes.alterar_ponto;
 
 import easytime.srv.api.infra.exceptions.InvalidUserException;
+import easytime.srv.api.model.Status;
 import easytime.srv.api.model.pontos.AlterarPontoDto;
 import easytime.srv.api.tables.TimeLog;
 import easytime.srv.api.tables.User;
@@ -49,7 +50,8 @@ class ValidacaoLoginNaoPertenceTest {
                 LocalTime.of(17, 0),
                 null,
                 null,
-                "Justificativa"
+                "Justificativa",
+                Status.PENDENTE
         );
     }
 

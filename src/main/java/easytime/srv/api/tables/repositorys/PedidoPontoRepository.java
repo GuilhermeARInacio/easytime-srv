@@ -13,8 +13,17 @@ import java.util.Optional;
 public interface PedidoPontoRepository extends JpaRepository<PedidoPonto, Integer> {
     Optional<PedidoPonto> findPedidoPontoByPonto_Id(Integer pontoId);
 
+    Optional<PedidoPonto> findPedidoPontoByPonto_IdAndTipoPedido(Integer pontoId, PedidoPonto.Tipo tipo);
+
     List<PedidoPonto> findAllByStatusPedido(Status statusPedido);
+
     @NotNull List<PedidoPonto> findAll();
 
     boolean existsByPonto_IdAndTipoPedido(Integer pontoId, PedidoPonto.Tipo tipoPedido);
+
+    boolean existsByPonto_IdAndTipoPedidoAndStatusPedidoIn(Integer integer, PedidoPonto.Tipo tipo, List<Status> status);
+
+    boolean existsByPonto_IdAndTipoPedidoAndStatusPedido(Integer integer, PedidoPonto.Tipo tipo, Status status);
+
+    Optional<PedidoPonto> findPedidoPontoByPonto_IdAndTipoPedidoAndStatusPedido(Integer idPonto, PedidoPonto.Tipo tipo, Status status);
 }

@@ -26,7 +26,7 @@ class ValidacaoPedidoStatusTest {
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
                 () -> validacao.validar(pedido, "user"));
-        assertEquals("Pedido já finalizado.", ex.getMessage());
+        assertEquals("Esse pedido já foi finalizado.", ex.getMessage());
     }
 
     @Test
@@ -36,7 +36,7 @@ class ValidacaoPedidoStatusTest {
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
                 () -> validacao.validar(pedido, "user"));
-        assertEquals("Pedido já finalizado.", ex.getMessage());
+        assertEquals("Esse pedido já foi finalizado.", ex.getMessage());
     }
 
     @Test

@@ -106,7 +106,17 @@ public class PontoService {
             throw new NotFoundException("Nenhum ponto encontrado.");
         }
 
-        return response.stream().map(RegistroCompletoDto::new).collect(Collectors.toList());
+        return response.stream().map(
+                timeLog -> {
+                    return new RegistroCompletoDto(
+                            timeLog, pedidoPontoRepository.existsByPonto_IdAndTipoPedidoAndStatusPedidoIn(
+                                timeLog.getId(),
+                                PedidoPonto.Tipo.ALTERACAO,
+                                List.of(Status.PENDENTE)
+                            )
+                    );
+                }
+        ).collect(Collectors.toList());
     }
 
     public void alterarPonto(AlterarPontoDto dto, String token){
@@ -140,13 +150,30 @@ public class PontoService {
         return finalizarPedidoPonto(pedidoPonto, login, Status.REJEITADO);
     }
 
+    public AlterarPontoDto consultarPedidoId(Integer idPonto){
+        var pedidoPonto = pedidoPontoRepository.findPedidoPontoByPonto_IdAndTipoPedidoAndStatusPedido(idPonto, PedidoPonto.Tipo.ALTERACAO, Status.PENDENTE)
+                .orElseThrow(() -> new NotFoundException("Pedido de ponto não localizado. Verifique se o código está correto."));
+
+        return new AlterarPontoDto(pedidoPonto);
+    }
+
     public List<RegistroCompletoDto> listarPontos() {
         var response = timeLogsRepository.findAll();
 
         if (response.isEmpty()) {
             throw new NotFoundException("Nenhum ponto encontrado.");
         }
-        return response.stream().map(RegistroCompletoDto::new).collect(Collectors.toList());
+        return response.stream().map(
+                timeLog -> {
+                    return new RegistroCompletoDto(
+                            timeLog, pedidoPontoRepository.existsByPonto_IdAndTipoPedidoAndStatusPedidoIn(
+                            timeLog.getId(),
+                            PedidoPonto.Tipo.ALTERACAO,
+                            List.of(Status.PENDENTE)
+                    )
+                    );
+                }
+        ).collect(Collectors.toList());
     }
 
     public List<PedidoPontoDto> listarAllPedidos() {
