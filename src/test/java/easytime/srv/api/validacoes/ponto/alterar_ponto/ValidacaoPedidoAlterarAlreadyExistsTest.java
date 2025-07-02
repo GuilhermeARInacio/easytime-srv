@@ -35,7 +35,6 @@ class ValidacaoPedidoAlterarAlreadyExistsTest {
         return new AlterarPontoDto(
                 "login",
                 1,
-                "01/06/2024",
                 LocalTime.of(8, 0),
                 LocalTime.of(12, 0),
                 LocalTime.of(13, 0),

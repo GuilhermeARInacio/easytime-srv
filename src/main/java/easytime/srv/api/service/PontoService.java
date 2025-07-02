@@ -21,6 +21,7 @@ import org.webjars.NotFoundException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -151,7 +152,7 @@ public class PontoService {
     }
 
     public AlterarPontoDto consultarPedidoId(Integer idPonto){
-        var pedidoPonto = pedidoPontoRepository.findPedidoPontoByPonto_IdAndTipoPedidoAndStatusPedido(idPonto, PedidoPonto.Tipo.ALTERACAO, Status.PENDENTE)
+        PedidoPonto pedidoPonto = pedidoPontoRepository.findPedidoPontoByPonto_IdAndTipoPedidoAndStatusPedido(idPonto, PedidoPonto.Tipo.ALTERACAO, Status.PENDENTE)
                 .orElseThrow(() -> new NotFoundException("Pedido de ponto não localizado. Verifique se o código está correto."));
 
         return new AlterarPontoDto(pedidoPonto);
@@ -183,8 +184,29 @@ public class PontoService {
                 .collect(Collectors.toList());
     }
 
-    public List<PedidoPontoDto> listarPedidoPendentes() {
-        return pedidoPontoRepository.findAllByStatusPedido(Status.PENDENTE)
+    public List<PedidoPontoDto> listarPedidosPorStatus(Status status) {
+        return pedidoPontoRepository.findAllByStatusPedido(status)
+                .stream()
+                .map(PedidoPontoDto::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<PedidoPontoDto> listarPedidosPorPeriodo(ConsultaPontosDto dto, String token) {
+        var dateInicio = DateTimeUtil.convertUserDateToDBDate(dto.dtInicio());
+        var dateFinal = DateTimeUtil.convertUserDateToDBDate(dto.dtFinal());
+
+        if (dateInicio.isAfter(dateFinal)) {
+            throw new IllegalArgumentException("A data de início não pode ser posterior à data final.");
+        }
+
+        var user = userRepository.findByLogin(tokenService.getSubject(token))
+                .orElseThrow(() -> new InvalidUserException("Usuário não encontrado: " + tokenService.getSubject(token)));
+
+        if(!user.getRole().equals("admin")){
+            throw new InvalidUserException("Apenas administradores podem realizar essa ação.");
+        }
+
+        return pedidoPontoRepository.findAllByHorarioCriacaoBetween(dateInicio.atTime(LocalTime.of(0,0)), dateFinal.atTime(LocalTime.of(23,59)))
                 .stream()
                 .map(PedidoPontoDto::new)
                 .collect(Collectors.toList());

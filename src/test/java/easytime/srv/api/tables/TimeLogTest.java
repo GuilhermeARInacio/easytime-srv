@@ -80,7 +80,6 @@ class TimeLogTest {
     @Test
     void alterarPonto_updatesFieldsAndCalculatesHoras() {
         AlterarPonto dto = mock(AlterarPonto.class);
-        when(dto.getData()).thenReturn("02/06/2024");
         when(dto.getEntrada1()).thenReturn(LocalTime.of(8, 0));
         when(dto.getSaida1()).thenReturn(LocalTime.of(12, 0));
         when(dto.getEntrada2()).thenReturn(LocalTime.of(13, 0));
@@ -103,7 +102,6 @@ class TimeLogTest {
     @Test
     void alterarPonto_nullFields_doNotUpdate() {
         AlterarPonto dto = mock(AlterarPonto.class);
-        when(dto.getData()).thenReturn(null);
         when(dto.getEntrada1()).thenReturn(null);
         when(dto.getSaida1()).thenReturn(null);
         when(dto.getEntrada2()).thenReturn(null);

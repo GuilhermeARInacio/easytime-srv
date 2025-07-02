@@ -130,9 +130,6 @@ public class TimeLog {
     }
 
     public void alterarPonto(AlterarPonto dto) {
-        if (dto.getData() != null && !String.valueOf(data).isEmpty()) {
-            this.setData(DateTimeUtil.convertUserDateToDBDate(dto.getData()));
-        }
         if (dto.getEntrada1() != null && !String.valueOf(E1).isEmpty()) {
             this.setE1(Time.valueOf(dto.getEntrada1()));
         }

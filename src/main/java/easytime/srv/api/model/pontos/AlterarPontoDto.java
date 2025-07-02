@@ -9,7 +9,6 @@ import java.time.LocalTime;
 public record AlterarPontoDto(
         String login,
         Integer idPonto,
-        String data,
         LocalTime entrada1,
         LocalTime saida1,
         LocalTime entrada2,
@@ -23,7 +22,6 @@ public record AlterarPontoDto(
         this(
                 pedido.getUser().getLogin(),
                 pedido.getPonto().getId(),
-                DateTimeUtil.convertDBDateToUserDate(pedido.getPonto().getData()),
                 pedido.getAlteracaoPonto().getEntrada1(),
                 pedido.getAlteracaoPonto().getSaida1(),
                 pedido.getAlteracaoPonto().getEntrada2(),

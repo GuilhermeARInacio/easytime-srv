@@ -270,23 +270,119 @@ class PontoControllerTest {
     @Test
     void listarPedidosPendentes_Success() {
         List<PedidoPontoDto> list = new ArrayList<>();
-        when(pontoService.listarPedidoPendentes()).thenReturn(list);
+        ConsultaStatus dto = new ConsultaStatus(Status.PENDENTE);
+        when(pontoService.listarPedidosPorStatus(dto.status())).thenReturn(list);
 
-        ResponseEntity<?> response = pontoController.listarPedidosPendentes();
+        ResponseEntity<?> response = pontoController.listarPedidosPorStatus(dto);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(list, response.getBody());
-        verify(pontoService, times(1)).listarPedidoPendentes();
+        verify(pontoService, times(1)).listarPedidosPorStatus(dto.status());
     }
 
     @Test
     void listarPedidosPendentes_Exception() {
-        when(pontoService.listarPedidoPendentes()).thenThrow(new RuntimeException("fail"));
+        ConsultaStatus dto = new ConsultaStatus(Status.PENDENTE);
+        when(pontoService.listarPedidosPorStatus(dto.status())).thenThrow(new RuntimeException("fail"));
 
-        ResponseEntity<?> response = pontoController.listarPedidosPendentes();
+        ResponseEntity<?> response = pontoController.listarPedidosPorStatus(dto);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        verify(pontoService, times(1)).listarPedidoPendentes();
+        verify(pontoService, times(1)).listarPedidosPorStatus(dto.status());
+    }
+
+    @Test
+    void listarPedidosAprovados_Success() {
+        List<PedidoPontoDto> list = new ArrayList<>();
+        ConsultaStatus dto = new ConsultaStatus(Status.APROVADO);
+        when(pontoService.listarPedidosPorStatus(dto.status())).thenReturn(list);
+
+        ResponseEntity<?> response = pontoController.listarPedidosPorStatus(dto);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(list, response.getBody());
+        verify(pontoService, times(1)).listarPedidosPorStatus(dto.status());
+    }
+
+    @Test
+    void listarPedidosAprovados_Exception() {
+        ConsultaStatus dto = new ConsultaStatus(Status.APROVADO);
+        when(pontoService.listarPedidosPorStatus(dto.status())).thenThrow(new RuntimeException("fail"));
+
+        ResponseEntity<?> response = pontoController.listarPedidosPorStatus(dto);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        verify(pontoService, times(1)).listarPedidosPorStatus(dto.status());
+    }
+
+    @Test
+    void listarPedidosRejeitados_Success() {
+        List<PedidoPontoDto> list = new ArrayList<>();
+        ConsultaStatus dto = new ConsultaStatus(Status.REJEITADO);
+        when(pontoService.listarPedidosPorStatus(dto.status())).thenReturn(list);
+
+        ResponseEntity<?> response = pontoController.listarPedidosPorStatus(dto);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(list, response.getBody());
+        verify(pontoService, times(1)).listarPedidosPorStatus(dto.status());
+    }
+
+    @Test
+    void listarPedidosRejeitados_Exception() {
+        ConsultaStatus dto = new ConsultaStatus(Status.REJEITADO);
+        when(pontoService.listarPedidosPorStatus(dto.status())).thenThrow(new RuntimeException("fail"));
+
+        ResponseEntity<?> response = pontoController.listarPedidosPorStatus(dto);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        verify(pontoService, times(1)).listarPedidosPorStatus(dto.status());
+    }
+
+    @Test
+    void listarPedidosPorPeriodo_Success() {
+        List<PedidoPontoDto> list = new ArrayList<>();
+        ConsultaPontosDto dto = new ConsultaPontosDto("01/06/2025", "05/06/2025");
+        when(pontoService.listarPedidosPorPeriodo(dto, token)).thenReturn(list);
+
+        ResponseEntity<?> response = pontoController.listarPedidosPorPeriodo(dto, token);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(list, response.getBody());
+        verify(pontoService, times(1)).listarPedidosPorPeriodo(dto, token);
+    }
+
+    @Test
+    void listarPedidosPorPeriodo_BadRequest() {
+        ConsultaPontosDto dto = new ConsultaPontosDto("01/06/2025", "05/06/2025");
+        when(pontoService.listarPedidosPorPeriodo(dto, token)).thenThrow(new RuntimeException("fail"));
+
+        ResponseEntity<?> response = pontoController.listarPedidosPorPeriodo(dto, token);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        verify(pontoService, times(1)).listarPedidosPorPeriodo(dto, token);
+    }
+
+    @Test
+    void listarPedidosPorPeriodo_Unathorized() {
+        ConsultaPontosDto dto = new ConsultaPontosDto("01/06/2025", "05/06/2025");
+        when(pontoService.listarPedidosPorPeriodo(dto, token)).thenThrow(new InvalidUserException("fail"));
+
+        ResponseEntity<?> response = pontoController.listarPedidosPorPeriodo(dto, token);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        verify(pontoService, times(1)).listarPedidosPorPeriodo(dto, token);
+    }
+
+    @Test
+    void listarPedidosPorPeriodo_IllegalArgument() {
+        ConsultaPontosDto dto = new ConsultaPontosDto("05/06/2025", "01/06/2025");
+        when(pontoService.listarPedidosPorPeriodo(dto, token)).thenThrow(new IllegalArgumentException("fail"));
+
+        ResponseEntity<?> response = pontoController.listarPedidosPorPeriodo(dto, token);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        verify(pontoService, times(1)).listarPedidosPorPeriodo(dto, token);
     }
 
     @Test
@@ -429,5 +525,39 @@ class PontoControllerTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         verify(pontoService, times(1)).listarAllPedidos();
+    }
+
+    @Test
+    void consultarPedidoPeloId_Success() {
+        AlterarPontoDto dto = mock(AlterarPontoDto.class);
+        when(pontoService.consultarPedidoId(dto.idPonto())).thenReturn(dto);
+
+        ResponseEntity<?> response = pontoController.consultarPedidoIdPonto(dto.idPonto(), token);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(dto, response.getBody());
+        verify(pontoService, times(1)).consultarPedidoId(dto.idPonto());
+    }
+
+    @Test
+    void consultarPedidoPeloId_Unathorized() {
+        AlterarPontoDto dto = mock(AlterarPontoDto.class);
+        when(pontoService.consultarPedidoId(dto.idPonto())).thenThrow(NotFoundException.class);
+
+        ResponseEntity<?> response = pontoController.consultarPedidoIdPonto(dto.idPonto(), token);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        verify(pontoService, times(1)).consultarPedidoId(dto.idPonto());
+    }
+
+    @Test
+    void consultarPedidoPeloId_InternalError() {
+        AlterarPontoDto dto = mock(AlterarPontoDto.class);
+        when(pontoService.consultarPedidoId(dto.idPonto())).thenThrow(RuntimeException.class);
+
+        ResponseEntity<?> response = pontoController.consultarPedidoIdPonto(dto.idPonto(), token);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        verify(pontoService, times(1)).consultarPedidoId(dto.idPonto());
     }
 }

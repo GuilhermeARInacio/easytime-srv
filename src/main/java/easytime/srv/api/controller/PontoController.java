@@ -1,11 +1,10 @@
 package easytime.srv.api.controller;
 
 import easytime.srv.api.infra.exceptions.InvalidUserException;
+import easytime.srv.api.model.Status;
 import easytime.srv.api.model.pontos.*;
 import easytime.srv.api.model.user.DTOUsuario;
-import easytime.srv.api.model.user.LoginDto;
 import easytime.srv.api.service.PontoService;
-import easytime.srv.api.tables.PedidoPonto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -14,10 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +42,7 @@ public class PontoController {
                             examples = @ExampleObject(
                                     value = """
                                     {
-                                        "userLogin":"mkenzo"
+                                        "userLogin":"user"
                                     }
                                     """
                             )
@@ -60,14 +57,14 @@ public class PontoController {
                                     name = "Retorna o código 401 e a mensagem de erro",
                                     value = """
                                             {
-                                                "userLogin":"abdc"
+                                                "userLogin":"user"
                                             }
                                             """
                             )
                     )
             )
     })
-    @Operation(summary = "Bater ponto", description = "Usuário envia apenas o userLogin e o ponto é registrado com a data e hora atuais.")
+    @Operation(summary = "Bater ponto", description = "Usuário envia apenas o login e o ponto é registrado com a data e hora atuais.")
     @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<?> registrarPonto(@RequestBody BaterPonto dto, @RequestHeader("Authorization") String token) {
         try{
@@ -86,19 +83,19 @@ public class PontoController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Ponto excluido com sucesso"
+                    description = "Ponto excluído com sucesso"
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "ID não encontrado"
+                    description = "ID não encontrado."
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Usuário não autorizado"
+                    description = "Usuário não autorizado."
             ),
             @ApiResponse(
                     responseCode = "500",
-                    description = "Erro interno do servidor"
+                    description = "Erro interno do servidor."
             )
     })
     @Operation(summary = "Remover registro de batimento de ponto", description = "Usuário envia o ID do registro.")
@@ -162,10 +159,6 @@ public class PontoController {
                     description = "Usuário não autorizado"
             ),
             @ApiResponse(
-                    responseCode = "404",
-                    description = "Campos não encontrados"
-            ),
-            @ApiResponse(
                     responseCode = "400",
                     description = "Request inválida"
             )
@@ -192,8 +185,8 @@ public class PontoController {
     @Operation(summary = "Lista todos os pontos salvos", description = "Retorna uma lista com todos os pontos salvos no BD.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista com os pontos retornada com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Não existiam pontos salvos no BD"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "404", description = "Caso não existam pontos salvos no BD"),
+            @ApiResponse(responseCode = "500", description = "Erro interno de servidor")
     })
     public ResponseEntity<?> listarPontos() {
         try {
@@ -206,19 +199,54 @@ public class PontoController {
         }
     }
 
-    @GetMapping("/pedidos/pendentes")
+    @PutMapping("/pedidos/status")
     @SecurityRequirement(name = "bearer-key")
-    @Operation(summary = "Lista os pedidos pendentes.", description = "Retorna uma lista com os pedidos pendentes.")
+    @Operation(summary = "Lista os pedidos de acordo com o status informado.", description = "Retorna uma lista com os pedidos com os status informado.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista os pontos pendentes com sucesso"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<?> listarPedidosPendentes() {
+    public ResponseEntity<?> listarPedidosPorStatus(@RequestBody ConsultaStatus dto) {
         try {
-            List<PedidoPontoDto> pedidos = pontoService.listarPedidoPendentes();
+            List<PedidoPontoDto> pedidos = pontoService.listarPedidosPorStatus(dto.status());
             return ResponseEntity.ok(pedidos);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Erro ao listar pedidos pendentes: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/pedidos/periodo")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Lista os pedidos encontrados."
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Erro de autenticação."
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Nenhum pedido encontrado."
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Request inválida"
+            )
+    })
+    @Operation(summary = "Lista os pedidos feitos entre as datas informadas.", description = "Usuário envia o período desejado para consultar os pedidos de ponto.")
+    @SecurityRequirement(name = "bearer-key")
+    public ResponseEntity<?> listarPedidosPorPeriodo(@Valid @RequestBody ConsultaPontosDto dto, @RequestHeader("Authorization") String token) {
+        try{
+            List<PedidoPontoDto> response = pontoService.listarPedidosPorPeriodo(dto, token);
+
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException | DateTimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (InvalidUserException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário não autorizado.");
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body("Erro ao consultar pontos: " + e.getMessage());
         }
     }
 
@@ -230,7 +258,7 @@ public class PontoController {
             @ApiResponse(responseCode = "400", description = "Request inválida"),
             @ApiResponse(responseCode = "401", description = "Usuário não autorizado ou sem permissão"),
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Erro interno de servidor")
     })
     public ResponseEntity<?> aprovarPonto(@PathVariable Integer idPedido, @RequestHeader("Authorization") String token) {
         try {
@@ -249,13 +277,13 @@ public class PontoController {
 
     @PostMapping("/reprovar/{idPedido}")
     @SecurityRequirement(name = "bearer-key")
-    @Operation(summary = "Reprova pedido de ponto", description = "Usuário admin reprova o pedido de ponto pelo ID  .")
+    @Operation(summary = "Reprova pedido de ponto", description = "Usuário admin reprova o pedido de ponto pelo ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedido reprovado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Request inválida"),
             @ApiResponse(responseCode = "401", description = "Usuário não autorizado ou sem permissão"),
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Erro interno de servidor")
     })
     public ResponseEntity<?> reprovarPonto(@PathVariable Integer idPedido, @RequestHeader("Authorization") String token) {
         try {
@@ -277,7 +305,7 @@ public class PontoController {
     @Operation(summary = "Lista todos os pedidos", description = "Retorna uma lista com todos os pedidos.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista com todos os pedidos retornada com sucesso"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Erro interno de servidor")
     })
     public ResponseEntity<?> listAllPedidos(){
         try {
@@ -290,24 +318,20 @@ public class PontoController {
 
     @GetMapping("/pedido/{idPonto}")
     @SecurityRequirement(name = "bearer-key")
-    @Operation(summary = "r pedido de ponto", description = "Usuário consulta um pedido de alteração.")
+    @Operation(summary = "Consultar pedido de ponto", description = "Usuário consulta um pedido de alteração pelo ID do ponto.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedido consultado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Request inválida"),
             @ApiResponse(responseCode = "401", description = "Usuário não autorizado ou sem permissão"),
             @ApiResponse(responseCode = "404", description = "Pedido não encontrado"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Erro interno de servidor")
     })
-    public ResponseEntity<?> consultarPedidoId(@PathVariable Integer idPonto, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> consultarPedidoIdPonto(@PathVariable Integer idPonto, @RequestHeader("Authorization") String token) {
         try {
             AlterarPontoDto response = pontoService.consultarPedidoId(idPonto);
             return ResponseEntity.ok(response);
         }catch (NotFoundException e) {
             return ResponseEntity.status(404).body("Erro ao consulta pedido de alteração: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        }catch (InvalidUserException | IllegalCallerException e) {
-            return ResponseEntity.status(401).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Erro ao consulta pedido de alteração: " + e.getMessage());
         }

@@ -242,6 +242,98 @@ class PontoServiceTest {
     }
 
     @Test
+    void consultarPorId_EmptyResult_Throws() {
+        Integer id = 1;
+
+        when(pedidoPontoRepository.findPedidoPontoByPonto_IdAndTipoPedidoAndStatusPedido(id, PedidoPonto.Tipo.ALTERACAO, Status.PENDENTE)).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> pontoService.consultarPedidoId(id));
+    }
+
+    @Test
+    void consultarPorId_Success() {
+        Integer id = 1;
+        PedidoPonto pedidoPonto = mock(PedidoPonto.class);
+        User user = mock(User.class);
+        TimeLog timeLog = mock(TimeLog.class);
+        AlterarPonto alterarPonto = mock(AlterarPonto.class);
+
+        when(pedidoPontoRepository
+                .findPedidoPontoByPonto_IdAndTipoPedidoAndStatusPedido(id, PedidoPonto.Tipo.ALTERACAO, Status.PENDENTE))
+                .thenReturn(Optional.ofNullable(pedidoPonto));
+        when(pedidoPonto.getUser()).thenReturn(user);
+        when(pedidoPonto.getPonto()).thenReturn(timeLog);
+        when(pedidoPonto.getPonto().getData()).thenReturn(mock(LocalDate.class));
+        when(pedidoPonto.getAlteracaoPonto()).thenReturn(alterarPonto);
+        AlterarPontoDto dto = new AlterarPontoDto(pedidoPonto);
+        assertEquals(dto, pontoService.consultarPedidoId(id));
+    }
+
+//    @Test
+//    void consultarPedidosPorData_Success() {
+//        String token = "token";
+//        String login = "user";
+//        User user = mock(User.class);
+//        ConsultaPontosDto dto = mock(ConsultaPontosDto.class);
+//
+//        when(tokenService.getSubject(token)).thenReturn(login);
+//        when(dto.dtInicio()).thenReturn("01/01/2024");
+//        when(dto.dtFinal()).thenReturn("02/01/2024");
+//        LocalDate d1 = LocalDate.of(2024, 1, 1);
+//        LocalDate d2 = LocalDate.of(2024, 1, 2);
+//        // Simulate DateTimeUtil
+//        try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
+//            util.when(() -> DateTimeUtil.convertUserDateToDBDate("01/01/2024")).thenReturn(d1);
+//            util.when(() -> DateTimeUtil.convertUserDateToDBDate("02/01/2024")).thenReturn(d2);
+//            PedidoPonto pedidoPonto = mock(PedidoPonto.class);
+//            when(pedidoPontoRepository.findAllByDataBetween(d1, d2)).thenReturn(List.of(pedidoPonto));
+//            when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
+//            when(user.getRole()).thenReturn("admin");
+//            assertFalse(pontoService.listarPedidosPorData(dto, token).isEmpty());
+//        }
+//    }
+
+//    @Test
+//    void consultarPedidosPorData_DateInicioAfterFinal_Throws() {
+//        String token = "token";
+//        String login = "user";
+//        var user = mock(easytime.srv.api.tables.User.class);
+//        ConsultaPontosDto dto = mock(ConsultaPontosDto.class);
+//
+//        when(tokenService.getSubject(token)).thenReturn(login);
+//        when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
+//        when(dto.dtInicio()).thenReturn("02/01/2024");
+//        when(dto.dtFinal()).thenReturn("01/01/2024");
+//
+//        LocalDate d1 = LocalDate.of(2024, 2, 1);
+//        LocalDate d2 = LocalDate.of(2024, 1, 1);
+//        try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
+//            util.when(() -> DateTimeUtil.convertUserDateToDBDate("02/01/2024")).thenReturn(d1);
+//            util.when(() -> DateTimeUtil.convertUserDateToDBDate("01/01/2024")).thenReturn(d2);
+//            assertThrows(IllegalArgumentException.class, () -> pontoService.consultar(dto, token));
+//        }
+//    }
+//
+//    @Test
+//    void consultarPedidosPorData_EmptyResult_Throws() {
+//        String token = "token";
+//        String login = "user";
+//        var user = mock(easytime.srv.api.tables.User.class);
+//        ConsultaPontosDto dto = mock(ConsultaPontosDto.class);
+//        when(tokenService.getSubject(token)).thenReturn(login);
+//        when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
+//        when(dto.dtInicio()).thenReturn("01/01/2024");
+//        when(dto.dtFinal()).thenReturn("02/01/2024");
+//        LocalDate d1 = LocalDate.of(2024, 1, 1);
+//        LocalDate d2 = LocalDate.of(2024, 1, 2);
+//        try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
+//            util.when(() -> DateTimeUtil.convertUserDateToDBDate("01/01/2024")).thenReturn(d1);
+//            util.when(() -> DateTimeUtil.convertUserDateToDBDate("02/01/2024")).thenReturn(d2);
+//            when(timeLogsRepository.findAllByUserAndDataBetween(user, d1, d2)).thenReturn(List.of());
+//            assertThrows(NotFoundException.class, () -> pontoService.consultar(dto, token));
+//        }
+//    }
+
+    @Test
     void alterarPonto_Success() {
         String token = "token";
         String login = "user";
@@ -337,7 +429,6 @@ class PontoServiceTest {
         when(pedidoPontoRepository.findById(1)).thenReturn(Optional.of(pedido));
         doNothing().when(validacaoFinalizarPonto).validar(pedido, login);
         when(pedido.getPonto()).thenReturn(timeLog);
-        //when(pedido.getTipoPonto()).thenReturn(PedidoPonto.Tipo.REGISTRO);
 
         assertDoesNotThrow(() -> pontoService.reprovarPonto(1, token));
     }
@@ -358,7 +449,7 @@ class PontoServiceTest {
     }
 
     @Test
-    void listarAllPedidos_Success() throws NoSuchFieldException, IllegalAccessException {
+    void listarAllPedidos_Success() {
         UserDTO userDTO = new UserDTO();
         userDTO.setNome("Test User");
         userDTO.setEmail("testuser@example.com");
@@ -395,7 +486,47 @@ class PontoServiceTest {
 
         var pedido = new PedidoPonto(timelog);
         when(pedidoPontoRepository.findAllByStatusPedido(Status.PENDENTE)).thenReturn(List.of(pedido));
-        assertFalse(pontoService.listarPedidoPendentes().isEmpty());
+        assertFalse(pontoService.listarPedidosPorStatus(Status.PENDENTE).isEmpty());
+    }
+
+    @Test
+    void listarPedidoAprovados_Success() {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setNome("Test User");
+        userDTO.setEmail("testuser@example.com");
+        userDTO.setLogin("testuser");
+        userDTO.setPassword("password123");
+        userDTO.setSector("IT");
+        userDTO.setJobTitle("Developer");
+        userDTO.setRole("user");
+        userDTO.setIsActive(true);
+
+        var user = User.toEntity(userDTO);
+        var timelog = new TimeLog(user, LocalDate.now());
+
+        var pedido = new PedidoPonto(timelog);
+        when(pedidoPontoRepository.findAllByStatusPedido(Status.APROVADO)).thenReturn(List.of(pedido));
+        assertFalse(pontoService.listarPedidosPorStatus(Status.APROVADO).isEmpty());
+    }
+
+    @Test
+    void listarPedidoRejeitados_Success() {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setNome("Test User");
+        userDTO.setEmail("testuser@example.com");
+        userDTO.setLogin("testuser");
+        userDTO.setPassword("password123");
+        userDTO.setSector("IT");
+        userDTO.setJobTitle("Developer");
+        userDTO.setRole("user");
+        userDTO.setIsActive(true);
+
+        var user = User.toEntity(userDTO);
+        var timelog = new TimeLog(user, LocalDate.now());
+
+        var pedido = new PedidoPonto(timelog);
+        when(pedidoPontoRepository.findAllByStatusPedido(Status.REJEITADO)).thenReturn(List.of(pedido));
+        assertFalse(pontoService.listarPedidosPorStatus(Status.REJEITADO).isEmpty());
     }
 
     @Test
