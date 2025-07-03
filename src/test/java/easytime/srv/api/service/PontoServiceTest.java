@@ -26,6 +26,8 @@ import org.webjars.NotFoundException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -262,76 +264,83 @@ class PontoServiceTest {
                 .thenReturn(Optional.ofNullable(pedidoPonto));
         when(pedidoPonto.getUser()).thenReturn(user);
         when(pedidoPonto.getPonto()).thenReturn(timeLog);
-        when(pedidoPonto.getPonto().getData()).thenReturn(mock(LocalDate.class));
         when(pedidoPonto.getAlteracaoPonto()).thenReturn(alterarPonto);
         AlterarPontoDto dto = new AlterarPontoDto(pedidoPonto);
         assertEquals(dto, pontoService.consultarPedidoId(id));
     }
 
-//    @Test
-//    void consultarPedidosPorData_Success() {
-//        String token = "token";
-//        String login = "user";
-//        User user = mock(User.class);
-//        ConsultaPontosDto dto = mock(ConsultaPontosDto.class);
-//
-//        when(tokenService.getSubject(token)).thenReturn(login);
-//        when(dto.dtInicio()).thenReturn("01/01/2024");
-//        when(dto.dtFinal()).thenReturn("02/01/2024");
-//        LocalDate d1 = LocalDate.of(2024, 1, 1);
-//        LocalDate d2 = LocalDate.of(2024, 1, 2);
-//        // Simulate DateTimeUtil
-//        try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
-//            util.when(() -> DateTimeUtil.convertUserDateToDBDate("01/01/2024")).thenReturn(d1);
-//            util.when(() -> DateTimeUtil.convertUserDateToDBDate("02/01/2024")).thenReturn(d2);
-//            PedidoPonto pedidoPonto = mock(PedidoPonto.class);
-//            when(pedidoPontoRepository.findAllByDataBetween(d1, d2)).thenReturn(List.of(pedidoPonto));
-//            when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-//            when(user.getRole()).thenReturn("admin");
-//            assertFalse(pontoService.listarPedidosPorData(dto, token).isEmpty());
-//        }
-//    }
+    @Test
+    void consultarPedidosPorPeriodo_Success() {
+        String token = "token";
+        String login = "user";
+        User user = mock(User.class);
+        ConsultaPontosDto dto = mock(ConsultaPontosDto.class);
+        TimeLog timeLog = mock(TimeLog.class);
+        PedidoPonto pedidoPonto = mock(PedidoPonto.class);
 
-//    @Test
-//    void consultarPedidosPorData_DateInicioAfterFinal_Throws() {
-//        String token = "token";
-//        String login = "user";
-//        var user = mock(easytime.srv.api.tables.User.class);
-//        ConsultaPontosDto dto = mock(ConsultaPontosDto.class);
-//
-//        when(tokenService.getSubject(token)).thenReturn(login);
-//        when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-//        when(dto.dtInicio()).thenReturn("02/01/2024");
-//        when(dto.dtFinal()).thenReturn("01/01/2024");
-//
-//        LocalDate d1 = LocalDate.of(2024, 2, 1);
-//        LocalDate d2 = LocalDate.of(2024, 1, 1);
-//        try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
-//            util.when(() -> DateTimeUtil.convertUserDateToDBDate("02/01/2024")).thenReturn(d1);
-//            util.when(() -> DateTimeUtil.convertUserDateToDBDate("01/01/2024")).thenReturn(d2);
-//            assertThrows(IllegalArgumentException.class, () -> pontoService.consultar(dto, token));
-//        }
-//    }
-//
-//    @Test
-//    void consultarPedidosPorData_EmptyResult_Throws() {
-//        String token = "token";
-//        String login = "user";
-//        var user = mock(easytime.srv.api.tables.User.class);
-//        ConsultaPontosDto dto = mock(ConsultaPontosDto.class);
-//        when(tokenService.getSubject(token)).thenReturn(login);
-//        when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-//        when(dto.dtInicio()).thenReturn("01/01/2024");
-//        when(dto.dtFinal()).thenReturn("02/01/2024");
-//        LocalDate d1 = LocalDate.of(2024, 1, 1);
-//        LocalDate d2 = LocalDate.of(2024, 1, 2);
-//        try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
-//            util.when(() -> DateTimeUtil.convertUserDateToDBDate("01/01/2024")).thenReturn(d1);
-//            util.when(() -> DateTimeUtil.convertUserDateToDBDate("02/01/2024")).thenReturn(d2);
-//            when(timeLogsRepository.findAllByUserAndDataBetween(user, d1, d2)).thenReturn(List.of());
-//            assertThrows(NotFoundException.class, () -> pontoService.consultar(dto, token));
-//        }
-//    }
+        when(tokenService.getSubject(token)).thenReturn(login);
+        when(dto.dtInicio()).thenReturn("01/01/2024");
+        when(dto.dtFinal()).thenReturn("02/01/2024");
+        LocalDate d1 = LocalDate.of(2024, 1, 1);
+        LocalDate d2 = LocalDate.of(2024, 1, 2);
+
+        try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
+            util.when(() -> DateTimeUtil.convertUserDateToDBDate("01/01/2024")).thenReturn(d1);
+            util.when(() -> DateTimeUtil.convertUserDateToDBDate("02/01/2024")).thenReturn(d2);
+
+            when(pedidoPontoRepository.findAllByHorarioCriacaoBetween(d1.atTime(LocalTime.of(0,0)), d2.atTime(LocalTime.of(23, 59)))).thenReturn(List.of(pedidoPonto));
+
+            when(pedidoPonto.getUser()).thenReturn(user);
+            when(pedidoPonto.getPonto()).thenReturn(timeLog);
+            when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
+            when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
+
+            when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
+            when(user.getRole()).thenReturn("admin");
+            assertFalse(pontoService.listarPedidosPorPeriodo(dto, token).isEmpty());
+        }
+    }
+
+    @Test
+    void consultarPedidosPorPeriodo_DateInicioAfterFinal_Throws() {
+        String token = "token";
+        ConsultaPontosDto dto = mock(ConsultaPontosDto.class);
+
+        when(dto.dtInicio()).thenReturn("01/01/2024");
+        when(dto.dtFinal()).thenReturn("02/01/2024");
+        LocalDate d1 = LocalDate.of(2024, 1, 1);
+        LocalDate d2 = LocalDate.of(2024, 1, 2);
+
+        try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
+            util.when(() -> DateTimeUtil.convertUserDateToDBDate("02/01/2024")).thenReturn(d1);
+            util.when(() -> DateTimeUtil.convertUserDateToDBDate("01/01/2024")).thenReturn(d2);
+
+            assertThrows(IllegalArgumentException.class, () -> pontoService.listarPedidosPorPeriodo(dto, token));
+        }
+    }
+
+    @Test
+    void consultarPedidosPorData_InvalidUser_Throws() {
+        String token = "token";
+        String login = "user";
+        User user = mock(User.class);
+        ConsultaPontosDto dto = mock(ConsultaPontosDto.class);
+
+        when(tokenService.getSubject(token)).thenReturn(login);
+        when(dto.dtInicio()).thenReturn("01/01/2024");
+        when(dto.dtFinal()).thenReturn("02/01/2024");
+        LocalDate d1 = LocalDate.of(2024, 1, 1);
+        LocalDate d2 = LocalDate.of(2024, 1, 2);
+
+        try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
+            util.when(() -> DateTimeUtil.convertUserDateToDBDate("01/01/2024")).thenReturn(d1);
+            util.when(() -> DateTimeUtil.convertUserDateToDBDate("02/01/2024")).thenReturn(d2);
+
+            when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
+            when(user.getRole()).thenReturn("user");
+            assertThrows(InvalidUserException.class, () -> pontoService.listarPedidosPorPeriodo(dto, token));
+        }
+    }
 
     @Test
     void alterarPonto_Success() {

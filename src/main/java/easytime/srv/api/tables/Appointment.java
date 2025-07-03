@@ -28,5 +28,4 @@ public class Appointment {
 
     private String comment;
 
-    // Getters and Setters
 }
