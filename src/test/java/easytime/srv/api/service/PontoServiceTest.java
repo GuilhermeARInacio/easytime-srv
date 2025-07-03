@@ -293,6 +293,7 @@ class PontoServiceTest {
             when(pedidoPonto.getUser()).thenReturn(user);
             when(pedidoPonto.getPonto()).thenReturn(timeLog);
             when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
+            when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
             when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
 
             when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));

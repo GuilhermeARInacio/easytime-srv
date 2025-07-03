@@ -10,14 +10,10 @@ public record PedidoPontoDto(
         String login,
         Integer idPonto,
         String dataRegistro,
+        String tipoPedido,
         String dataPedido,
         String statusRegistro,
         AlterarPonto alteracaoPonto
-//        String statusPedido
-//        String tipo_pedido,
-//        String gestorLogin,
-//        String dataAprovacao,
-//        String justificativa
 ) {
     public PedidoPontoDto(PedidoPonto pedidoPonto) {
         this(
@@ -25,6 +21,7 @@ public record PedidoPontoDto(
           pedidoPonto.getUser().getLogin(),
           pedidoPonto.getPonto().getId(),
           DateTimeUtil.convertDBDateToUserDate(pedidoPonto.getPonto().getData()),
+          pedidoPonto.getTipoPedido().name(),
           DateTimeUtil.convertDBDateToUserDate(pedidoPonto.getHorarioCriacao().toLocalDate()),
           pedidoPonto.getPonto().getStatusRegistro().name(),
           pedidoPonto.getAlteracaoPonto() == null ? null : pedidoPonto.getAlteracaoPonto()
