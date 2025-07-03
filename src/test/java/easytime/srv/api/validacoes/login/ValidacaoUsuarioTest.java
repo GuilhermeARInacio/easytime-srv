@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 
+import java.sql.Timestamp;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ValidacaoUsuarioTest {
