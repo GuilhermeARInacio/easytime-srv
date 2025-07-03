@@ -199,22 +199,6 @@ public class PontoController {
         }
     }
 
-    @PutMapping("/pedidos/status")
-    @SecurityRequirement(name = "bearer-key")
-    @Operation(summary = "Lista os pedidos de acordo com o status informado.", description = "Retorna uma lista com os pedidos com os status informado.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lista os pontos pendentes com sucesso"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    public ResponseEntity<?> listarPedidosPorStatus(@RequestBody ConsultaStatus dto) {
-        try {
-            List<PedidoPontoDto> pedidos = pontoService.listarPedidosPorStatus(dto.status());
-            return ResponseEntity.ok(pedidos);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Erro ao listar pedidos pendentes: " + e.getMessage());
-        }
-    }
-
     @PutMapping("/pedidos/filtrar")
     @ApiResponses(value = {
             @ApiResponse(
