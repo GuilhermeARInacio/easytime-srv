@@ -191,22 +191,15 @@ public class PontoService {
                 .collect(Collectors.toList());
     }
 
-    public List<PedidoPontoDto> listarPedidosPorPeriodo(ConsultaPontosDto dto, String token) {
-        var dateInicio = DateTimeUtil.convertUserDateToDBDate(dto.dtInicio());
-        var dateFinal = DateTimeUtil.convertUserDateToDBDate(dto.dtFinal());
+    public List<PedidoPontoDto> listarPedidosPorTipo(PedidoPonto.Tipo tipo) {
+        return pedidoPontoRepository.findAllByTipoPedido(tipo)
+                .stream()
+                .map(PedidoPontoDto::new)
+                .collect(Collectors.toList());
+    }
 
-        if (dateInicio.isAfter(dateFinal)) {
-            throw new IllegalArgumentException("A data de início não pode ser posterior à data final.");
-        }
-
-        var user = userRepository.findByLogin(tokenService.getSubject(token))
-                .orElseThrow(() -> new InvalidUserException("Usuário não encontrado: " + tokenService.getSubject(token)));
-
-        if(!user.getRole().equals("admin")){
-            throw new InvalidUserException("Apenas administradores podem realizar essa ação.");
-        }
-
-        return pedidoPontoRepository.findAllByHorarioCriacaoBetween(dateInicio.atTime(LocalTime.of(0,0)), dateFinal.atTime(LocalTime.of(23,59)))
+    public List<PedidoPontoDto> listarPedidosPorPeriodo(LocalDateTime dateInicio, LocalDateTime dateFinal) {
+        return pedidoPontoRepository.findAllByHorarioCriacaoBetween(dateInicio, dateFinal)
                 .stream()
                 .map(PedidoPontoDto::new)
                 .collect(Collectors.toList());
@@ -241,5 +234,50 @@ public class PontoService {
         return status == Status.APROVADO?
                 "Registro ponto aprovado pelo gestor."
                 :"Registro ponto reprovado pelo gestor.";
+    }
+
+    public List<PedidoPontoDto> filtrarPedidos(FiltroPedidos dto) {
+        LocalDateTime dateInicio = null;
+        LocalDateTime dateFinal = null;
+
+        if (dto.dtInicio() != null && dto.dtFinal() != null) {
+            dateInicio = DateTimeUtil.convertUserDateToDBDate(dto.dtInicio()).atTime(LocalTime.of(0,0));
+            dateFinal = DateTimeUtil.convertUserDateToDBDate(dto.dtFinal()).atTime(LocalTime.of(23,59));
+
+            if (dateInicio.isAfter(dateFinal)) {
+                throw new IllegalArgumentException("A data de início não pode ser posterior à data final.");
+            }
+        }
+
+        if ((dto.tipo() == null && dto.status() == null) && dto.dtInicio() != null && dto.dtFinal() != null) {
+            return this.listarPedidosPorPeriodo(dateInicio, dateFinal);
+        } else if ((dto.dtInicio() == null || dto.dtFinal() == null) && dto.tipo() == null && dto.status() != null) {
+            return this.listarPedidosPorStatus(dto.status());
+        } else if ((dto.dtInicio() == null || dto.dtFinal() == null) && dto.status() == null && dto.tipo() != null) {
+            return this.listarPedidosPorTipo(dto.tipo());
+        } else if ((dto.dtInicio() == null || dto.dtFinal() == null) && (dto.tipo() != null && dto.status() != null)) {
+            return pedidoPontoRepository.findAllByTipoPedidoAndStatusPedido(dto.tipo(), dto.status())
+                    .stream()
+                    .map(PedidoPontoDto::new)
+                    .collect(Collectors.toList());
+        } else if (dto.status() == null && (dto.tipo() != null && dto.dtInicio() != null)) {
+            return pedidoPontoRepository.findAllByTipoPedidoAndHorarioCriacaoBetween(dto.tipo(), dateInicio, dateFinal)
+                    .stream()
+                    .map(PedidoPontoDto::new)
+                    .collect(Collectors.toList());
+        } else if (dto.tipo() == null && (dto.status() != null && dto.dtInicio() != null)) {
+            return pedidoPontoRepository.findAllByStatusPedidoAndHorarioCriacaoBetween(dto.status(), dateInicio, dateFinal)
+                    .stream()
+                    .map(PedidoPontoDto::new)
+                    .collect(Collectors.toList());
+        } else if (dto.status() != null && dto.tipo() != null && dto.dtInicio() != null && dto.dtFinal() != null) {
+            return pedidoPontoRepository.findAllByStatusPedidoAndTipoPedidoAndHorarioCriacaoBetween(dto.status(), dto.tipo(), dateInicio, dateFinal)
+                    .stream()
+                    .map(PedidoPontoDto::new)
+                    .collect(Collectors.toList());
+        } else {
+            return this.listarAllPedidos();
+        }
+
     }
 }

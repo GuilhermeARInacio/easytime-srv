@@ -340,49 +340,49 @@ class PontoControllerTest {
     }
 
     @Test
-    void listarPedidosPorPeriodo_Success() {
+    void filtrarPedidos_Success() {
         List<PedidoPontoDto> list = new ArrayList<>();
-        ConsultaPontosDto dto = new ConsultaPontosDto("01/06/2025", "05/06/2025");
-        when(pontoService.listarPedidosPorPeriodo(dto, token)).thenReturn(list);
+        FiltroPedidos dto = new FiltroPedidos("01/06/2025", "05/06/2025", Status.PENDENTE, PedidoPonto.Tipo.ALTERACAO);
+        when(pontoService.filtrarPedidos(dto)).thenReturn(list);
 
-        ResponseEntity<?> response = pontoController.listarPedidosPorPeriodo(dto, token);
+        ResponseEntity<?> response = pontoController.filtrarPedidos(dto, token);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(list, response.getBody());
-        verify(pontoService, times(1)).listarPedidosPorPeriodo(dto, token);
+        verify(pontoService, times(1)).filtrarPedidos(dto);
     }
 
     @Test
-    void listarPedidosPorPeriodo_BadRequest() {
-        ConsultaPontosDto dto = new ConsultaPontosDto("01/06/2025", "05/06/2025");
-        when(pontoService.listarPedidosPorPeriodo(dto, token)).thenThrow(new RuntimeException("fail"));
+    void filtrarPedidos_BadRequest() {
+        FiltroPedidos dto = new FiltroPedidos("01/06/2025", "05/06/2025", Status.PENDENTE, PedidoPonto.Tipo.ALTERACAO);
+        when(pontoService.filtrarPedidos(dto)).thenThrow(new RuntimeException("fail"));
 
-        ResponseEntity<?> response = pontoController.listarPedidosPorPeriodo(dto, token);
+        ResponseEntity<?> response = pontoController.filtrarPedidos(dto, token);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(pontoService, times(1)).listarPedidosPorPeriodo(dto, token);
+        verify(pontoService, times(1)).filtrarPedidos(dto);
     }
 
     @Test
-    void listarPedidosPorPeriodo_Unathorized() {
-        ConsultaPontosDto dto = new ConsultaPontosDto("01/06/2025", "05/06/2025");
-        when(pontoService.listarPedidosPorPeriodo(dto, token)).thenThrow(new InvalidUserException("fail"));
+    void filtrarPedidos_Unathorized() {
+        FiltroPedidos dto = new FiltroPedidos("01/06/2025", "05/06/2025", Status.PENDENTE, PedidoPonto.Tipo.ALTERACAO);
+        when(pontoService.filtrarPedidos(dto)).thenThrow(new InvalidUserException("fail"));
 
-        ResponseEntity<?> response = pontoController.listarPedidosPorPeriodo(dto, token);
+        ResponseEntity<?> response = pontoController.filtrarPedidos(dto, token);
 
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
-        verify(pontoService, times(1)).listarPedidosPorPeriodo(dto, token);
+        verify(pontoService, times(1)).filtrarPedidos(dto);
     }
 
     @Test
-    void listarPedidosPorPeriodo_IllegalArgument() {
-        ConsultaPontosDto dto = new ConsultaPontosDto("05/06/2025", "01/06/2025");
-        when(pontoService.listarPedidosPorPeriodo(dto, token)).thenThrow(new IllegalArgumentException("fail"));
+    void filtrarPedidos_IllegalArgument() {
+        FiltroPedidos dto = new FiltroPedidos("01/06/2025", "05/06/2025", Status.PENDENTE, PedidoPonto.Tipo.ALTERACAO);
+        when(pontoService.filtrarPedidos(dto)).thenThrow(new IllegalArgumentException("fail"));
 
-        ResponseEntity<?> response = pontoController.listarPedidosPorPeriodo(dto, token);
+        ResponseEntity<?> response = pontoController.filtrarPedidos(dto, token);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        verify(pontoService, times(1)).listarPedidosPorPeriodo(dto, token);
+        verify(pontoService, times(1)).filtrarPedidos(dto);
     }
 
     @Test

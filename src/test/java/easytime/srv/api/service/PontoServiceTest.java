@@ -270,15 +270,12 @@ class PontoServiceTest {
     }
 
     @Test
-    void consultarPedidosPorPeriodo_Success() {
-        String token = "token";
-        String login = "user";
+    void filtrarPedidosPorData_Success() {
         User user = mock(User.class);
-        ConsultaPontosDto dto = mock(ConsultaPontosDto.class);
+        FiltroPedidos dto = mock(FiltroPedidos.class);
         TimeLog timeLog = mock(TimeLog.class);
         PedidoPonto pedidoPonto = mock(PedidoPonto.class);
 
-        when(tokenService.getSubject(token)).thenReturn(login);
         when(dto.dtInicio()).thenReturn("01/01/2024");
         when(dto.dtFinal()).thenReturn("02/01/2024");
         LocalDate d1 = LocalDate.of(2024, 1, 1);
@@ -288,7 +285,8 @@ class PontoServiceTest {
             util.when(() -> DateTimeUtil.convertUserDateToDBDate("01/01/2024")).thenReturn(d1);
             util.when(() -> DateTimeUtil.convertUserDateToDBDate("02/01/2024")).thenReturn(d2);
 
-            when(pedidoPontoRepository.findAllByHorarioCriacaoBetween(d1.atTime(LocalTime.of(0,0)), d2.atTime(LocalTime.of(23, 59)))).thenReturn(List.of(pedidoPonto));
+            when(pedidoPontoRepository.findAllByHorarioCriacaoBetween(d1.atTime(LocalTime.of(0,0)), d2.atTime(LocalTime.of(23, 59))))
+                    .thenReturn(List.of(pedidoPonto));
 
             when(pedidoPonto.getUser()).thenReturn(user);
             when(pedidoPonto.getPonto()).thenReturn(timeLog);
@@ -296,16 +294,13 @@ class PontoServiceTest {
             when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
             when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
 
-            when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-            when(user.getRole()).thenReturn("admin");
-            assertFalse(pontoService.listarPedidosPorPeriodo(dto, token).isEmpty());
+            assertFalse(pontoService.filtrarPedidos(dto).isEmpty());
         }
     }
 
     @Test
-    void consultarPedidosPorPeriodo_DateInicioAfterFinal_Throws() {
-        String token = "token";
-        ConsultaPontosDto dto = mock(ConsultaPontosDto.class);
+    void filtrarPedidos_DateInicioAfterFinal_Throws() {
+        FiltroPedidos dto = mock(FiltroPedidos.class);
 
         when(dto.dtInicio()).thenReturn("01/01/2024");
         when(dto.dtFinal()).thenReturn("02/01/2024");
@@ -316,20 +311,96 @@ class PontoServiceTest {
             util.when(() -> DateTimeUtil.convertUserDateToDBDate("02/01/2024")).thenReturn(d1);
             util.when(() -> DateTimeUtil.convertUserDateToDBDate("01/01/2024")).thenReturn(d2);
 
-            assertThrows(IllegalArgumentException.class, () -> pontoService.listarPedidosPorPeriodo(dto, token));
+            assertThrows(IllegalArgumentException.class, () -> pontoService.filtrarPedidos(dto));
         }
     }
 
     @Test
-    void consultarPedidosPorData_InvalidUser_Throws() {
-        String token = "token";
-        String login = "user";
+    void filtrarPedidosPorStatus_Success() {
+        PedidoPonto pedidoPonto = mock(PedidoPonto.class);
+        FiltroPedidos dto = mock(FiltroPedidos.class);
         User user = mock(User.class);
-        ConsultaPontosDto dto = mock(ConsultaPontosDto.class);
+        TimeLog timeLog = mock(TimeLog.class);
 
-        when(tokenService.getSubject(token)).thenReturn(login);
+        when(dto.dtInicio()).thenReturn(null);
+        when(dto.tipo()).thenReturn(null);
+        when(dto.status()).thenReturn(Status.PENDENTE);
+        when(pedidoPonto.getUser()).thenReturn(user);
+        when(pedidoPonto.getPonto()).thenReturn(timeLog);
+        when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
+        when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
+        when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
+
+        try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
+            when(pedidoPontoRepository.findAllByStatusPedido(dto.status())).thenReturn(List.of(pedidoPonto));
+
+            assertFalse(pontoService.filtrarPedidos(dto).isEmpty());
+        }
+    }
+
+    @Test
+    void filtrarPedidosPorTipo_Success() {
+        PedidoPonto pedidoPonto = mock(PedidoPonto.class);
+        FiltroPedidos dto = mock(FiltroPedidos.class);
+        User user = mock(User.class);
+        TimeLog timeLog = mock(TimeLog.class);
+
+        when(dto.dtInicio()).thenReturn(null);
+        when(dto.tipo()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
+        when(dto.status()).thenReturn(Status.PENDENTE);
+        when(pedidoPonto.getUser()).thenReturn(user);
+        when(pedidoPonto.getPonto()).thenReturn(timeLog);
+        when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
+        when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
+        when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
+
+        try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
+            when(pedidoPontoRepository.findAllByTipoPedidoAndStatusPedido(dto.tipo(), dto.status())).thenReturn(List.of(pedidoPonto));
+
+            assertFalse(pontoService.filtrarPedidos(dto).isEmpty());
+        }
+    }
+
+    @Test
+    void filtrarPedidosPorTipoEStatus_Success() {
+        PedidoPonto pedidoPonto = mock(PedidoPonto.class);
+        FiltroPedidos dto = mock(FiltroPedidos.class);
+        User user = mock(User.class);
+        TimeLog timeLog = mock(TimeLog.class);
+
+        when(dto.dtInicio()).thenReturn(null);
+        when(dto.status()).thenReturn(null);
+
+        try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
+            when(dto.tipo()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
+            when(pedidoPonto.getUser()).thenReturn(user);
+            when(pedidoPonto.getPonto()).thenReturn(timeLog);
+            when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
+            when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
+            when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
+            when(pedidoPontoRepository.findAllByTipoPedido(dto.tipo())).thenReturn(List.of(pedidoPonto));
+
+            assertFalse(pontoService.filtrarPedidos(dto).isEmpty());
+        }
+    }
+
+    @Test
+    void filtrarPedidosPorTipoEHorarioCriacao_Success() {
+        PedidoPonto pedidoPonto = mock(PedidoPonto.class);
+        FiltroPedidos dto = mock(FiltroPedidos.class);
+        User user = mock(User.class);
+        TimeLog timeLog = mock(TimeLog.class);
+
         when(dto.dtInicio()).thenReturn("01/01/2024");
         when(dto.dtFinal()).thenReturn("02/01/2024");
+        when(dto.status()).thenReturn(null);
+        when(dto.tipo()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
+        when(pedidoPonto.getUser()).thenReturn(user);
+        when(pedidoPonto.getPonto()).thenReturn(timeLog);
+        when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
+        when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
+        when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
+
         LocalDate d1 = LocalDate.of(2024, 1, 1);
         LocalDate d2 = LocalDate.of(2024, 1, 2);
 
@@ -337,9 +408,101 @@ class PontoServiceTest {
             util.when(() -> DateTimeUtil.convertUserDateToDBDate("01/01/2024")).thenReturn(d1);
             util.when(() -> DateTimeUtil.convertUserDateToDBDate("02/01/2024")).thenReturn(d2);
 
-            when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-            when(user.getRole()).thenReturn("user");
-            assertThrows(InvalidUserException.class, () -> pontoService.listarPedidosPorPeriodo(dto, token));
+            when(pedidoPontoRepository.findAllByTipoPedidoAndHorarioCriacaoBetween(dto.tipo(), d1.atTime(0, 0), d2.atTime(23, 59)))
+                    .thenReturn(List.of(pedidoPonto));
+
+            assertFalse(pontoService.filtrarPedidos(dto).isEmpty());
+        }
+    }
+
+    @Test
+    void filtrarPedidosPorStatusEHorarioCriacao_Success() {
+        PedidoPonto pedidoPonto = mock(PedidoPonto.class);
+        FiltroPedidos dto = mock(FiltroPedidos.class);
+        User user = mock(User.class);
+        TimeLog timeLog = mock(TimeLog.class);
+
+        when(dto.dtInicio()).thenReturn("01/01/2024");
+        when(dto.dtFinal()).thenReturn("02/01/2024");
+        when(dto.status()).thenReturn(Status.PENDENTE);
+        when(dto.tipo()).thenReturn(null);
+        when(pedidoPonto.getUser()).thenReturn(user);
+        when(pedidoPonto.getPonto()).thenReturn(timeLog);
+        when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
+        when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
+        when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
+
+        LocalDate d1 = LocalDate.of(2024, 1, 1);
+        LocalDate d2 = LocalDate.of(2024, 1, 2);
+
+        try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
+            util.when(() -> DateTimeUtil.convertUserDateToDBDate("01/01/2024")).thenReturn(d1);
+            util.when(() -> DateTimeUtil.convertUserDateToDBDate("02/01/2024")).thenReturn(d2);
+
+            when(pedidoPontoRepository.findAllByStatusPedidoAndHorarioCriacaoBetween(dto.status(), d1.atTime(0, 0), d2.atTime(23, 59)))
+                    .thenReturn(List.of(pedidoPonto));
+
+            assertFalse(pontoService.filtrarPedidos(dto).isEmpty());
+        }
+    }
+
+    @Test
+    void filtrarPedidosPorStatusEHorarioCriacaoETipo_Success() {
+        PedidoPonto pedidoPonto = mock(PedidoPonto.class);
+        FiltroPedidos dto = mock(FiltroPedidos.class);
+        User user = mock(User.class);
+        TimeLog timeLog = mock(TimeLog.class);
+
+        when(dto.dtInicio()).thenReturn("01/01/2024");
+        when(dto.dtFinal()).thenReturn("02/01/2024");
+        when(dto.status()).thenReturn(Status.PENDENTE);
+        when(dto.tipo()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
+        when(pedidoPonto.getUser()).thenReturn(user);
+        when(pedidoPonto.getPonto()).thenReturn(timeLog);
+        when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
+        when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
+        when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
+
+        LocalDate d1 = LocalDate.of(2024, 1, 1);
+        LocalDate d2 = LocalDate.of(2024, 1, 2);
+
+        try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
+            util.when(() -> DateTimeUtil.convertUserDateToDBDate("01/01/2024")).thenReturn(d1);
+            util.when(() -> DateTimeUtil.convertUserDateToDBDate("02/01/2024")).thenReturn(d2);
+
+            when(pedidoPontoRepository.findAllByStatusPedidoAndTipoPedidoAndHorarioCriacaoBetween(dto.status(), dto.tipo(), d1.atTime(0, 0), d2.atTime(23, 59)))
+                    .thenReturn(List.of(pedidoPonto));
+
+            assertFalse(pontoService.filtrarPedidos(dto).isEmpty());
+        }
+    }
+
+    @Test
+    void filtrarSemFiltro_Success() {
+        PedidoPonto pedidoPonto = mock(PedidoPonto.class);
+        FiltroPedidos dto = mock(FiltroPedidos.class);
+        User user = mock(User.class);
+        TimeLog timeLog = mock(TimeLog.class);
+
+        when(dto.dtInicio()).thenReturn(null);
+        when(dto.status()).thenReturn(null);
+        when(dto.tipo()).thenReturn(null);
+        when(pedidoPonto.getUser()).thenReturn(user);
+        when(pedidoPonto.getPonto()).thenReturn(timeLog);
+        when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
+        when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
+        when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
+
+        LocalDate d1 = LocalDate.of(2024, 1, 1);
+        LocalDate d2 = LocalDate.of(2024, 1, 2);
+
+        try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
+            util.when(() -> DateTimeUtil.convertUserDateToDBDate("01/01/2024")).thenReturn(d1);
+            util.when(() -> DateTimeUtil.convertUserDateToDBDate("02/01/2024")).thenReturn(d2);
+
+            when(pedidoPontoRepository.findAll()).thenReturn(List.of(pedidoPonto));
+
+            assertFalse(pontoService.filtrarPedidos(dto).isEmpty());
         }
     }
 

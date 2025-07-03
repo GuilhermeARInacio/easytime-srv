@@ -215,7 +215,7 @@ public class PontoController {
         }
     }
 
-    @PutMapping("/pedidos/periodo")
+    @PutMapping("/pedidos/filtrar")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -234,11 +234,11 @@ public class PontoController {
                     description = "Request inválida"
             )
     })
-    @Operation(summary = "Lista os pedidos feitos entre as datas informadas.", description = "Usuário envia o período desejado para consultar os pedidos de ponto.")
+    @Operation(summary = "Lista os pedidos de acordo com os filtros.", description = "Usuário envia os filtros que deseja.")
     @SecurityRequirement(name = "bearer-key")
-    public ResponseEntity<?> listarPedidosPorPeriodo(@Valid @RequestBody ConsultaPontosDto dto, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> filtrarPedidos(@RequestBody FiltroPedidos dto, @RequestHeader("Authorization") String token) {
         try{
-            List<PedidoPontoDto> response = pontoService.listarPedidosPorPeriodo(dto, token);
+            List<PedidoPontoDto> response = pontoService.filtrarPedidos(dto);
 
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException | DateTimeException e){
