@@ -21,7 +21,6 @@ class ValidacaoHorarioInvalidoTest {
         AlterarPontoDto dto = new AlterarPontoDto(
                 "login",
                 1,
-                "01/06/2024",
                 LocalTime.of(6, 0),
                 LocalTime.of(12, 0),
                 LocalTime.of(13, 0),
@@ -41,7 +40,6 @@ class ValidacaoHorarioInvalidoTest {
         AlterarPontoDto dto = new AlterarPontoDto(
                 "Login",
                 1,
-                "01/06/2024",
                 LocalTime.of(5, 59),
                 null,
                 null,
@@ -62,7 +60,6 @@ class ValidacaoHorarioInvalidoTest {
         AlterarPontoDto dto = new AlterarPontoDto(
                 "login",
                 1,
-                "01/06/2024",
                 LocalTime.of(23, 1),
                 LocalTime.of(23, 1),
                 null,
@@ -83,7 +80,6 @@ class ValidacaoHorarioInvalidoTest {
         AlterarPontoDto dto = new AlterarPontoDto(
                 "login",
                 1,
-                "01/06/2024",
                 null,
                 null,
                 null,

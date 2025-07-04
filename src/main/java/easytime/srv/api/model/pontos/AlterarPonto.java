@@ -10,7 +10,6 @@ import java.time.LocalTime;
 @Getter
 @Embeddable
 public class AlterarPonto {
-    private String data;
     private LocalTime entrada1;
     private LocalTime saida1;
     private LocalTime entrada2;
@@ -20,7 +19,6 @@ public class AlterarPonto {
     private String justificativa;
 
     public AlterarPonto(AlterarPontoDto dto) {
-        this.data = dto.data();
         this.entrada1 = dto.entrada1();
         this.saida1 = dto.saida1();
         this.entrada2 = dto.entrada2();

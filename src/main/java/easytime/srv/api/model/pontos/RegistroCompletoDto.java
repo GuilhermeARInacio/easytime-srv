@@ -39,4 +39,6 @@ public record RegistroCompletoDto (
     }
 
 
+
+
 }

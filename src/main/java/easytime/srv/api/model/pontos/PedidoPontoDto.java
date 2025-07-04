@@ -3,19 +3,17 @@ package easytime.srv.api.model.pontos;
 import easytime.srv.api.tables.PedidoPonto;
 import easytime.srv.api.util.DateTimeUtil;
 
-import java.time.LocalDate;
-
 public record PedidoPontoDto(
         Integer id,
         String login,
         Integer idPonto,
         String dataRegistro,
+        String tipoPedido,
+        String dataPedido,
         String statusRegistro,
         String statusPedido,
-        String tipo_pedido,
-        String gestorLogin,
-        String dataAprovacao,
-        String justificativa
+        AlterarPonto alteracaoPonto,
+        RegistroCompletoDto registroPonto
 ) {
     public PedidoPontoDto(PedidoPonto pedidoPonto) {
         this(
@@ -23,12 +21,12 @@ public record PedidoPontoDto(
           pedidoPonto.getUser().getLogin(),
           pedidoPonto.getPonto().getId(),
           DateTimeUtil.convertDBDateToUserDate(pedidoPonto.getPonto().getData()),
+          pedidoPonto.getTipoPedido().name(),
+          DateTimeUtil.convertDBDateToUserDate(pedidoPonto.getHorarioCriacao().toLocalDate()),
           pedidoPonto.getPonto().getStatusRegistro().name(),
           pedidoPonto.getStatusPedido().name(),
-          pedidoPonto.getTipoPedido().name(),
-          pedidoPonto.getGestorLogin(),
-          DateTimeUtil.convertDBDateTimeToUserDateTime(pedidoPonto.getDataAprovacao()),
-          pedidoPonto.getAlteracaoPonto() != null ? pedidoPonto.getAlteracaoPonto().getJustificativa() : "Esse pedido é um registro."
+          pedidoPonto.getAlteracaoPonto() == null ? null : pedidoPonto.getAlteracaoPonto(),
+          new RegistroCompletoDto(pedidoPonto.getPonto(), pedidoPonto.getAlteracaoPonto() != null)
         );
     }
 }
