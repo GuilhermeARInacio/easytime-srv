@@ -293,6 +293,8 @@ class PontoServiceTest {
             when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
             when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
             when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
+            when(pedidoPonto.getStatusPedido()).thenReturn(Status.PENDENTE);
+            when(timeLog.getUser()).thenReturn(user);
 
             assertFalse(pontoService.filtrarPedidos(dto).isEmpty());
         }
@@ -330,6 +332,8 @@ class PontoServiceTest {
         when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
         when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
         when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
+        when(pedidoPonto.getStatusPedido()).thenReturn(Status.PENDENTE);
+        when(timeLog.getUser()).thenReturn(user);
 
         try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
             when(pedidoPontoRepository.findAllByStatusPedido(dto.status())).thenReturn(List.of(pedidoPonto));
@@ -353,9 +357,11 @@ class PontoServiceTest {
         when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
         when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
         when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
+        when(timeLog.getUser()).thenReturn(user);
 
         try (MockedStatic<DateTimeUtil> util = mockStatic(DateTimeUtil.class)) {
             when(pedidoPontoRepository.findAllByTipoPedidoAndStatusPedido(dto.tipo(), dto.status())).thenReturn(List.of(pedidoPonto));
+            when(pedidoPonto.getStatusPedido()).thenReturn(Status.PENDENTE);
 
             assertFalse(pontoService.filtrarPedidos(dto).isEmpty());
         }
@@ -379,6 +385,8 @@ class PontoServiceTest {
             when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
             when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
             when(pedidoPontoRepository.findAllByTipoPedido(dto.tipo())).thenReturn(List.of(pedidoPonto));
+            when(pedidoPonto.getStatusPedido()).thenReturn(Status.PENDENTE);
+            when(timeLog.getUser()).thenReturn(user);
 
             assertFalse(pontoService.filtrarPedidos(dto).isEmpty());
         }
@@ -400,6 +408,8 @@ class PontoServiceTest {
         when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
         when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
         when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
+        when(pedidoPonto.getStatusPedido()).thenReturn(Status.PENDENTE);
+        when(timeLog.getUser()).thenReturn(user);
 
         LocalDate d1 = LocalDate.of(2024, 1, 1);
         LocalDate d2 = LocalDate.of(2024, 1, 2);
@@ -431,6 +441,8 @@ class PontoServiceTest {
         when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
         when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
         when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
+        when(pedidoPonto.getStatusPedido()).thenReturn(Status.PENDENTE);
+        when(timeLog.getUser()).thenReturn(user);
 
         LocalDate d1 = LocalDate.of(2024, 1, 1);
         LocalDate d2 = LocalDate.of(2024, 1, 2);
@@ -462,6 +474,8 @@ class PontoServiceTest {
         when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
         when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
         when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
+        when(pedidoPonto.getStatusPedido()).thenReturn(Status.PENDENTE);
+        when(timeLog.getUser()).thenReturn(user);
 
         LocalDate d1 = LocalDate.of(2024, 1, 1);
         LocalDate d2 = LocalDate.of(2024, 1, 2);
@@ -492,6 +506,8 @@ class PontoServiceTest {
         when(pedidoPonto.getHorarioCriacao()).thenReturn(mock(LocalDateTime.class));
         when(pedidoPonto.getTipoPedido()).thenReturn(PedidoPonto.Tipo.ALTERACAO);
         when(timeLog.getStatusRegistro()).thenReturn(Status.PENDENTE);
+        when(pedidoPonto.getStatusPedido()).thenReturn(Status.PENDENTE);
+        when(timeLog.getUser()).thenReturn(user);
 
         LocalDate d1 = LocalDate.of(2024, 1, 1);
         LocalDate d2 = LocalDate.of(2024, 1, 2);
