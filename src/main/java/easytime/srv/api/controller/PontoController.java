@@ -71,11 +71,11 @@ public class PontoController {
             var ponto = pontoService.registrarPonto(dto, token);
             return ResponseEntity.ok(ponto);
         } catch (NotFoundException e) {
-            return ResponseEntity.status(401).body("Erro ao registrar ponto: " + e.getMessage());
+            return ResponseEntity.status(401).body(e.getMessage());
         }catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Erro ao registrar ponto: " + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Erro ao registrar ponto: " + e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
