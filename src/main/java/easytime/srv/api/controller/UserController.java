@@ -22,7 +22,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PutMapping("/create")
+    @PostMapping("/create")
     @Operation(summary = "Criar usuário", description = "Envia um UserDTO para api e cria um usuário no banco de dados")
     @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<Object> createUser(@RequestBody UserDTO user) {
