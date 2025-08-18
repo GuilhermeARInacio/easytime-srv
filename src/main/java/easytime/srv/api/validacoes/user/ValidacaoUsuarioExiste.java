@@ -17,10 +17,10 @@ public class ValidacaoUsuarioExiste implements ValidacaoUser{
         var user1 = userRepository.findByEmail(usuario.getEmail());
         var user2 = userRepository.findByLogin(usuario.getLogin());
         if(user1.isPresent()){
-            throw new ObjectAlreadyExistsException("Email em uso.");
+            throw new ObjectAlreadyExistsException("Desculpe, já existe um usuário cadastrado com este e-mail.");
         }
         if(user2.isPresent()){
-            throw new ObjectAlreadyExistsException("Login em uso.");
+            throw new ObjectAlreadyExistsException("Desculpe, já existe um usuário cadastrado com este login.");
         }
     }
 }
