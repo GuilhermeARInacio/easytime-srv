@@ -44,4 +44,8 @@ public interface PedidoPontoRepository extends JpaRepository<PedidoPonto, Intege
     List<PedidoPonto> findAllByTipoPedidoAndHorarioCriacaoBetween(PedidoPonto.Tipo tipo, LocalDateTime dateInicio, LocalDateTime dateFinal);
 
     List<PedidoPonto> findAllByStatusPedidoAndTipoPedidoAndHorarioCriacaoBetween(Status status, PedidoPonto.Tipo tipo, LocalDateTime dateInicio, LocalDateTime dateFinal);
+
+    List<PedidoPonto> findAllPedidoPontoByPonto_Id(Integer id);
+
+    List<PedidoPonto> findAllPedidoPontoByPonto_IdAndTipoPedido(Integer id, PedidoPonto.Tipo tipo);
 }

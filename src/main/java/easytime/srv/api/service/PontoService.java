@@ -220,10 +220,13 @@ public class PontoService {
         if (pedidoPonto.getTipoPedido() == PedidoPonto.Tipo.ALTERACAO && status == Status.APROVADO) {
             pedidoPonto.getPonto().alterarPonto(pedidoPonto.getAlteracaoPonto());
             pedidoPonto.getPonto().setStatusRegistro(status);
+
+            pedidoPontoRepository.findAllPedidoPontoByPonto_IdAndTipoPedido(pedidoPonto.getPonto().getId(), PedidoPonto.Tipo.REGISTRO).stream().findFirst().ifPresent(p -> pedidoPontoRepository.delete(p));
             timeLogsRepository.save(pedidoPonto.getPonto());
             pedidoPontoRepository.save(pedidoPonto);
             return "Ponto alterado com sucesso após aprovação do gestor.";
         } else if (pedidoPonto.getTipoPedido() == PedidoPonto.Tipo.ALTERACAO && status == Status.REJEITADO) {
+            pedidoPontoRepository.findPedidoPontoByPonto_IdAndTipoPedido(pedidoPonto.getPonto().getId(), PedidoPonto.Tipo.ALTERACAO).stream().findFirst().ifPresent(p -> pedidoPontoRepository.delete(p));
             pedidoPontoRepository.save(pedidoPonto);
             return "Pedido de alteração de ponto reprovado pelo gestor.";
         }
